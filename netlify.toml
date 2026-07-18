@@ -1,0 +1,11 @@
+# Nastavení pro Netlify.
+# Příkaz sestavení a složku k publikování necháváme podle nastavení v Netlify UI.
+
+[build.environment]
+  # Netlify hlídá, jestli se do sestaveného webu nedostala tajemství, a build kvůli
+  # tomu padal. Tyhle dvě hodnoty ale do prohlížeče patří — prefix NEXT_PUBLIC_
+  # znamená „veřejné" a bez nich by přihlašovací formuláře nemohly mluvit s databází.
+  # Klíč je Supabase „publishable" (veřejný); data chrání pravidla RLS
+  # v supabase/migrations/0001_init.sql, ne utajení tohoto klíče.
+  # Kontrola zůstává zapnutá pro všechno ostatní.
+  SECRETS_SCAN_OMIT_KEYS = "NEXT_PUBLIC_SUPABASE_URL,NEXT_PUBLIC_SUPABASE_ANON_KEY"
