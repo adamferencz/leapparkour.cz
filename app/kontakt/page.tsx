@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Reveal } from "@/components/ui/Reveal";
 import { SITE } from "@/lib/config";
 
 export const metadata: Metadata = {
@@ -76,23 +77,28 @@ export default function KontaktPage() {
       {/* Zeptejte se */}
       <section className="py-16 md:py-24">
         <div className="container-site">
-          <h1 className="text-center text-4xl font-extrabold md:text-5xl">
-            Zeptejte se
-          </h1>
-          <p className="mx-auto mt-4 max-w-xl text-center text-steel">
-            Napište nám na náš e-mail — rádi vám odpovíme na cokoliv ohledně
-            kroužku i tábora.
-          </p>
+          <Reveal>
+            <h1 className="text-center text-4xl font-extrabold md:text-5xl">
+              Zeptejte se
+            </h1>
+          </Reveal>
+          <Reveal delay={0.06}>
+            <p className="mx-auto mt-4 max-w-xl text-center text-steel">
+              Napište nám na náš e-mail — rádi vám odpovíme na cokoliv ohledně
+              kroužku i tábora.
+            </p>
+          </Reveal>
 
-          <div className="mt-8 text-center">
+          <Reveal delay={0.12} className="mt-8 text-center">
             <a
               href={`mailto:${SITE.email}`}
               className="inline-block break-all text-2xl font-extrabold text-brand transition-colors hover:text-brand-dark md:text-4xl"
             >
               {SITE.email}
             </a>
-          </div>
+          </Reveal>
 
+          <Reveal delay={0.18}>
           <dl className="mx-auto mt-8 flex max-w-md flex-col gap-3 text-center sm:max-w-none sm:flex-row sm:justify-center sm:gap-10">
             <div>
               <dt className="text-sm font-semibold uppercase tracking-wide text-steel/70">
@@ -113,16 +119,17 @@ export default function KontaktPage() {
               <dd className="mt-1 font-medium text-navy">{SITE.legalName}</dd>
             </div>
           </dl>
+          </Reveal>
 
           {/* Sociální sítě */}
           <div className="mt-12 grid gap-4 sm:grid-cols-3">
-            {SOCIALS.map((social) => (
+            {SOCIALS.map((social, i) => (
+              <Reveal key={social.label} delay={i * 0.06}>
               <a
-                key={social.label}
                 href={social.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex items-center gap-4 rounded-2xl bg-slate-100 p-5 transition-colors hover:bg-brand hover:text-white"
+                className="group flex h-full items-center gap-4 rounded-2xl bg-slate-100 p-5 transition-[background-color,transform,box-shadow] duration-200 hover:-translate-y-0.5 hover:bg-brand hover:text-white hover:shadow-lg"
               >
                 <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white text-brand shadow-sm">
                   {social.icon}
@@ -136,6 +143,7 @@ export default function KontaktPage() {
                   </span>
                 </span>
               </a>
+              </Reveal>
             ))}
           </div>
         </div>
@@ -144,28 +152,33 @@ export default function KontaktPage() {
       {/* Mapa */}
       <section className="pb-16 md:pb-24">
         <div className="container-site">
-          <h2 className="text-3xl font-bold md:text-4xl">Kde nás najdete</h2>
-          <p className="mt-3 max-w-2xl text-steel">
-            Trénujeme v Havlíčkově Brodě — v tělocvičně ZŠ Wolkerova a v létě na
-            parkourovém hřišti Plovárenská.
-          </p>
-          <div className="mt-8 overflow-hidden rounded-2xl border border-slate-100 shadow-sm">
+          <Reveal>
+            <h2 className="text-3xl font-bold md:text-4xl">Kde nás najdete</h2>
+            <p className="mt-3 max-w-2xl text-steel">
+              Trénujeme v Havlíčkově Brodě — v tělocvičně ZŠ Wolkerova a v létě na
+              parkourovém hřišti Plovárenská.
+            </p>
+          </Reveal>
+          <Reveal
+            from="none"
+            className="mt-8 overflow-hidden rounded-2xl border border-slate-100 shadow-sm"
+          >
             <iframe
               src="https://maps.google.com/maps?q=Havl%C3%AD%C4%8Dk%C5%AFv%20Brod&t=m&z=13&output=embed&iwloc=near"
               title="Havlíčkův Brod"
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
               allowFullScreen
-              className="h-[320px] w-full border-0 md:h-[440px]"
+              className="h-80 w-full border-0 md:h-110"
             />
-          </div>
+          </Reveal>
         </div>
       </section>
 
       {/* CTA */}
       <section className="pb-16 md:pb-24">
         <div className="container-site">
-          <div className="rounded-3xl bg-navy px-6 py-12 text-center md:px-12 md:py-16">
+          <Reveal className="rounded-3xl bg-navy px-6 py-12 text-center md:px-12 md:py-16">
             <h2 className="text-3xl font-bold text-white md:text-4xl">
               Chcete se přidat?
             </h2>
@@ -176,18 +189,18 @@ export default function KontaktPage() {
             <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
               <Link
                 href="/krouzek"
-                className="rounded-full bg-brand px-6 py-3 font-semibold text-white transition-colors hover:bg-brand-dark"
+                className="rounded-full bg-brand px-6 py-3 font-semibold text-white transition-[background-color,transform] duration-200 hover:bg-brand-dark active:scale-[0.98]"
               >
                 Parkourový kroužek
               </Link>
               <Link
                 href="/tabor"
-                className="rounded-full border-2 border-white px-6 py-3 font-semibold text-white transition-colors hover:bg-white hover:text-navy"
+                className="rounded-full border-2 border-white px-6 py-3 font-semibold text-white transition-[background-color,color,transform] duration-200 hover:bg-white hover:text-navy active:scale-[0.98]"
               >
                 Letní tábor Leap Camp
               </Link>
             </div>
-          </div>
+          </Reveal>
         </div>
       </section>
     </>

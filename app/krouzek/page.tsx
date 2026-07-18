@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { YouTube } from "@/components/ui/YouTube";
+import { Reveal } from "@/components/ui/Reveal";
 import { CLUB_SEASON, SITE, INSURANCE_URL } from "@/lib/config";
 
 export const metadata: Metadata = {
@@ -40,75 +41,89 @@ export default function KrouzekPage() {
       <section className="bg-slate-50 py-16 md:py-24">
         <div className="container-site">
           <div className="mx-auto max-w-3xl text-center">
-            <h1 className="text-4xl font-extrabold md:text-5xl">Kroužky</h1>
-            <p className="mt-4 text-lg text-steel md:text-xl">
-              Parkourové kroužky v Havlíčkově Brodě pro děti 6–16 let.
-            </p>
-            <div className="mt-8">
-              <Link
-                href="/krouzek/prihlaska"
-                className="inline-block rounded-full bg-brand px-6 py-3 font-semibold text-white transition-colors hover:bg-brand-dark"
-              >
-                Přihlásit se na kroužek
-              </Link>
-            </div>
+            <Reveal>
+              <h1 className="text-4xl font-extrabold md:text-5xl">Kroužky</h1>
+            </Reveal>
+            <Reveal delay={0.08}>
+              <p className="mt-4 text-lg text-steel md:text-xl">
+                Parkourové kroužky v Havlíčkově Brodě pro děti 6–16 let.
+              </p>
+            </Reveal>
+            <Reveal delay={0.16}>
+              <div className="mt-8">
+                <Link
+                  href="/krouzek/prihlaska"
+                  className="inline-block rounded-full bg-brand px-6 py-3 font-semibold text-white transition-[background-color,transform] duration-200 hover:bg-brand-dark active:scale-[0.98]"
+                >
+                  Přihlásit se na kroužek
+                </Link>
+              </div>
+            </Reveal>
           </div>
-          <div className="mx-auto mt-12 max-w-3xl">
+          <Reveal delay={0.24} className="mx-auto mt-12 max-w-3xl">
             <YouTube id="S73hmD_kbgA" title="Parkourový kroužek Leap Parkour" />
-          </div>
+          </Reveal>
         </div>
       </section>
 
       {/* Kdy se trénuje? */}
-      <section className="py-16 md:py-24">
+      <section className="overflow-x-clip py-16 md:py-24">
         <div className="container-site">
           <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
             <div>
-              <h2 className="text-3xl font-bold md:text-4xl">Kdy se trénuje?</h2>
-              <p className="mt-5 font-semibold text-navy">
-                Pojď trénovat správným a bezpečným způsobem pod dohledem
-                zkušených trenérů.
-              </p>
-              <p className="mt-4">
-                Tréninky probíhají každý{" "}
-                <strong className="text-navy">
-                  čtvrtek od 16:00 do 18:00 a pátek od 16:00 do 17:00
-                </strong>
-                . V případě, že se chcete zlepšit, výrazně doporučujeme chodit
-                2× týdně.
-              </p>
-              <div className="mt-6 rounded-2xl bg-brand/10 px-6 py-5">
-                <p className="text-navy">
-                  Váháte, jestli je parkour pro vás? Přijďte si to vyzkoušet —{" "}
-                  <strong className="font-bold text-brand">
-                    první trénink máte ZDARMA!
-                  </strong>
+              <Reveal from="left">
+                <h2 className="text-3xl font-bold md:text-4xl">Kdy se trénuje?</h2>
+                <p className="mt-5 font-semibold text-navy">
+                  Pojď trénovat správným a bezpečným způsobem pod dohledem
+                  zkušených trenérů.
                 </p>
-              </div>
+                <p className="mt-4">
+                  Tréninky probíhají každý{" "}
+                  <strong className="text-navy">
+                    čtvrtek od 16:00 do 18:00 a pátek od 16:00 do 17:00
+                  </strong>
+                  . V případě, že se chcete zlepšit, výrazně doporučujeme chodit
+                  2× týdně.
+                </p>
+                <div className="mt-6 rounded-2xl bg-brand/10 px-6 py-5">
+                  <p className="text-navy">
+                    Váháte, jestli je parkour pro vás? Přijďte si to vyzkoušet —{" "}
+                    <strong className="font-bold text-brand">
+                      první trénink máte ZDARMA!
+                    </strong>
+                  </p>
+                </div>
+              </Reveal>
 
-              <h3 className="mt-10 text-xl font-bold">
-                Kroužek je rozdělen na skupiny:
-              </h3>
-              <ul className="mt-4 space-y-3">
-                {CLUB_SEASON.terms.map((term) => (
-                  <li
-                    key={term.id}
-                    className="flex flex-wrap items-center justify-between gap-2 rounded-2xl bg-slate-100 px-6 py-4"
-                  >
-                    <div>
-                      <p className="font-semibold text-navy">{term.label}</p>
-                      <p className="text-sm text-steel first-letter:uppercase">
-                        {term.level}
-                      </p>
-                    </div>
-                    <span className="rounded-full bg-white px-4 py-1.5 text-sm font-semibold text-brand">
-                      {term.age}
-                    </span>
-                  </li>
-                ))}
-              </ul>
+              <Reveal from="left" delay={0.08}>
+                <h3 className="mt-10 text-xl font-bold">
+                  Kroužek je rozdělen na skupiny:
+                </h3>
+                <ul className="mt-4 space-y-3">
+                  {CLUB_SEASON.terms.map((term) => (
+                    <li
+                      key={term.id}
+                      className="flex flex-wrap items-center justify-between gap-2 rounded-2xl bg-slate-100 px-6 py-4"
+                    >
+                      <div>
+                        <p className="font-semibold text-navy">{term.label}</p>
+                        <p className="text-sm text-steel first-letter:uppercase">
+                          {term.level}
+                        </p>
+                      </div>
+                      <span className="rounded-full bg-white px-4 py-1.5 text-sm font-semibold text-brand">
+                        {term.age}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </Reveal>
             </div>
-            <div className="relative mx-auto aspect-3/4 w-full max-w-md overflow-hidden rounded-3xl">
+            <Reveal
+              from="right"
+              delay={0.08}
+              className="relative mx-auto aspect-3/4 w-full max-w-md overflow-hidden rounded-3xl"
+            >
               <Image
                 src="/images/2024_08_1.jpeg"
                 alt="Trénink parkouru na kroužku"
@@ -116,16 +131,19 @@ export default function KrouzekPage() {
                 sizes="(min-width: 1024px) 28rem, 100vw"
                 className="object-cover"
               />
-            </div>
+            </Reveal>
           </div>
         </div>
       </section>
 
       {/* Kde trénujeme */}
-      <section className="bg-slate-50 py-16 md:py-24">
+      <section className="overflow-x-clip bg-slate-50 py-16 md:py-24">
         <div className="container-site">
           <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
-            <div className="relative order-last aspect-video w-full overflow-hidden rounded-3xl lg:order-first">
+            <Reveal
+              from="left"
+              className="relative order-last aspect-video w-full overflow-hidden rounded-3xl lg:order-first"
+            >
               <Image
                 src="/images/2024_08_WOLKEROVA.jpg"
                 alt="Tělocvična ZŠ Wolkerova v Havlíčkově Brodě"
@@ -133,8 +151,8 @@ export default function KrouzekPage() {
                 sizes="(min-width: 1024px) 34rem, 100vw"
                 className="object-cover"
               />
-            </div>
-            <div>
+            </Reveal>
+            <Reveal from="right" delay={0.08}>
               <h2 className="text-3xl font-bold md:text-4xl">Kde trénujeme</h2>
               <p className="mt-5">
                 <strong className="text-navy">{CLUB_SEASON.startNote}</strong> v
@@ -160,7 +178,7 @@ export default function KrouzekPage() {
                 </svg>
                 <p className="font-medium text-navy">{CLUB_SEASON.venue}</p>
               </div>
-            </div>
+            </Reveal>
           </div>
         </div>
       </section>
@@ -169,30 +187,36 @@ export default function KrouzekPage() {
       <section className="py-16 md:py-24">
         <div className="container-site">
           <div className="mx-auto max-w-3xl">
-            <h2 className="text-center text-3xl font-bold md:text-4xl">
-              Co si vzít s sebou?
-            </h2>
+            <Reveal>
+              <h2 className="text-center text-3xl font-bold md:text-4xl">
+                Co si vzít s sebou?
+              </h2>
+            </Reveal>
             <ul className="mt-8 space-y-4">
-              {GEAR_LIST.map((item) => (
-                <li
-                  key={item}
-                  className="flex items-start gap-3 rounded-2xl bg-slate-100 px-6 py-4"
-                >
-                  <CheckIcon />
-                  <span>{item}</span>
+              {GEAR_LIST.map((item, i) => (
+                <li key={item}>
+                  <Reveal
+                    delay={i * 0.06}
+                    className="flex items-start gap-3 rounded-2xl bg-slate-100 px-6 py-4"
+                  >
+                    <CheckIcon />
+                    <span>{item}</span>
+                  </Reveal>
                 </li>
               ))}
             </ul>
-            <p className="mt-6 text-center">
-              Další informace a podmínky najdete{" "}
-              <Link
-                href="/krouzek/informace"
-                className="font-semibold text-brand underline-offset-4 hover:underline"
-              >
-                ZDE
-              </Link>
-              .
-            </p>
+            <Reveal delay={0.18}>
+              <p className="mt-6 text-center">
+                Další informace a podmínky najdete{" "}
+                <Link
+                  href="/krouzek/informace"
+                  className="font-semibold text-brand underline-offset-4 hover:underline"
+                >
+                  ZDE
+                </Link>
+                .
+              </p>
+            </Reveal>
           </div>
         </div>
       </section>
@@ -200,7 +224,7 @@ export default function KrouzekPage() {
       {/* Jak to u nás na kroužku funguje? */}
       <section className="bg-slate-50 py-16 md:py-24">
         <div className="container-site">
-          <div className="mx-auto max-w-3xl text-center">
+          <Reveal className="mx-auto max-w-3xl text-center">
             <h2 className="text-3xl font-bold md:text-4xl">
               Jak to u nás na kroužku funguje?
             </h2>
@@ -212,8 +236,8 @@ export default function KrouzekPage() {
               Pro splnění je třeba prokázat, že účastník umí určité dovednosti
               a techniky, jak je vidět v tabulce.
             </p>
-          </div>
-          <div className="mx-auto mt-10 max-w-4xl overflow-hidden rounded-3xl bg-white p-2 shadow-sm md:p-4">
+          </Reveal>
+          <Reveal className="mx-auto mt-10 max-w-4xl overflow-hidden rounded-3xl bg-white p-2 shadow-sm md:p-4">
             <Image
               src="/images/2024_08_Snimek-obrazovky-2024-08-15-v-22.16.54.png"
               alt="Tabulka úrovní lvl.1 – lvl.5 parkour deníku"
@@ -222,25 +246,30 @@ export default function KrouzekPage() {
               sizes="(min-width: 1024px) 56rem, 100vw"
               className="h-auto w-full rounded-2xl"
             />
-          </div>
+          </Reveal>
         </div>
       </section>
 
       {/* Kolik stojí kroužky? */}
       <section id="pridat" className="py-16 md:py-24">
         <div className="container-site">
-          <h2 className="text-center text-3xl font-bold md:text-4xl">
-            Kolik stojí kroužky?
-          </h2>
+          <Reveal>
+            <h2 className="text-center text-3xl font-bold md:text-4xl">
+              Kolik stojí kroužky?
+            </h2>
+          </Reveal>
           <div className="mx-auto mt-10 grid max-w-3xl gap-6 md:grid-cols-2">
-            <div className="flex flex-col items-center rounded-3xl border border-slate-100 bg-white p-8 text-center shadow-sm">
+            <Reveal className="flex flex-col items-center rounded-3xl border border-slate-100 bg-white p-8 text-center shadow-sm">
               <p className="font-semibold text-navy">Trénování 1× týdně</p>
               <p className="mt-3 text-4xl font-extrabold text-brand">
                 {CLUB_SEASON.priceOnceWeek}
               </p>
               <p className="mt-2 text-sm text-steel">cena za pololetí</p>
-            </div>
-            <div className="relative flex flex-col items-center rounded-3xl border-2 border-brand bg-white p-8 text-center shadow-sm">
+            </Reveal>
+            <Reveal
+              delay={0.08}
+              className="relative flex flex-col items-center rounded-3xl border-2 border-brand bg-white p-8 text-center shadow-sm"
+            >
               <span className="absolute -top-3 rounded-full bg-brand px-4 py-1 text-xs font-semibold uppercase tracking-wide text-white">
                 Doporučujeme
               </span>
@@ -249,19 +278,21 @@ export default function KrouzekPage() {
                 {CLUB_SEASON.priceTwiceWeek}
               </p>
               <p className="mt-2 text-sm text-steel">cena za pololetí</p>
+            </Reveal>
+          </div>
+
+          <Reveal delay={0.16}>
+            <div className="mt-10 text-center">
+              <Link
+                href="/krouzek/prihlaska"
+                className="inline-block rounded-full bg-brand px-8 py-3.5 font-semibold text-white transition-[background-color,transform] duration-200 hover:bg-brand-dark active:scale-[0.98]"
+              >
+                Přihlásit se na kroužek
+              </Link>
             </div>
-          </div>
+          </Reveal>
 
-          <div className="mt-10 text-center">
-            <Link
-              href="/krouzek/prihlaska"
-              className="inline-block rounded-full bg-brand px-8 py-3.5 font-semibold text-white transition-colors hover:bg-brand-dark"
-            >
-              Přihlásit se na kroužek
-            </Link>
-          </div>
-
-          <div className="mx-auto mt-12 max-w-3xl rounded-2xl bg-slate-100 px-6 py-6 text-center md:px-10">
+          <Reveal className="mx-auto mt-12 max-w-3xl rounded-2xl bg-slate-100 px-6 py-6 text-center md:px-10">
             <p>
               V ceně kroužku mají děti základní pojištění od České rady dětí a
               mládeže. Více informací o pojištění{" "}
@@ -284,7 +315,7 @@ export default function KrouzekPage() {
                 {SITE.email}
               </a>
             </p>
-          </div>
+          </Reveal>
         </div>
       </section>
     </>

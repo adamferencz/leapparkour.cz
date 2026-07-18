@@ -76,7 +76,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="cs">
+    <html lang="cs" className="no-js" suppressHydrationWarning>
       <head>
         <script
           type="application/ld+json"
@@ -84,6 +84,11 @@ export default function RootLayout({
         />
       </head>
       <body className={`${poppins.variable} font-sans antialiased`}>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: "document.documentElement.classList.remove('no-js')",
+          }}
+        />
         <Header />
         <main>{children}</main>
         <Footer />

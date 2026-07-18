@@ -26,6 +26,10 @@ Web běží na http://localhost:3000. Přístupy k Supabase jsou v `.env.local` 
    (kdokoliv smí odeslat přihlášku, číst a upravovat je smí jen přihlášený admin).
 2. **Admin účet:** Dashboard → Authentication → Users → **Add user** → e-mail + heslo
    (doporučeně „Auto confirm"). Tímto účtem se pak přihlásíte na `/admin/login`.
+3. **DŮLEŽITÉ — vypnout veřejnou registraci:** Dashboard → Authentication →
+   Sign In / Providers → vypnout **„Allow new users to sign up"**. Kdokoliv
+   přihlášený (role `authenticated`) totiž smí číst přihlášky — registrace se
+   proto zakládají jen ručně v dashboardu.
 
 ## Roční údržba obsahu
 
