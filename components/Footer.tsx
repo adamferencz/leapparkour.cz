@@ -24,6 +24,7 @@ export default function Footer() {
           <ul className="mt-3 space-y-2 text-sm text-white/70">
             <li><Link href="/krouzek" className="hover:text-white">Kroužek</Link></li>
             <li><Link href="/tabor" className="hover:text-white">LeapCamp</Link></li>
+            <li><Link href="/blog" className="hover:text-white">Blog</Link></li>
             <li><Link href="/prihlaska" className="hover:text-white">Přihláška</Link></li>
             <li><Link href="/kontakt" className="hover:text-white">Kontakt</Link></li>
             <li><Link href="/admin" className="hover:text-white">Administrace</Link></li>

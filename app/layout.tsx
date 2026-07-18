@@ -11,12 +11,63 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://leapparkour.cz"),
   title: {
     default: "Leap Parkour – Parkour komunita na Vysočině",
     template: "%s | Leap Parkour",
   },
   description:
-    "Pořádáme parkourové kroužky a tábory v Havlíčkově Brodě. Připoj se k parkourové komunitě na Vysočině.",
+    "Největší parkourová komunita na Vysočině. Pořádáme parkourové kroužky pro děti v Havlíčkově Brodě a letní tábor LeapCamp plný pohybu, her a zážitků.",
+  openGraph: {
+    title: "Leap Parkour – Parkour komunita na Vysočině",
+    description: "Pořádáme parkourové kroužky pro děti v Havlíčkově Brodě a letní tábor LeapCamp plný pohybu, her a zážitků.",
+    url: "https://leapparkour.cz",
+    siteName: "Leap Parkour",
+    locale: "cs_CZ",
+    type: "website",
+    images: [
+      {
+        url: "/images/2024_08_DSC05433.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Leap Parkour",
+      },
+    ],
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+};
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "SportsClub",
+  "name": "Leap Parkour",
+  "alternateName": "LeapParkour z.s.",
+  "url": "https://leapparkour.cz",
+  "logo": "https://leapparkour.cz/images/logo.svg",
+  "image": "https://leapparkour.cz/images/2024_08_DSC05433.jpg",
+  "description": "Největší parkourová komunita na Vysočině. Pořádáme parkourové kroužky pro děti v Havlíčkově Brodě a letní tábor LeapCamp.",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Práčat 1886",
+    "addressLocality": "Havlíčkův Brod",
+    "postalCode": "58001",
+    "addressRegion": "Vysočina",
+    "addressCountry": "CZ"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": 49.611914,
+    "longitude": 15.5802 // Havlíčkův Brod region coordinates
+  },
+  "email": "leapparkour@seznam.cz",
+  "sameAs": [
+    "https://www.instagram.com/leapparkour/",
+    "https://www.facebook.com/share/YG84oj6nvVgR4NvM/",
+    "https://www.youtube.com/@LeapParkour"
+  ]
 };
 
 export default function RootLayout({
@@ -26,6 +77,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="cs">
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
       <body className={`${poppins.variable} font-sans antialiased`}>
         <Header />
         <main>{children}</main>
