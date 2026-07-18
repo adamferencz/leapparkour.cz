@@ -4,7 +4,7 @@ const path = require('path');
 const inputDir = '/Users/martinsramek/leapparkour.cz/scraped/blog_unzipped/LeapParkour_Blog_Scraped';
 const outputFile = '/Users/martinsramek/leapparkour.cz/lib/blog.ts';
 
-// Deleting custom SEO blog posts as requested (we only keep the 11 historical ones)
+// Deleting custom SEO blog posts as requested
 const customPosts = [];
 
 const files = fs.readdirSync(inputDir).filter(f => f.endsWith('.md'));
@@ -30,7 +30,7 @@ for (const file of files) {
         date = dateMatch[1].trim();
       }
       
-      const cleanLine = line.replace(/\[.*?\]\(.*?\)/g, ''); // strip link markdown
+      const cleanLine = line.replace(/\[.*?\]\(.*?\)/g, '');
       const parts = line.split('[');
       title = parts[0].trim();
       
@@ -77,22 +77,26 @@ for (const file of files) {
   
   for (const line of bodyLines) {
     if (line.startsWith('![')) {
-      // Image
+      // Image - check if file exists locally to prevent 404s and node crash
       const match = line.match(/!\[(.*?)\]\((.*?)\)/);
       if (match) {
-        const filename = decodeURIComponent(match[2]);
-        htmlContent += `<div className="my-6 relative aspect-video overflow-hidden rounded-2xl"><img src="${filename}" alt="${match[1]}" className="w-full h-full object-cover" /></div>\n`;
+        const cleanFilename = decodeURIComponent(match[2]);
+        const localPath = path.join('/Users/martinsramek/leapparkour.cz/public', cleanFilename);
+        if (fs.existsSync(localPath)) {
+          htmlContent += `<div className="my-6 relative aspect-video overflow-hidden rounded-2xl"><img src="${cleanFilename}" alt="${match[1]}" className="w-full h-full object-cover" /></div>\n`;
+        } else {
+          // Skip if missing to avoid 404 loop and SWC malloc crashes
+          console.log(`Skipping missing image: ${cleanFilename} in ${file}`);
+        }
       }
     } else if (line.startsWith('# ') || line.startsWith('## ') || line.startsWith('### ') || line.startsWith('#### ')) {
       if (inList) { htmlContent += '</ul>\n'; inList = false; }
       
-      // Extract clean heading text, removing any markdown bold/italic inside
       let headingText = line.replace(/^#+\s*/, '')
         .replace(/\*\*/g, '')
         .replace(/\*/g, '')
         .trim();
         
-      // Map Markdown headers cleanly (post title is H1, so subheadings should be H2/H3)
       if (line.startsWith('# ')) {
         htmlContent += `<h2>${headingText}</h2>\n`;
       } else if (line.startsWith('## ')) {
@@ -101,13 +105,12 @@ for (const file of files) {
         htmlContent += `<h3>${headingText}</h3>\n`;
       }
     } else if (line.startsWith('* ') || line.startsWith('- ')) {
-      if (!inList) { htmlContent += '<ul>\n'; inList = true; }
+      if (!inList) { htmlContent += '</ul>\n'; inList = true; }
       
       let itemText = line.replace(/^[\*\-]\s*/, '');
       itemText = itemText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
       itemText = itemText.replace(/\*(.*?)\*/g, '<em>$1</em>');
       itemText = itemText.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2">$1</a>');
-      // Clean up residual * or _ characters
       itemText = itemText.replace(/[\*_]/g, '');
       
       htmlContent += `<li>${itemText}</li>\n`;
@@ -115,11 +118,9 @@ for (const file of files) {
       if (inList) { htmlContent += '</ul>\n'; inList = false; }
       
       let paraText = line;
-      // Convert bold & italics
       paraText = paraText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
       paraText = paraText.replace(/\*(.*?)\*/g, '<em>$1</em>');
       paraText = paraText.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2">$1</a>');
-      // Strip any residual stray markdown markers from text
       paraText = paraText.replace(/[\*_#]/g, '');
       
       htmlContent += `<p>${paraText}</p>\n`;
@@ -134,7 +135,11 @@ for (const file of files) {
   let coverImage = '/images/2024_08_DSC05433.jpg';
   const imgMatch = htmlContent.match(/img src="(.*?)"/);
   if (imgMatch) {
-    coverImage = imgMatch[1];
+    const cleanImgPath = imgMatch[1];
+    const localImgPath = path.join('/Users/martinsramek/leapparkour.cz/public', cleanImgPath);
+    if (fs.existsSync(localImgPath)) {
+      coverImage = cleanImgPath;
+    }
   }
   
   parsedPosts.push({
@@ -168,4 +173,4 @@ export const BLOG_POSTS: BlogPost[] = ${JSON.stringify(allPosts, null, 2)};
 `;
 
 fs.writeFileSync(outputFile, outputContent, 'utf-8');
-console.log(`Successfully parsed ${parsedPosts.length} historical blog posts and deleted custom SEO posts!`);
+console.log(`Successfully parsed ${parsedPosts.length} historical blog posts with image safety checks!`);
