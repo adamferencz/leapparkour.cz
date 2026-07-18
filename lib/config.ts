@@ -90,8 +90,7 @@ export const CAMP_SPORTS = [
 
 export const WHATSAPP_CHOICES = [
   { value: "add", label: "Chci přidat" },
-  { value: "no_add", label: "Nechci přidat" },
-  { value: "cannot", label: "Chci přidat, nejde zaškrtnout" },
+  { value: "no_add", label: "Nemám WhatsApp" },
 ] as const;
 
 /** Pojištění ČRDM — v ceně kroužku i tábora */
