@@ -8,7 +8,7 @@ export type ClubFormState = { error: string } | null;
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-const WHATSAPP_VALUES = ["add", "no_add", "cannot", "other"] as const;
+const WHATSAPP_VALUES = ["add", "no_add"] as const;
 type WhatsappChoice = (typeof WHATSAPP_VALUES)[number];
 
 const GENERIC_ERROR =
@@ -22,7 +22,6 @@ export async function submitClubRegistration(
   const email = String(formData.get("email") ?? "").trim();
   const phone = String(formData.get("phone") ?? "").trim();
   const whatsappChoice = String(formData.get("whatsapp_choice") ?? "");
-  const whatsappOther = String(formData.get("whatsapp_other") ?? "").trim();
   const healthNotes = String(formData.get("health_notes") ?? "").trim();
 
   const validTermIds: string[] = CLUB_SEASON.terms.map((t) => t.id);
@@ -43,9 +42,6 @@ export async function submitClubRegistration(
   if (!WHATSAPP_VALUES.includes(whatsappChoice as WhatsappChoice)) {
     return { error: "Vyberte prosím jednu z možností u WhatsApp skupiny." };
   }
-  if (whatsappChoice === "other" && !whatsappOther) {
-    return { error: "U možnosti „Jiné“ prosím doplňte upřesnění." };
-  }
   if (terms.length === 0) {
     return { error: "Vyberte prosím alespoň jeden termín kroužku." };
   }
@@ -57,7 +53,7 @@ export async function submitClubRegistration(
       email,
       phone,
       whatsapp_choice: whatsappChoice,
-      whatsapp_other: whatsappChoice === "other" ? whatsappOther : null,
+      whatsapp_other: null,
       terms,
       health_notes: healthNotes || null,
       season: CLUB_SEASON.id,
