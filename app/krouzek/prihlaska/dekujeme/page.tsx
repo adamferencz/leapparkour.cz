@@ -1,12 +1,17 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Reveal } from "@/components/ui/Reveal";
+import { createPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createPageMetadata({
   title: "Děkujeme za přihlášku",
   description:
     "Vaši přihlášku na parkourový kroužek jsme přijali. Brzy se vám ozveme s platebními údaji.",
-};
+  path: "/krouzek/prihlaska/dekujeme",
+  image: "/images/2024_08_krouzek.jpg",
+  imageAlt: "Děkujeme za přihlášku na parkourový kroužek Leap Parkour",
+  robots: { index: false, follow: false },
+});
 
 export default function DekujemePage() {
   return (

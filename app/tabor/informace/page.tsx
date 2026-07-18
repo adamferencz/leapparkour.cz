@@ -3,11 +3,15 @@ import Link from "next/link";
 import { CAMP, INSURANCE_URL } from "@/lib/config";
 import { AccordionItem } from "@/components/ui/Accordion";
 import { Reveal } from "@/components/ui/Reveal";
+import { createPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createPageMetadata({
   title: "Důležité informace o táboře",
   description: `Adresa, příjezd a odjezd, potřebné dokumenty, storno podmínky a doporučený seznam věcí na letní tábor ${CAMP.label}.`,
-};
+  path: "/tabor/informace",
+  image: "/images/2024_08_TABOROVA2022.jpg",
+  imageAlt: `Důležité informace k letnímu táboru ${CAMP.label}`,
+});
 
 const DOCUMENTS = [
   "Vytisknutá a podepsaná přihláška na tábor",
@@ -296,7 +300,7 @@ export default function TaborInformacePage() {
                 href="/tabor/prihlaska"
                 className="inline-block rounded-full bg-brand px-6 py-3 font-semibold text-white transition-[background-color,transform] duration-200 hover:bg-brand-dark active:scale-[0.98]"
               >
-                Přihlásit dítě na tábor
+                Jedu na LeapCamp
               </Link>
               <Link
                 href="/tabor"

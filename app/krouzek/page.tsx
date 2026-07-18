@@ -4,12 +4,16 @@ import Image from "next/image";
 import { YouTube } from "@/components/ui/YouTube";
 import { Reveal } from "@/components/ui/Reveal";
 import { CLUB_SEASON, SITE, INSURANCE_URL } from "@/lib/config";
+import { createPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createPageMetadata({
   title: "Kroužky",
   description:
     "Parkourové kroužky v Havlíčkově Brodě pro děti 6–16 let. Tréninky pod dohledem zkušených trenérů, první trénink zdarma.",
-};
+  path: "/krouzek",
+  image: "/images/2024_08_krouzek.jpg",
+  imageAlt: "Parkourový kroužek Leap Parkour v Havlíčkově Brodě",
+});
 
 const GEAR_LIST = [
   "Čistá voda na pití (pokud možno ne sladké limonády)",

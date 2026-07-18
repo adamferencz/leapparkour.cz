@@ -3,12 +3,16 @@ import Link from "next/link";
 import { AccordionItem } from "@/components/ui/Accordion";
 import { Reveal } from "@/components/ui/Reveal";
 import { SITE } from "@/lib/config";
+import { createPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createPageMetadata({
   title: "Další informace a podmínky",
   description:
     "Pravidla storno poplatků a vrácení uhrazených částek při zrušení účasti na parkourových kroužcích Leap Parkour.",
-};
+  path: "/krouzek/informace",
+  image: "/images/2024_08_krouzek.jpg",
+  imageAlt: "Informace a podmínky parkourových kroužků Leap Parkour",
+});
 
 function DocumentIcon() {
   return (

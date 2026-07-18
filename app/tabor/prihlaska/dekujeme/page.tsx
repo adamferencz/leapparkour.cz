@@ -2,12 +2,16 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { CAMP } from "@/lib/config";
 import { Reveal } from "@/components/ui/Reveal";
+import { createPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createPageMetadata({
   title: "Děkujeme za přihlášku na tábor",
   description: `Přihlášku na ${CAMP.label} jsme přijali — další kroky k platbě a dokumentům.`,
-  robots: { index: false },
-};
+  path: "/tabor/prihlaska/dekujeme",
+  image: "/images/2024_08_TABOROVA2022.jpg",
+  imageAlt: `Děkujeme za přihlášku na ${CAMP.label}`,
+  robots: { index: false, follow: false },
+});
 
 export default function TaborDekujemePage() {
   // as const dělá z paymentUrl literál "" — rozšíříme na string, ať jde větvit.

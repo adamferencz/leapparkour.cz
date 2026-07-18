@@ -3,12 +3,16 @@ import Link from "next/link";
 import Image from "next/image";
 import { Reveal } from "@/components/ui/Reveal";
 import { CAMP, CLUB_SEASON } from "@/lib/config";
+import { createPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createPageMetadata({
   title: "Přihláška",
   description:
     "Přihlaste své dítě na parkourový kroužek nebo letní tábor Leap Camp.",
-};
+  path: "/prihlaska",
+  image: "/images/2024_08_krouzek.jpg",
+  imageAlt: "Přihláška na parkourový kroužek nebo LeapCamp",
+});
 
 export default function PrihlaskaPage() {
   return (

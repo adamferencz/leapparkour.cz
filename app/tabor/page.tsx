@@ -5,11 +5,15 @@ import { CAMP, INSURANCE_URL } from "@/lib/config";
 import { YouTube } from "@/components/ui/YouTube";
 import { Reveal } from "@/components/ui/Reveal";
 import { AccordionItem } from "@/components/ui/Accordion";
+import { createPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createPageMetadata({
   title: `LeapCamp ${CAMP.year}: parkourový tábor pro děti ${CAMP.ageRange}`,
   description: `Týden pohybu, přátelství a vesmírného dobrodružství na Vysočině. Parkour, hry, týmové výzvy, zkušení trenéři, pedagogický dozor a zdravotník. Termín ${CAMP.dates}, ${CAMP.venue}, cena ${CAMP.price}.`,
-};
+  path: "/tabor",
+  image: "/images/2024_08_TABOROVA2022.jpg",
+  imageAlt: `LeapCamp ${CAMP.year} - letní parkourový tábor pro děti`,
+});
 
 const ctaButton =
   "inline-block rounded-full bg-brand px-6 py-3 font-semibold text-white transition-[background-color,transform] duration-200 hover:bg-brand-dark active:scale-[0.98]";
@@ -227,22 +231,27 @@ const REVIEWS = [
   {
     name: "had rychly",
     text: "Kreativní pohyb a spousta zábavy",
+    avatar: "/images/blog/blog-01.webp",
   },
   {
     name: "Jitka Klofáčová",
     text: "Příjemní vedoucí, skvělý program, spousta pohybu. Doporučuji všem, kdo se neradi nudí.",
+    avatar: "/images/blog/blog-20.webp",
   },
   {
     name: "Danielpk8",
     text: "Úžasný trenéři, děti je milují, díky za ně",
+    avatar: "/images/blog/blog-11.webp",
   },
   {
     name: "Magdalena Klofáčová",
     text: "Skvělí vedoucí, parádní program a každý den plný pohybu, her a zábavy. Každý rok si odvezeš nové dovednosti, kamarády a spoustu nezapomenutelných zážitků.",
+    avatar: "/images/blog/blog-13.webp",
   },
   {
     name: "Daniel Pospíchal",
     text: "Nejlepší parkourový tým na Vysočině. Vše dělají srdcem a vedou nové generace k pohybu a lásce ke sportu obecně.",
+    avatar: "/images/blog/blog-18.webp",
   },
 ];
 
@@ -297,7 +306,7 @@ export default function TaborPage() {
             <Reveal delay={0.16}>
               <div className="mt-8 flex flex-wrap items-center gap-4">
                 <Link href="/tabor/prihlaska" className={ctaButton}>
-                  Přihlásit dítě na tábor
+                  Jedu na LeapCamp
                 </Link>
                 <Link href="/tabor/informace" className={ctaSecondary}>
                   Zobrazit informace pro rodiče
@@ -427,7 +436,7 @@ export default function TaborPage() {
               zvládne něco, co pro něj ještě před chvílí vypadalo nemožně.
             </p>
             <Link href="/tabor/prihlaska" className={`${ctaButton} mt-8`}>
-              Chci přihlásit dítě
+              Jedu na LeapCamp
             </Link>
           </Reveal>
           <Reveal from="right">
@@ -659,7 +668,7 @@ export default function TaborPage() {
               příjezd v sobotu 16:00–17:00, odjezd v sobotu 10:00–11:00).
             </p>
             <Link href="/tabor/prihlaska" className={`${ctaButton} mt-8`}>
-              Přihlásit dítě na tábor
+              Jedu na LeapCamp
             </Link>
           </Reveal>
         </div>
@@ -669,35 +678,45 @@ export default function TaborPage() {
       <section className="py-16 md:py-24">
         <div className="container-site">
           <Reveal>
-            <div className="grid gap-10 rounded-3xl bg-navy p-8 md:p-12 lg:grid-cols-2 lg:gap-16">
-              <div className="flex flex-col justify-center">
-                <h2 className="text-3xl font-bold text-white md:text-4xl">Cena tábora</h2>
-                <p className="mt-6 text-lg text-slate-300">
-                  Cena LeapCampu {CAMP.year} je
-                </p>
-                <p className="mt-1 text-5xl font-extrabold text-white">{CAMP.price}</p>
-                <div className="mt-8 flex flex-wrap items-center gap-5">
-                  <Link href="/tabor/prihlaska" className={ctaButton}>
-                    Přihlásit dítě na tábor
-                  </Link>
-                  <Link
-                    href="/tabor/informace"
-                    className="font-semibold text-white underline-offset-4 hover:underline"
-                  >
-                    Další informace a podmínky
-                  </Link>
+            <div className="relative overflow-hidden rounded-3xl bg-navy">
+              <Image
+                src="/images/blog/blog-10.webp"
+                alt={`Parkour na LeapCampu ${CAMP.year}`}
+                fill
+                sizes="(min-width: 1024px) 1120px, 100vw"
+                className="object-cover object-left"
+              />
+              <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(28,36,75,0.58)_0%,rgba(28,36,75,0.68)_42%,rgba(28,36,75,0.98)_58%,#1c244b_100%)]" />
+              <div className="relative grid gap-10 p-8 md:p-12 lg:grid-cols-2 lg:gap-16">
+                <div className="flex min-h-[300px] flex-col justify-center">
+                  <h2 className="text-3xl font-bold !text-white md:text-4xl">Cena tábora</h2>
+                  <p className="mt-6 text-lg text-slate-100">
+                    Cena LeapCampu {CAMP.year} je
+                  </p>
+                  <p className="mt-1 text-5xl font-extrabold text-white">{CAMP.price}</p>
+                  <div className="mt-8 flex flex-wrap items-center gap-5">
+                    <Link href="/tabor/prihlaska" className={ctaButton}>
+                      Jedu na LeapCamp
+                    </Link>
+                    <Link
+                      href="/tabor/informace"
+                      className="font-semibold text-white underline-offset-4 hover:underline"
+                    >
+                      Další informace a podmínky
+                    </Link>
+                  </div>
                 </div>
-              </div>
-              <div>
-                <h3 className="text-xl font-bold text-white">Co je v ceně</h3>
-                <ul className="mt-6 grid gap-x-6 gap-y-3 text-slate-200 sm:grid-cols-2">
-                  {PRICE_INCLUDES.map((item) => (
-                    <li key={item} className="flex items-start gap-3">
-                      <IconCheck />
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
+                <div className="flex flex-col justify-center">
+                  <h3 className="text-xl font-bold !text-white">Co je v ceně</h3>
+                  <ul className="mt-6 grid gap-x-6 gap-y-3 text-slate-100 sm:grid-cols-2">
+                    {PRICE_INCLUDES.map((item) => (
+                      <li key={item} className="flex items-start gap-3">
+                        <IconCheck />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
             </div>
           </Reveal>
@@ -733,7 +752,7 @@ export default function TaborPage() {
           <Reveal>
             <div className="mt-10 text-center">
               <Link href="/tabor/prihlaska" className={ctaButton}>
-                Přihlásit dítě na LeapCamp {CAMP.year}
+                Jedu na LeapCamp
               </Link>
             </div>
           </Reveal>
@@ -823,21 +842,43 @@ export default function TaborPage() {
               </p>
             </div>
           </Reveal>
-          <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {REVIEWS.map((review, i) => (
-              <Reveal key={review.name} delay={(i % 3) * 0.06} className="h-full">
-                <figure className="flex h-full flex-col rounded-2xl bg-white p-6 shadow-sm transition-[transform,box-shadow] duration-200 hover:-translate-y-0.5 hover:shadow-md">
-                  <Stars />
-                  <blockquote className="mt-4 flex-1 text-sm leading-relaxed">
-                    {review.text}
-                  </blockquote>
-                  <figcaption className="mt-4 text-sm font-semibold text-navy">
-                    {review.name}
-                  </figcaption>
-                </figure>
-              </Reveal>
-            ))}
-          </div>
+          <Reveal delay={0.1}>
+            <div className="review-carousel-mask mt-12 overflow-hidden">
+              <div className="review-carousel-track flex w-max gap-6">
+                {[...REVIEWS, ...REVIEWS].map((review, i) => (
+                  <figure
+                    key={`${review.name}-${i}`}
+                    className="flex w-[82vw] max-w-[360px] shrink-0 flex-col rounded-2xl border border-slate-100 bg-white p-6 shadow-sm sm:w-[340px] lg:w-[352px]"
+                  >
+                    <div className="flex items-center gap-4">
+                      <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-full bg-slate-100 ring-2 ring-white shadow-sm">
+                        <Image
+                          src={review.avatar}
+                          alt={`Profilová fotka recenze: ${review.name}`}
+                          fill
+                          sizes="48px"
+                          className="object-cover"
+                        />
+                      </div>
+                      <figcaption>
+                        <p className="text-sm font-semibold text-navy">{review.name}</p>
+                        <p className="mt-0.5 text-xs text-steel/70">Google recenze</p>
+                      </figcaption>
+                    </div>
+                    <div className="mt-5 flex items-center justify-between gap-3">
+                      <Stars />
+                      <span className="rounded-full bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-700">
+                        5.0
+                      </span>
+                    </div>
+                    <blockquote className="mt-4 flex-1 text-sm leading-relaxed text-steel">
+                      {review.text}
+                    </blockquote>
+                  </figure>
+                ))}
+              </div>
+            </div>
+          </Reveal>
         </div>
       </section>
 
@@ -845,28 +886,38 @@ export default function TaborPage() {
       <section className="py-16 md:py-24">
         <div className="container-site">
           <Reveal>
-            <div className="rounded-3xl bg-navy p-8 text-center md:p-12">
-              <h2 className="mx-auto max-w-3xl text-3xl font-bold text-white md:text-4xl">
-                Pošlete dítě na týden, kde bude růst, hýbat se a sbírat zážitky
-              </h2>
-              <p className="mx-auto mt-6 max-w-2xl leading-relaxed text-slate-300">
-                LeapCamp není jen sportovní tábor. Je to týden, ve kterém děti trénují,
-                hrají, spolupracují, překonávají strach a zažívají příběh společně s partou
-                vrstevníků.
-              </p>
-              <p className="mx-auto mt-4 max-w-2xl leading-relaxed text-slate-300">
-                V roce {CAMP.year} je čeká vesmírná mise, ale hlavní zůstává stejné:
-                bezpečný pohyb, dobrá parta, zkušení trenéři a zážitky, které si děti
-                odvezou domů.
-              </p>
-              <div className="mt-8">
-                <Link href="/tabor/prihlaska" className={ctaButton}>
-                  Přihlásit dítě na LeapCamp {CAMP.year}
-                </Link>
+            <div className="relative overflow-hidden rounded-3xl bg-navy p-8 text-center md:p-12">
+              <Image
+                src="/images/blog/blog-24.webp"
+                alt="Táborová atmosféra na LeapCampu"
+                fill
+                sizes="(min-width: 1024px) 1120px, 100vw"
+                className="object-cover opacity-40"
+              />
+              <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(28,36,75,0.92),rgba(47,99,212,0.66))]" />
+              <div className="relative">
+                <h2 className="mx-auto max-w-3xl text-3xl font-bold !text-white md:text-4xl">
+                  Pošlete dítě na týden, kde bude růst, hýbat se a sbírat zážitky
+                </h2>
+                <p className="mx-auto mt-6 max-w-2xl leading-relaxed text-slate-100">
+                  LeapCamp není jen sportovní tábor. Je to týden, ve kterém děti trénují,
+                  hrají, spolupracují, překonávají strach a zažívají příběh společně s partou
+                  vrstevníků.
+                </p>
+                <p className="mx-auto mt-4 max-w-2xl leading-relaxed text-slate-100">
+                  V roce {CAMP.year} je čeká vesmírná mise, ale hlavní zůstává stejné:
+                  bezpečný pohyb, dobrá parta, zkušení trenéři a zážitky, které si děti
+                  odvezou domů.
+                </p>
+                <div className="mt-8">
+                  <Link href="/tabor/prihlaska" className={ctaButton}>
+                    Jedu na LeapCamp
+                  </Link>
+                </div>
+                <p className="mt-6 text-sm text-slate-200/80">
+                  Termín: {CAMP.dates} · Věk: {CAMP.ageRange} · Místo: {CAMP.venue}
+                </p>
               </div>
-              <p className="mt-6 text-sm text-slate-400">
-                Termín: {CAMP.dates} · Věk: {CAMP.ageRange} · Místo: {CAMP.venue}
-              </p>
             </div>
           </Reveal>
         </div>

@@ -12,12 +12,24 @@ const poppins = Poppins({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://leapparkour.cz"),
+  applicationName: "Leap Parkour",
   title: {
     default: "Leap Parkour – Parkour komunita na Vysočině",
     template: "%s | Leap Parkour",
   },
   description:
     "Největší parkourová komunita na Vysočině. Pořádáme parkourové kroužky pro děti v Havlíčkově Brodě a letní tábor LeapCamp plný pohybu, her a zážitků.",
+  alternates: {
+    canonical: "https://leapparkour.cz",
+  },
+  keywords: [
+    "parkour Havlíčkův Brod",
+    "parkourový kroužek",
+    "LeapCamp",
+    "parkourový tábor",
+    "parkour pro děti",
+    "Leap Parkour",
+  ],
   openGraph: {
     title: "Leap Parkour – Parkour komunita na Vysočině",
     description: "Pořádáme parkourové kroužky pro děti v Havlíčkově Brodě a letní tábor LeapCamp plný pohybu, her a zážitků.",
@@ -26,13 +38,20 @@ export const metadata: Metadata = {
     locale: "cs_CZ",
     type: "website",
     images: [
-      {
-        url: "/images/2024_08_DSC05433.jpg",
-        width: 1200,
-        height: 630,
-        alt: "Leap Parkour",
+        {
+        url: "/images/2024_08_krouzek.jpg",
+        width: 1024,
+        height: 571,
+        alt: "Leap Parkour - parkourové kroužky a tábor pro děti",
       },
     ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Leap Parkour – Parkour komunita na Vysočině",
+    description:
+      "Parkourové kroužky v Havlíčkově Brodě a letní tábor LeapCamp pro děti.",
+    images: ["/images/2024_08_krouzek.jpg"],
   },
   robots: {
     index: true,
@@ -47,7 +66,7 @@ const jsonLd = {
   "alternateName": "LeapParkour z.s.",
   "url": "https://leapparkour.cz",
   "logo": "https://leapparkour.cz/images/logo.svg",
-  "image": "https://leapparkour.cz/images/2024_08_DSC05433.jpg",
+  "image": "https://leapparkour.cz/images/2024_08_krouzek.jpg",
   "description": "Největší parkourová komunita na Vysočině. Pořádáme parkourové kroužky pro děti v Havlíčkově Brodě a letní tábor LeapCamp.",
   "address": {
     "@type": "PostalAddress",

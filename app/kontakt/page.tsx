@@ -2,12 +2,16 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Reveal } from "@/components/ui/Reveal";
 import { SITE } from "@/lib/config";
+import { createPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createPageMetadata({
   title: "Kontakt",
   description:
     "Napište nám na leapparkour@seznam.cz nebo nás sledujte na sociálních sítích. Najdete nás v Havlíčkově Brodě.",
-};
+  path: "/kontakt",
+  image: "/images/2024_08_krouzek.jpg",
+  imageAlt: "Kontakt na Leap Parkour v Havlíčkově Brodě",
+});
 
 const SOCIALS = [
   {

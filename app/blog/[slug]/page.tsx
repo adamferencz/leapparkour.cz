@@ -4,29 +4,52 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { BLOG_POSTS } from "@/lib/blog";
 
+const BLOG_SLUG_ALIASES: Record<string, string> = {
+  "useful-mikiny": "bud-silny-abys-byl-uzitecny",
+};
+
+function parseCzechDate(date: string) {
+  const match = date.match(/^(\d{1,2})\.(\d{1,2})\.\s*(\d{4})$/);
+  if (!match) return undefined;
+
+  const [, day, month, year] = match;
+  return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
+}
+
 interface Props {
   params: Promise<{ slug: string }>;
 }
 
 export async function generateStaticParams() {
-  return BLOG_POSTS.map((post) => ({
-    slug: post.slug,
-  }));
+  return [
+    ...BLOG_POSTS.map((post) => ({
+      slug: post.slug,
+    })),
+    ...Object.keys(BLOG_SLUG_ALIASES).map((slug) => ({ slug })),
+  ];
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const post = BLOG_POSTS.find((p) => p.slug === slug);
+  const canonicalSlug = BLOG_SLUG_ALIASES[slug] ?? slug;
+  const post = BLOG_POSTS.find((p) => p.slug === canonicalSlug);
   if (!post) return {};
+  const url = `https://leapparkour.cz/blog/${post.slug}`;
 
   return {
     title: post.title,
     description: post.metaDescription,
+    alternates: {
+      canonical: url,
+    },
     openGraph: {
       title: post.title,
       description: post.metaDescription,
+      url,
       type: "article",
-      publishedTime: post.date,
+      publishedTime: parseCzechDate(post.date),
+      siteName: "Leap Parkour",
+      locale: "cs_CZ",
       authors: [post.author],
       images: [
         {
@@ -35,13 +58,21 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         },
       ],
     },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: post.metaDescription,
+      images: [post.coverImage],
+    },
   };
 }
 
 export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params;
-  const post = BLOG_POSTS.find((p) => p.slug === slug);
+  const canonicalSlug = BLOG_SLUG_ALIASES[slug] ?? slug;
+  const post = BLOG_POSTS.find((p) => p.slug === canonicalSlug);
   if (!post) notFound();
+  const publishedDate = parseCzechDate(post.date);
 
   // JSON-LD Article Schema
   const jsonLd = {
@@ -50,7 +81,7 @@ export default async function BlogPostPage({ params }: Props) {
     "headline": post.title,
     "description": post.excerpt,
     "image": `https://leapparkour.cz${post.coverImage}`,
-    "datePublished": "2026-07-18", // dynamically formatted date or fallback
+    ...(publishedDate ? { "datePublished": publishedDate } : {}),
     "author": {
       "@type": "Organization",
       "name": "Leap Parkour",
@@ -131,7 +162,9 @@ export default async function BlogPostPage({ params }: Props) {
                        [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:mb-6 [&_ul]:text-steel/90
                        [&_li]:mb-2
                        [&_blockquote]:border-l-4 [&_blockquote]:border-brand [&_blockquote]:pl-4 [&_blockquote]:italic [&_blockquote]:text-brand [&_blockquote]:my-8
-                       [&_a]:text-brand [&_a]:font-bold [&_a]:underline hover:[&_a]:text-brand-dark"
+                       [&_a]:text-brand [&_a]:font-bold [&_a]:underline hover:[&_a]:text-brand-dark
+                       [&_figure.blog-inline-photo]:my-8
+                       [&_figure.blog-inline-photo_img]:aspect-video [&_figure.blog-inline-photo_img]:w-full [&_figure.blog-inline-photo_img]:rounded-2xl [&_figure.blog-inline-photo_img]:object-cover [&_figure.blog-inline-photo_img]:shadow-sm"
             dangerouslySetInnerHTML={{ __html: post.content }}
           />
         </div>

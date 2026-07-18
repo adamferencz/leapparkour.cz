@@ -3,12 +3,16 @@ import { ClubForm } from "@/components/forms/ClubForm";
 import { AccordionItem } from "@/components/ui/Accordion";
 import { Reveal } from "@/components/ui/Reveal";
 import { CLUB_SEASON, INSURANCE_URL } from "@/lib/config";
+import { createPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createPageMetadata({
   title: "Přihláška na kroužek",
   description:
     "Přihlaste své dítě na parkourový kroužek v Havlíčkově Brodě. Tréninky ve čtvrtek a pátek pro děti 6–16 let, první trénink zdarma.",
-};
+  path: "/krouzek/prihlaska",
+  image: "/images/2024_08_krouzek.jpg",
+  imageAlt: "Online přihláška na parkourový kroužek Leap Parkour",
+});
 
 function IconCheck() {
   return (

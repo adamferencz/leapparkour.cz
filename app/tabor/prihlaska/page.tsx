@@ -3,11 +3,15 @@ import { CampForm } from "@/components/forms/CampForm";
 import { AccordionItem } from "@/components/ui/Accordion";
 import { Reveal } from "@/components/ui/Reveal";
 import { CAMP, INSURANCE_URL } from "@/lib/config";
+import { createPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createPageMetadata({
   title: `Přihláška na ${CAMP.label}`,
   description: `Online přihláška na letní parkourový tábor ${CAMP.label} — ${CAMP.dates}, ${CAMP.venue}, pro děti ${CAMP.ageRange}.`,
-};
+  path: "/tabor/prihlaska",
+  image: "/images/2024_08_TABOROVA2022.jpg",
+  imageAlt: `Online přihláška na letní parkourový tábor ${CAMP.label}`,
+});
 
 /** Ikonky akordeonů — inline SVG (stroke, 22px). */
 const iconProps = {

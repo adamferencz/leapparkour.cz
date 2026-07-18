@@ -2,12 +2,16 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { BLOG_POSTS } from "@/lib/blog";
+import { createPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createPageMetadata({
   title: "Blog a články o parkouru",
   description:
     "Přečtěte si články o parkouru pro děti, bezpečnosti na trénincích, o našem letním táboře Leap Camp a dalších tématech z komunity Leap Parkour.",
-};
+  path: "/blog",
+  image: "/images/blog/blog-18.webp",
+  imageAlt: "Blog Leap Parkour - články o parkouru, tréninku a táborech",
+});
 
 export default function BlogPage() {
   return (
@@ -37,7 +41,7 @@ export default function BlogPage() {
               </Link>
               <div className="flex flex-1 flex-col p-6">
                 <div className="flex items-center gap-3 text-xs text-steel/80">
-                  <time dateTime="2026-07-18">{post.date}</time>
+                  <time>{post.date}</time>
                   <span>•</span>
                   <span>{post.readTime}</span>
                 </div>

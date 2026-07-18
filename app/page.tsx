@@ -3,12 +3,16 @@ import Image from "next/image";
 import Link from "next/link";
 import { TimelineBlock } from "@/components/home/TimelineBlock";
 import { Reveal } from "@/components/ui/Reveal";
+import { createPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createPageMetadata({
   title: { absolute: "Leap Parkour – Parkour komunita na Vysočině" },
   description:
     "Největší parkourová komunita na Vysočině již od roku 2015. Pořádáme parkourové kroužky v Havlíčkově Brodě a letní tábor LeapCamp plný pohybu, her a zážitků.",
-};
+  path: "/",
+  image: "/images/2024_08_krouzek.jpg",
+  imageAlt: "Děti na parkourovém kroužku Leap Parkour v Havlíčkově Brodě",
+});
 
 const BTN_PRIMARY =
   "inline-flex items-center justify-center rounded-full bg-brand px-6 py-3 font-semibold text-white transition-[background-color,color,transform] duration-200 hover:bg-brand-dark active:scale-[0.98]";
