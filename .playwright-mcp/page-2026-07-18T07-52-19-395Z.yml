@@ -1,0 +1,158 @@
+- generic [active] [ref=e1]:
+  - link "Přeskočit na obsah" [ref=e2] [cursor=pointer]:
+    - /url: "#content"
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - generic [ref=e9]:
+        - generic [ref=e10]:
+          - generic [ref=e11]:
+            - generic:
+              - generic:
+                - link "leapparkour.cz":
+                  - /url: https://leapparkour.cz/
+          - 'navigation "Site Navigation: Primary" [ref=e15]':
+            - list [ref=e17]:
+              - listitem [ref=e18]:
+                - link "KROUŽKY" [ref=e19] [cursor=pointer]:
+                  - /url: https://leapparkour.cz/krouzek/
+              - listitem [ref=e20]:
+                - link "TÁBORY" [ref=e21] [cursor=pointer]:
+                  - /url: https://leapparkour.cz/leapcamp2026/
+              - listitem [ref=e22]:
+                - link "KONTAKT" [ref=e23] [cursor=pointer]:
+                  - /url: https://leapparkour.cz/kontakt/
+        - generic [ref=e24]:
+          - generic [ref=e27]:
+            - link "Facebook" [ref=e28] [cursor=pointer]:
+              - /url: https://www.facebook.com/share/YG84oj6nvVgR4NvM/
+            - link "Youtube" [ref=e32] [cursor=pointer]:
+              - /url: https://www.youtube.com/@LeapParkour
+            - link "Instagram" [ref=e36] [cursor=pointer]:
+              - /url: https://www.instagram.com/leapparkour/
+          - link "Přidej se k nám" [ref=e42] [cursor=pointer]:
+            - /url: https://leapparkour.cz/krouzek/
+    - main [ref=e47]:
+      - article [ref=e48]:
+        - generic [ref=e50]:
+          - generic [ref=e52]:
+            - heading "Pořádáme parkourové kroužky a tábory" [level=1] [ref=e55]
+            - paragraph [ref=e58]: Největší parkourová komunita na Vysočině již od roku 2015
+            - link "Přidej se k nám" [ref=e62] [cursor=pointer]:
+              - /url: https://leapparkour.cz/leapcamp2026/
+          - generic [ref=e69]:
+            - heading "O nás" [level=3] [ref=e72]
+            - paragraph [ref=e75]: V roce 2015 se v Havlíčkově Brodě potkala parta cílevědomých lidí. Lidí kteří měli vášeň pro jednu jedinou věc.
+            - heading "Parkour" [level=1] [ref=e80]
+            - paragraph [ref=e83]: Láska k pohybu byla to, co měli společné.
+            - heading "Touha" [level=1] [ref=e90]
+            - paragraph [ref=e93]: Začali společně trénovat. Neustále. Každý den. Jejich touha po tom se zlepšovat, stát se silnějšími, být rychlejšími, být vytrvalejšími, byla čím dál tím větší. Navzájem se motivovali. Učili se jeden od druhého, utužovali přátelství a společně rostli.
+            - heading "Filozofie" [level=1] [ref=e100]
+            - paragraph [ref=e103]: Řídili se parkourovým mottem "être fort pour être utile" - Buď silný, aby jsi byl užitečný.
+            - heading "Komunita" [level=1] [ref=e110]
+            - paragraph [ref=e113]: Budovali komunitu podobně smýšlejících lidí. Z parkouru se stal životní styl. Když se pro něco doopravdy nadchnete, dokážete neuvěřitelné věci.
+            - heading "Jamy" [level=1] [ref=e120]
+            - paragraph [ref=e123]: Začali jezdit po celé ČR na parkourové jamy setkání (setkání). Tam sbírali zkušenosti a poznatky od ostatních tracerů (parkouristů).
+            - heading "Cestování" [level=1] [ref=e130]
+            - paragraph [ref=e133]: Neznali hranic a toužili poznávat a objevovat víc. Sbírali zážitky a vzpomínky, kde se jen dalo. Jedna z jejich cest vedla dodávkou napříč Rakouskem, Švýcarskem a Německem. Vše dokumentovali a vytvořili toto video.
+            - link "Přehrát video" [ref=e137] [cursor=pointer]:
+              - /url: https://www.youtube.com/watch?v=FUO8em_0ASA
+            - heading "Předávání zkušeností" [level=1] [ref=e149]
+            - paragraph [ref=e152]: Zájem o parkour se neustále zvětšoval. Kluci věděli, že nejlepší, co můžou udělat, je šířit jejich dobré myšlenky a znalosti dál. Dál k mladším generacím.
+            - heading "Kroužky" [level=1] [ref=e159]
+            - paragraph [ref=e162]: Tak vznikly první parkourové kroužky v Havlíčkově Brodě. Netrvalo dlouho a pod rukami trenérů prošli stovky dětí.
+            - link "Přidej se na kroužek" [ref=e166] [cursor=pointer]:
+              - /url: "#"
+            - heading "Workshopy" [level=1] [ref=e175]
+            - paragraph [ref=e178]: Začali pořádat workshopy po celé ČR.
+            - heading "Šíříme povědomí o parkouru" [level=1] [ref=e185]
+            - paragraph [ref=e188]: Vystoupení na maturitních plesech, dětských dnech, eventech, menších i větších akcích.
+            - heading "Tábory" [level=1] [ref=e195]
+            - paragraph [ref=e198]: Nejlepším rozhodnutím, které parta kluků mohla udělat bylo založení parkourových táborů. Pojmenovali je LeapCamp.
+            - paragraph [ref=e201]: Týden plný zážitků, dobrodružství, her, trénování,
+            - link "Přidej se k nám" [ref=e205] [cursor=pointer]:
+              - /url: "#"
+            - heading "Chceme hřiště v Havlíčkově Brodě" [level=1] [ref=e214]
+            - paragraph [ref=e217]: Bylo na čase vybudovat lepší zázemí pro parkourovou komunitu. Vznikl tak nový projekt..
+            - iframe [ref=e221]:
+              
+            - paragraph [ref=e226]: Díky jejich snaze, silné vůli a podpoře města HB vzniklo první parkourové hřiště na Vysočině. Další sen se stal realitou..
+            - heading "Merch" [level=1] [ref=e233]
+            - paragraph [ref=e236]: "Komunita se neustále rozšiřovala a kluci vytvořili svůj první merch s jejich myšlenkami, které uznávali. Natáčeli profesionální videa za účelem šíření těchto myšlenek:"
+            - link "Be strong to be useful" [ref=e240] [cursor=pointer]:
+              - /url: https://www.youtube.com/watch?v=hpPxPD0iGQ4&t
+            - link "Collect moments, not things" [ref=e246] [cursor=pointer]:
+              - /url: https://www.youtube.com/watch?v=P9FCYGAQTFU
+            - heading "Parkourová hala?" [level=1] [ref=e255]
+            - paragraph [ref=e258]: Sny se mají plnit! Ale ne každý sen, se má stát skutečností. Někdy se zkrátka stane, že se ocitnete na jiné cestě, než by jste měli být. Náš plán s multifunkční halou nevyšel, za to nás ale nasměroval na správnou cestu.
+            - link "Zobrazit článek" [ref=e262] [cursor=pointer]:
+              - /url: https://www.idnes.cz/jihlava/zpravy/vysocina-havlickuv-brod-parkour-hala-leap-parkour-centrum.A190522_477346_jihlava-zpravy_epsal
+            - heading "Muži" [level=1] [ref=e271]
+            - paragraph [ref=e274]: Na začátku této cesty v roce 2015 to byla parta kluků. Nyní v roce 2024 je to parta silných soběstačných mužů, kteří jsou připraveni čelit všem překážkám, které se jim postaví do cesty.
+            - heading "Poslání" [level=1] [ref=e281]
+            - paragraph [ref=e284]: A protože každý má ve svém životě jiné poslání, tak se každý vydal svou vlastní životní cestou..
+            - paragraph [ref=e291]:
+              - text: Naše parta hrdinů má už teď dvě věci společné.
+              - generic [ref=e292]: 1. Historii a zážitky, které jim nikdo nikdy nevezme. 2. Lásku pro pohyb
+              - text: Tady naše cesta nekončí, stále jsme tu pro vás a vytváříme aktivní parkourovou komunitu. Pokud i ty se k nám chceš přidat a být její součástí, klikni na jedno z následující tlačítek.
+            - link "Kroužek" [ref=e296] [cursor=pointer]:
+              - /url: "#"
+            - link "Tábor" [ref=e302] [cursor=pointer]:
+              - /url: "#"
+          - generic [ref=e306]:
+            - heading "Collect moments, not things." [level=3] [ref=e309]
+            - paragraph [ref=e312]: Vyrábíme vlastní parkour oblečení, které prodáváme pouze osobně na táboře anebo na kroužkách. Pro více informací nám prosím napište.
+            - link "Kontakt" [ref=e316] [cursor=pointer]:
+              - /url: "#"
+    - generic [ref=e320]:
+      - button "Close menu" [ref=e322] [cursor=pointer]
+      - generic [ref=e327]:
+        - 'navigation "Site Navigation: Primary" [ref=e331]':
+          - list [ref=e333]:
+            - listitem [ref=e334]:
+              - link "KROUŽKY" [ref=e335] [cursor=pointer]:
+                - /url: https://leapparkour.cz/krouzek/
+            - listitem [ref=e336]:
+              - link "TÁBORY" [ref=e337] [cursor=pointer]:
+                - /url: https://leapparkour.cz/leapcamp2026/
+            - listitem [ref=e338]:
+              - link "KONTAKT" [ref=e339] [cursor=pointer]:
+                - /url: https://leapparkour.cz/kontakt/
+        - generic [ref=e342]:
+          - link "Facebook" [ref=e343] [cursor=pointer]:
+            - /url: https://www.facebook.com/share/YG84oj6nvVgR4NvM/
+          - link "Youtube" [ref=e347] [cursor=pointer]:
+            - /url: https://www.youtube.com/@LeapParkour
+          - link "Instagram" [ref=e351] [cursor=pointer]:
+            - /url: https://www.instagram.com/leapparkour/
+        - link "Přidej se k nám" [ref=e357] [cursor=pointer]:
+          - /url: https://leapparkour.cz/krouzek/
+    - contentinfo [ref=e359]:
+      - generic [ref=e362]:
+        - complementary "Footer Widget 1" [ref=e364]:
+          - paragraph [ref=e367]
+        - complementary "Footer Widget 3" [ref=e369]:
+          - generic [ref=e370]:
+            - heading "Odkazy" [level=2] [ref=e371]
+            - navigation "Odkazy" [ref=e372]:
+              - list [ref=e373]:
+                - listitem [ref=e374]:
+                  - link "KROUŽKY" [ref=e375] [cursor=pointer]:
+                    - /url: https://leapparkour.cz/krouzek/
+                - listitem [ref=e376]:
+                  - link "TÁBORY" [ref=e377] [cursor=pointer]:
+                    - /url: https://leapparkour.cz/leapcamp2026/
+                - listitem [ref=e378]:
+                  - link "KONTAKT" [ref=e379] [cursor=pointer]:
+                    - /url: https://leapparkour.cz/kontakt/
+        - complementary "Footer Widget 4" [ref=e381]:
+          - generic [ref=e382]:
+            - heading "Kontakt" [level=2] [ref=e383]
+            - generic [ref=e384]:
+              - paragraph [ref=e385]: LeapParkour z.s.
+              - paragraph [ref=e386]: "Ičo: 07195320"
+              - paragraph [ref=e387]: leapparkour@seznam.cz
+              - paragraph [ref=e388]: "Podporují nás: www.fapi.cz"
+              - paragraph [ref=e389]
+              - paragraph [ref=e390]
+      - paragraph [ref=e397]: © 2026 leapparkour.cz
+  - generic [ref=e398]: desktop

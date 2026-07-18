@@ -1,0 +1,89 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+import { CAMP } from "@/lib/config";
+
+export const metadata: Metadata = {
+  title: "Děkujeme za přihlášku na tábor",
+  description: `Přihlášku na ${CAMP.label} jsme přijali — další kroky k platbě a dokumentům.`,
+  robots: { index: false },
+};
+
+export default function TaborDekujemePage() {
+  // as const dělá z paymentUrl literál "" — rozšíříme na string, ať jde větvit.
+  const paymentUrl: string = CAMP.paymentUrl;
+
+  return (
+    <div className="container-site py-16 md:py-24">
+      <div className="mx-auto max-w-2xl text-center">
+        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-brand/10 text-brand">
+          <svg
+            width="32"
+            height="32"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <circle cx="12" cy="12" r="10" />
+            <path d="m9 12 2 2 4-4" />
+          </svg>
+        </div>
+
+        <h1 className="mt-6 text-4xl font-extrabold md:text-5xl">
+          Děkujeme za přihlášku!
+        </h1>
+        <p className="mt-4 text-lg">
+          Vaši přihlášku na {CAMP.label} ({CAMP.dates}) jsme v pořádku přijali.
+        </p>
+
+        {paymentUrl ? (
+          <div className="mt-10 rounded-3xl border-2 border-brand bg-brand/5 p-8">
+            <h2 className="text-2xl font-bold">Důležité: dokončete platbu</h2>
+            <p className="mt-3 text-steel">
+              Na tlačítko níže je nutné kliknout! Jinak by tábor nebylo možné
+              zaplatit.
+            </p>
+            <a
+              href={paymentUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-6 inline-block rounded-full bg-brand px-10 py-4 text-lg font-semibold text-white transition-colors hover:bg-brand-dark"
+            >
+              Přejít k platbě
+            </a>
+          </div>
+        ) : (
+          <div className="mt-10 rounded-3xl bg-slate-100 p-8">
+            <h2 className="text-2xl font-bold">Jak zaplatit?</h2>
+            <p className="mt-3 text-steel">
+              Platební údaje vám pošleme na e-mail uvedený v přihlášce.
+            </p>
+          </div>
+        )}
+
+        <p className="mt-8 text-steel">
+          {CAMP.infoNote} Před odjezdem si prosím projděte důležité informace o
+          táboře — najdete tam i seznam dokumentů, bez kterých dítě na tábor
+          přijmout nemůžeme.
+        </p>
+
+        <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
+          <Link
+            href="/tabor/informace"
+            className="rounded-full bg-navy px-6 py-3 font-semibold text-white transition-colors hover:bg-navy/90"
+          >
+            Důležité informace a dokumenty
+          </Link>
+          <Link
+            href="/"
+            className="font-semibold text-brand hover:underline"
+          >
+            Zpět na úvodní stránku →
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+}

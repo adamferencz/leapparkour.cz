@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "skills": {
+    "impeccable": {
+      "source": "pbakaus/impeccable",
+      "sourceType": "github",
+      "skillPath": ".agents/skills/impeccable/SKILL.md",
+      "computedHash": "dbbe3ac1a6285c2d2a18f39f56b2dee5b977e9566e2d0bba4347028ba90285bd"
+    },
+    "ui-animation": {
+      "source": "mblode/agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/ui-animation/SKILL.md",
+      "computedHash": "6f312759d3821a55ea4a250cdff9c10cd2c6d530287a5f3666f38297b1b8f594"
+    }
+  }
+}

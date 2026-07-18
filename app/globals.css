@@ -1,0 +1,32 @@
+@import "tailwindcss";
+
+@theme {
+  /* Brand — převzato z původního webu leapparkour.cz */
+  --color-brand: #467ff7;
+  --color-brand-dark: #2f63d4;
+  --color-navy: #1c244b;
+  --color-steel: #324a6d;
+
+  --font-sans: var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
+}
+
+body {
+  color: var(--color-steel);
+  background: #ffffff;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--color-navy);
+}
+
+@utility container-site {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 72rem;
+  padding-inline: 1.25rem;
+}

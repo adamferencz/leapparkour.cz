@@ -1,0 +1,478 @@
+# LeapCamp 2027 - návrh copywritingu landing page
+
+Zdrojový rámec: LeapCamp 2026, hlavní web LeapParkour, podmínky tábora a veřejně dostupné informace o předchozí komunikaci LeapParkour.
+
+Rozsah tohoto dokumentu: tento dokument slouží pouze jako copywritingový podklad pro landing page. Veškerý design, grafika, animace, emotikony, fotky a vizuální styl mají být použité z AI výstupů, které připravuje kolega. Texty níže tedy neřeší finální vizuální podobu stránky, pouze obsah, strukturu, argumentaci a prodejní sdělení.
+
+Poznámka k použití Star Wars motivu: text používá vesmírnou / galaktickou tematiku lehce, aby stránka působila bezpečně a důvěryhodně pro rodiče. Před ostrým zveřejněním doporučuji zvážit právně opatrnější formulace typu "vesmírné dobrodružství inspirované světem galaktických hrdinů" místo výrazného užívání značky Star Wars.
+
+## Strategický základ stránky
+
+### Hlavní prodejní slib
+
+Bezpečný týden plný pohybu, parkouru a dobrodružství, kde se děti zlepší, najdou partu a zažijí tábor, na který budou dlouho vzpomínat.
+
+### Pro rodiče musí stránka rychle odpovědět na tyto otázky
+
+- Je tábor bezpečný?
+- Pro jak staré děti je vhodný?
+- Zvládne ho i začátečník?
+- Kdo se o děti stará?
+- Kde a kdy tábor probíhá?
+- Co přesně děti čeká?
+- Jak je zajištěný program, dozor a zdravotní péče?
+- Kolik tábor stojí?
+- Jak se přihlásit?
+- Co když dítě onemocní nebo se něco změní?
+
+### Primární CTA
+
+Přihlásit dítě na LeapCamp 2027
+
+### Sekundární CTA
+
+Zobrazit informace pro rodiče
+
+---
+
+# Landing Page Copy
+
+## Hero sekce
+
+### Nadpis
+
+LeapCamp 2027: parkourový tábor pro děti 8-16 let
+
+### Podnadpis
+
+Týden pohybu, přátelství a vesmírného dobrodružství na Vysočině. Děti čeká parkour, hry, týmové výzvy, zkušení trenéři, pedagogický dozor a zdravotník po celou dobu tábora.
+
+### Krátké informace v bodech
+
+- 2. 7. - 10. 7. 2027
+- Táborové středisko Radost u Světlé nad Sázavou
+- Pro začátečníky i pokročilé ve věku 8-16 let
+- Parkour, hry, týmové bodování a celotáborový příběh
+- Zkušení trenéři, pedagogický dozor a zdravotník
+
+### CTA
+
+Přihlásit dítě na tábor
+
+### Doplňkový text pod CTA
+
+Kapacita tábora je omezená. Po odeslání přihlášky vám pošleme všechny důležité informace k platbě, dokumentům a příjezdu.
+
+---
+
+## Krátká důvěryhodnostní sekce
+
+### Nadpis
+
+Tábor od parkourové komunity, která vede děti k pohybu od roku 2015
+
+### Text
+
+LeapParkour vznikl v Havlíčkově Brodě jako parta lidí, kteří milovali pohyb, trénování a překonávání vlastních limitů. Postupně z toho vyrostly parkourové kroužky, workshopy, komunita a letní LeapCamp.
+
+Na táboře dětem nepředáváme jen triky. Učíme je trénovat bezpečně, spolupracovat, překonávat strach, respektovat ostatní a zažít radost z pohybu.
+
+---
+
+## Pro koho je tábor vhodný
+
+### Nadpis
+
+Pro děti, které chtějí skákat, hýbat se a zažít pořádný tábor
+
+### Text
+
+LeapCamp je určený pro děti od 8 do 16 let. Přijet mohou začátečníci, kteří s parkourem teprve začínají, i pokročilejší děti, které už trénují a chtějí se během týdne posunout dál.
+
+Program vedeme tak, aby si každé dítě našlo svoji úroveň. Nikdo nemusí umět salto ani žádný konkrétní trik předem. Důležité je, aby mělo chuť hýbat se, zkoušet nové věci a fungovat v partě.
+
+### Rodičovský doplněk
+
+Tréninky probíhají pod dohledem trenérů. Děti neskáčou parkour samy bez svolení vedoucích a během programu poslouchají pokyny trenéra.
+
+---
+
+## Téma 2027
+
+### Nadpis
+
+V roce 2027 nás čeká vesmírná mise
+
+### Text
+
+LeapCamp 2027 se ponese v duchu galaktického dobrodružství. Děti se zapojí do celotáborové hry, budou plnit týmové mise, sbírat body a postupně odkrývat příběh, ve kterém rozhoduje odvaha, spolupráce a schopnost překonat překážky.
+
+Parkour se do tohoto světa hodí přirozeně. Každý skok, přeskok, výlez nebo salto je další krok na cestě mladého hrdiny. Nejde ale o výkon za každou cenu. Jde o postupný trénink, bezpečné zlepšování a radost z toho, že dítě zvládne něco, co pro něj ještě před chvílí vypadalo nemožně.
+
+### CTA
+
+Chci přihlásit dítě
+
+---
+
+## Co děti na táboře zažijí
+
+### Nadpis
+
+Parkour, hry, týmové výzvy a zážitky od rána do večera
+
+### Text
+
+Během týdne děti čeká pestrý program, který kombinuje parkourový trénink, sportovní aktivity, táborové hry a celotáborový příběh.
+
+### Body
+
+- parkourové tréninky pro začátečníky i pokročilé,
+- bezpečný nácvik technik, skoků, přeskoků a dopadů,
+- parkourový deník pro sledování pokroku,
+- workshop zaměřený na salto vzad,
+- velký airtrack, trampolíny, bedny, lešení, žíněnky a další překážky,
+- týmové bodování a celotáborová hra,
+- další sporty a pohybové aktivity podle programu,
+- fotky a táborové video jako vzpomínka na celý týden.
+
+### Krátký doplněk
+
+Program není jen o parkouru. Děti si vyzkouší více pohybových aktivit, naučí se spolupracovat v týmu a zažijí klasickou táborovou atmosféru.
+
+---
+
+## Bezpečnost a dohled
+
+### Nadpis
+
+Bezpečnost bereme stejně vážně jako zábavu
+
+### Text
+
+Rozumíme tomu, že u parkourového tábora je bezpečnost pro rodiče jedna z nejdůležitějších otázek. Proto děti trénují pod vedením zkušených trenérů, program má jasná pravidla a po celou dobu tábora je zajištěný dohled.
+
+### Body
+
+- děti trénují pod vedením trenérů,
+- program probíhá podle táborového řádu,
+- účastníci neskáčou parkour bez svolení vedoucích,
+- na táboře je pedagogický dozor,
+- na táboře je zkušený zdravotník,
+- děti jsou vedené k respektu, spolupráci a ohleduplnosti,
+- součástí tábora je základní pojištění od České rady dětí a mládeže.
+
+### Text pro rodiče
+
+Naším cílem není tlačit děti do výkonů, na které nejsou připravené. Chceme, aby se zlepšovaly postupně, zdravě a s radostí. Každé dítě má jinou úroveň a podle toho s ním pracujeme.
+
+---
+
+## Trenéři
+
+### Nadpis
+
+Parta trenérů, která jde dětem vlastním příkladem
+
+### Text
+
+Na LeapCampu se o děti stará tým vedoucích, trenérů, pedagogického dozoru a zdravotníka. Jsou to lidé, kteří mají rádi pohyb, pracují s dětmi a vědí, jak vytvořit prostředí, ve kterém se děti cítí dobře, bezpečně a zároveň mají chuť překonávat samy sebe.
+
+LeapParkour vznikl z opravdové lásky k pohybu. Stejnou energii se snažíme předávat i dětem na kroužcích a táborech.
+
+### Citace / osobní blok
+
+"Také jsem jezdil jako dítě na letní tábory. Bylo to super a nikdy na ně nezapomenu. Jsou to pro mě zážitky na celý život a přesně o to se snažím, aby LeapCamp byl pro děti zážitkem, na který jen tak nezapomenou."
+
+David Pospíchal, zakladatel a hlavní vedoucí tábora
+
+---
+
+## Kdy a kde
+
+### Nadpis
+
+Termín a místo konání
+
+### Text
+
+LeapCamp 2027 proběhne od 2. 7. do 10. 7. 2027 v Táborovém středisku Radost u Světlé nad Sázavou.
+
+### Praktické údaje
+
+- Termín: 2. 7. - 10. 7. 2027
+- Místo: Táborové středisko Radost u Světlé nad Sázavou
+- Adresa: Nová Ves u Světlé 103, 582 91 Nová Ves u Světlé
+- Věk: 8-16 let
+- Typ tábora: pobytový parkour-herní tábor
+
+### Poznámka před publikací
+
+Příjezdové a odjezdové časy převzít podle finálních organizačních pokynů pro rok 2027. V roce 2026 byl příjezd v sobotu 16:00-17:00 a odjezd v sobotu 10:00-11:00.
+
+---
+
+## Cena
+
+### Nadpis
+
+Cena tábora
+
+### Text
+
+Cena LeapCampu 2027 je 7 450 Kč.
+
+### Co je v ceně
+
+- ubytování,
+- strava po dobu tábora,
+- parkourový a sportovní program,
+- práce trenérů a vedoucích,
+- pedagogický dozor,
+- zdravotník,
+- využití parkourového vybavení,
+- celotáborová hra,
+- táborové fotky a video,
+- základní pojištění od České rady dětí a mládeže.
+
+### Poznámka před publikací
+
+Cenu před zveřejněním ještě jednou ověřit. Vycházím z ceny ročníku 2026.
+
+---
+
+## Přihlášení
+
+### Nadpis
+
+Jak dítě přihlásit
+
+### Text
+
+Přihlášení probíhá přes online formulář. Po vyplnění přihlášky vám pošleme další informace k platbě, potřebným dokumentům a organizaci příjezdu.
+
+### Kroky
+
+1. Vyplníte online přihlášku.
+2. Obdržíte potvrzení a informace k platbě.
+3. Před táborem si připravíte potřebné dokumenty.
+4. V den příjezdu dítě předáte vedoucím v táborovém středisku.
+
+### CTA
+
+Přihlásit dítě na LeapCamp 2027
+
+---
+
+## Co budou rodiče potřebovat před táborem
+
+### Nadpis
+
+Dokumenty, bez kterých dítě nemůžeme na tábor přijmout
+
+### Text
+
+Před odjezdem prosíme rodiče o pečlivou kontrolu všech dokumentů. Bez povinných dokumentů nemůžeme dítě na tábor přijmout.
+
+### Seznam
+
+- vytisknutá a podepsaná přihláška na tábor,
+- potvrzení o bezinfekčnosti ne starší než jeden den,
+- kopie kartičky zdravotní pojišťovny,
+- potvrzení dítěte o zdravotní způsobilosti od lékaře.
+
+---
+
+## Co si vzít s sebou
+
+### Nadpis
+
+Doporučený seznam věcí
+
+### Text
+
+Podrobný seznam věcí pošleme rodičům před táborem. Obecně doporučujeme sportovní oblečení, pevnou obuv, hygienické potřeby, láhev na pití, pokrývku hlavy, pláštěnku, baterku nebo čelovku a věci na spaní podle aktuálních pokynů.
+
+### Praktický doplněk
+
+Všechny důležité věci doporučujeme podepsat jménem dítěte.
+
+---
+
+## Storno a nemoc
+
+### Nadpis
+
+Co když dítě onemocní nebo nemůže přijet?
+
+### Text
+
+Storno podmínky vycházejí z pravidel tábora. Pokud dítě onemocní nebo se zraní před táborem, řešíme situaci podle termínu zrušení a doloženého potvrzení od lékaře.
+
+### Přehled
+
+- 30 a více dnů před začátkem tábora: vracíme 100 % z ceny mínus 500 Kč za administrativu a účetnictví.
+- 15-29 dní před začátkem tábora: při nemoci nebo zranění vracíme 100 % mínus 500 Kč, při jiném důvodu 50 % z celkové ceny.
+- 14 a méně dní před začátkem tábora: peníze se nevrací, pokud nejde o nemoc nebo zranění.
+- Pokud dítě onemocní nebo se zraní během tábora, vracíme 750 Kč za každý den, kdy na táboře nemohlo být.
+
+### Poznámka před publikací
+
+Storno podmínky doporučuji před zveřejněním znovu potvrdit podle aktuálních pravidel pro rok 2027.
+
+---
+
+## FAQ pro rodiče
+
+### Musí dítě umět parkour?
+
+Nemusí. Tábor je vhodný pro začátečníky i pokročilé. Děti trénují podle své úrovně a pod vedením trenérů.
+
+### Je tábor vhodný i pro dítě, které se bojí salt?
+
+Ano. Dítě nemusí dělat salto. Trénink je postupný a vždy záleží na jeho úrovni, připravenosti a pokynech trenéra.
+
+### Budou děti skákat samy bez dozoru?
+
+Ne. Parkour se trénuje pod dohledem trenérů. Tábor má jasná pravidla a děti neskáčou bez svolení vedoucích.
+
+### Kdo se o děti stará?
+
+O děti se stará tým trenérů a vedoucích, pedagogický dozor a zdravotník.
+
+### Jaký je věk účastníků?
+
+Tábor je pro děti ve věku 8-16 let. Minimální věk je 8 let.
+
+### Kde tábor probíhá?
+
+V Táborovém středisku Radost u Světlé nad Sázavou, adresa Nová Ves u Světlé 103, 582 91 Nová Ves u Světlé.
+
+### Co když dítě bere léky nebo má zdravotní omezení?
+
+Informace o lécích, alergiích nebo zdravotních omezeních je potřeba uvést v přihlášce a předat zdravotníkovi při příjezdu.
+
+### Mohou mít děti mobil?
+
+Používání mobilních telefonů se řídí táborovým řádem. V předchozích letech bylo dovoleno pouze v osobním volnu.
+
+### Dostanou rodiče fotky nebo video?
+
+Ano, součástí tábora jsou fotky a táborové video.
+
+### Jak se přihlásit?
+
+Přihlášení probíhá přes online formulář. Po přihlášení obdržíte další instrukce k platbě a dokumentům.
+
+---
+
+## Závěrečná prodejní sekce
+
+### Nadpis
+
+Pošlete dítě na týden, kde bude růst, hýbat se a sbírat zážitky
+
+### Text
+
+LeapCamp není jen sportovní tábor. Je to týden, ve kterém děti trénují, hrají, spolupracují, překonávají strach a zažívají příběh společně s partou vrstevníků.
+
+V roce 2027 je čeká vesmírná mise, ale hlavní zůstává stejné: bezpečný pohyb, dobrá parta, zkušení trenéři a zážitky, které si děti odvezou domů.
+
+### CTA
+
+Přihlásit dítě na LeapCamp 2027
+
+### Doplňkový text
+
+Termín: 2. 7. - 10. 7. 2027 | Věk: 8-16 let | Místo: Táborové středisko Radost u Světlé nad Sázavou
+
+---
+
+# Marketingové nástroje pro prodej stránky
+
+## Doporučená struktura nad foldem
+
+1. Hero s jasnou informací: co, pro koho, kdy, kde.
+2. CTA "Přihlásit dítě na tábor".
+3. Rychlé důvěryhodnostní prvky: od roku 2015, zkušení trenéři, zdravotník, pedagogický dozor, pro začátečníky i pokročilé.
+4. Fotka nebo video z minulých ročníků.
+
+## Trust prvky
+
+- "LeapParkour pořádá kroužky a tábory od roku 2015."
+- "Tábor je pro začátečníky i pokročilé."
+- "Děti trénují pod dohledem zkušených trenérů."
+- "Na táboře je pedagogický dozor a zdravotník."
+- "Součástí je táborové video a fotky."
+- "Celotáborový příběh a bodování po týmech."
+
+## CTA varianty
+
+- Přihlásit dítě na LeapCamp 2027
+- Chci rezervovat místo
+- Zajistit místo na táboře
+- Poslat přihlášku
+- Chci informace k přihlášení
+
+## Krátké reklamní texty
+
+### Facebook / Instagram varianta 1
+
+LeapCamp 2027 je parkourový tábor pro děti 8-16 let na Vysočině. Čeká je týden pohybu, her, týmových výzev a vesmírného dobrodružství.
+
+Tábor je vhodný pro začátečníky i pokročilé. O děti se starají zkušení trenéři, pedagogický dozor a zdravotník.
+
+Termín: 2. 7. - 10. 7. 2027
+Místo: Táborové středisko Radost u Světlé nad Sázavou
+
+Přihlášky jsou otevřené.
+
+### Facebook / Instagram varianta 2
+
+Má vaše dítě rádo pohyb, skákání a výzvy?
+
+Na LeapCampu 2027 zažije parkour, hry, týmové mise a táborový příběh ve vesmírném stylu. Tréninky vedou zkušení trenéři a program je vhodný i pro děti, které s parkourem teprve začínají.
+
+2. 7. - 10. 7. 2027
+Pro děti 8-16 let
+Vysočina
+
+Rezervujte místo včas.
+
+### Krátký banner
+
+LeapCamp 2027
+Parkourový tábor pro děti 8-16 let
+2. 7. - 10. 7. 2027 | Vysočina
+Přihlásit dítě
+
+## E-mail rodičům
+
+Předmět: Přihlášky na LeapCamp 2027 jsou otevřené
+
+Dobrý den,
+
+spouštíme přihlášky na LeapCamp 2027, parkourový tábor pro děti ve věku 8-16 let.
+
+Tábor proběhne od 2. 7. do 10. 7. 2027 v Táborovém středisku Radost u Světlé nad Sázavou. Děti čeká týden parkouru, her, týmových výzev a celotáborového příběhu ve vesmírném stylu.
+
+Tábor je vhodný pro začátečníky i pokročilé. O děti se starají zkušení trenéři, pedagogický dozor a zdravotník.
+
+Na stránce najdete všechny důležité informace k programu, bezpečnosti, místu, ceně, dokumentům i přihlášení.
+
+Přihlášku najdete zde:
+[doplnit odkaz]
+
+Těšíme se na další společný LeapCamp.
+
+LeapParkour
+
+## Poznámky k obsahu, který ještě doplnit
+
+- finální přihlašovací odkaz,
+- potvrdit cenu 7 450 Kč,
+- potvrdit příjezd a odjezd pro rok 2027,
+- doplnit aktuální počet vedoucích/trenérů,
+- doplnit fotky a video z minulých ročníků,
+- rozhodnout, zda používat slovo "Star Wars" přímo, nebo právně opatrnější vesmírnou formulaci.
+- design, grafiku, animace, emotikony, fotky a další vizuální prvky převzít z AI výstupů, které připravuje kolega; tento dokument použít pouze jako copywritingový základ.
