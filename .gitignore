@@ -28,3 +28,9 @@ next-env.d.ts
 
 # pracovní artefakty
 /.playwright-mcp/
+
+# interní podklady (nepatří do veřejného repa)
+/zadaní
+/inbox/
+/image.png
+/image copy.png
