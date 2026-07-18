@@ -3,6 +3,10 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import {
+  isSupabaseConfigured,
+  SUPABASE_CONFIG_ERROR,
+} from "@/lib/supabase/config";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -10,9 +14,15 @@ export default function AdminLoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
+  const supabaseConfigured = isSupabaseConfigured();
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (!supabaseConfigured) {
+      setError(SUPABASE_CONFIG_ERROR);
+      return;
+    }
+
     setError(null);
     setPending(true);
 
@@ -46,6 +56,12 @@ export default function AdminLoginPage() {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
+          {!supabaseConfigured && (
+            <p className="rounded-xl bg-amber-50 px-4 py-3 text-sm text-amber-800">
+              {SUPABASE_CONFIG_ERROR}
+            </p>
+          )}
+
           <div>
             <label
               htmlFor="email"
@@ -90,7 +106,7 @@ export default function AdminLoginPage() {
 
           <button
             type="submit"
-            disabled={pending}
+            disabled={pending || !supabaseConfigured}
             className="w-full rounded-full bg-brand px-6 py-3 font-semibold text-white transition-colors hover:bg-brand-dark disabled:cursor-not-allowed disabled:opacity-60"
           >
             {pending ? "Přihlašuji…" : "Přihlásit se"}
