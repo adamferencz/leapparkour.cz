@@ -1,5 +1,6 @@
 import Image from "next/image";
 import type { ReactNode } from "react";
+import { Reveal } from "@/components/ui/Reveal";
 
 interface TimelineImage {
   src: string;
@@ -24,6 +25,7 @@ interface TimelineBlockProps {
 /**
  * Jeden blok příběhové časové osy „O nás“ — text + fotka/video.
  * Svislou čáru kreslí rodičovský seznam (viz app/page.tsx), blok přidává tečku.
+ * Sloupce se odhalují z opačných stran podle svého umístění (tečka se objeví s blokem).
  */
 export function TimelineBlock({
   title,
@@ -57,15 +59,25 @@ export function TimelineBlock({
       />
 
       <div className="grid gap-8 md:grid-cols-2 md:items-center md:gap-20">
-        <div className={mediaLeft ? "md:order-2" : undefined}>
+        <Reveal
+          from={mediaLeft ? "right" : "left"}
+          className={mediaLeft ? "md:order-2" : undefined}
+        >
           <h3 className="text-2xl font-bold md:text-3xl">{title}</h3>
           <div className="mt-4 space-y-4 leading-relaxed [&_strong]:font-semibold [&_strong]:text-navy">
             {children}
           </div>
           {actions && <div className="mt-6 flex flex-wrap gap-3">{actions}</div>}
-        </div>
+        </Reveal>
 
-        {mediaNode && <div className={mediaLeft ? "md:order-1" : undefined}>{mediaNode}</div>}
+        {mediaNode && (
+          <Reveal
+            from={mediaLeft ? "left" : "right"}
+            className={mediaLeft ? "md:order-1" : undefined}
+          >
+            {mediaNode}
+          </Reveal>
+        )}
       </div>
     </li>
   );

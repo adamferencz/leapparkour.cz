@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { CampForm } from "@/components/forms/CampForm";
 import { AccordionItem } from "@/components/ui/Accordion";
+import { Reveal } from "@/components/ui/Reveal";
 import { CAMP, INSURANCE_URL } from "@/lib/config";
 
 export const metadata: Metadata = {
@@ -68,61 +69,57 @@ function IconMapPin() {
 }
 
 export default function TaborPrihlaskaPage() {
-  // Z "4. 7. – 11. 7. 2027" odvodíme datum příjezdu a odjezdu.
-  const [startRaw = "", departureDate = ""] = CAMP.dates
-    .split("–")
-    .map((part) => part.trim());
-  const arrivalDate = startRaw.endsWith(String(CAMP.year))
-    ? startRaw
-    : `${startRaw} ${CAMP.year}`;
-
   return (
     <div className="container-site py-16 md:py-24">
       <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,460px)] lg:gap-14">
         {/* Levý sloupec — informace o táboře */}
         <div>
-          <p className="inline-block rounded-full bg-brand/10 px-4 py-1.5 text-sm font-semibold text-brand">
-            {CAMP.edition}
-          </p>
-          <h1 className="mt-4 text-4xl font-extrabold md:text-5xl">
-            {CAMP.label}
-          </h1>
-          <p className="mt-4 max-w-xl text-lg">
-            Týden plný parkouru, her a sportů na Vysočině pro začátečníky i
-            pokročilé.
-          </p>
+          <Reveal>
+            <p className="inline-block rounded-full bg-brand/10 px-4 py-1.5 text-sm font-semibold text-brand">
+              {CAMP.edition}
+            </p>
+            <h1 className="mt-4 text-4xl font-extrabold md:text-5xl">
+              {CAMP.label}
+            </h1>
+            <p className="mt-4 max-w-xl text-lg">
+              Týden parkouru, her, týmových výzev a vesmírného dobrodružství na
+              Vysočině — pro začátečníky i pokročilé.
+            </p>
+          </Reveal>
 
           <dl className="mt-8 grid gap-4 sm:grid-cols-3">
-            <div className="rounded-2xl bg-slate-100 px-5 py-4">
-              <dt className="text-xs font-semibold tracking-wide text-steel/80 uppercase">
-                Termín
-              </dt>
-              <dd className="mt-1 font-semibold text-navy">{CAMP.dates}</dd>
-            </div>
-            <div className="rounded-2xl bg-slate-100 px-5 py-4">
-              <dt className="text-xs font-semibold tracking-wide text-steel/80 uppercase">
-                Místo
-              </dt>
-              <dd className="mt-1 font-semibold text-navy">{CAMP.venue}</dd>
-            </div>
-            <div className="rounded-2xl bg-slate-100 px-5 py-4">
-              <dt className="text-xs font-semibold tracking-wide text-steel/80 uppercase">
-                Věk
-              </dt>
-              <dd className="mt-1 font-semibold text-navy">{CAMP.ageRange}</dd>
-            </div>
+            {(
+              [
+                ["Termín", CAMP.dates],
+                ["Místo", CAMP.venue],
+                ["Věk", CAMP.ageRange],
+              ] as const
+            ).map(([label, value], i) => (
+              <Reveal
+                key={label}
+                delay={i * 0.06}
+                className="h-full rounded-2xl bg-slate-100 px-5 py-4"
+              >
+                <dt className="text-xs font-semibold tracking-wide text-steel/80 uppercase">
+                  {label}
+                </dt>
+                <dd className="mt-1 font-semibold text-navy">{value}</dd>
+              </Reveal>
+            ))}
           </dl>
 
-          <div className="mt-6 rounded-2xl bg-brand/5 px-6 py-5">
-            <p className="text-xs font-semibold tracking-wide text-steel/80 uppercase">
-              Cena tábora
-            </p>
-            <p className="mt-1 text-4xl font-extrabold text-navy md:text-5xl">
-              {CAMP.price}
-            </p>
-          </div>
+          <Reveal delay={0.08}>
+            <div className="mt-6 rounded-2xl bg-brand/5 px-6 py-5">
+              <p className="text-xs font-semibold tracking-wide text-steel/80 uppercase">
+                Cena tábora
+              </p>
+              <p className="mt-1 text-4xl font-extrabold text-navy md:text-5xl">
+                {CAMP.price}
+              </p>
+            </div>
+          </Reveal>
 
-          <div className="mt-10 space-y-3">
+          <Reveal className="mt-10 space-y-3" delay={0.12}>
             <AccordionItem title="Co cena zahrnuje" icon={<IconPrice />} defaultOpen>
               <ul className="list-disc space-y-2 pl-5">
                 <li>Strava a pitný režim</li>
@@ -141,7 +138,9 @@ export default function TaborPrihlaskaPage() {
                   (doporučujeme mít i pojištění vlastní)
                 </li>
                 <li>Táborové video a fotky</li>
-                <li>Celotáborový program a příběh</li>
+                <li>
+                  Celotáborová hra a příběh — v roce {CAMP.year} vesmírná mise
+                </li>
               </ul>
             </AccordionItem>
 
@@ -167,7 +166,11 @@ export default function TaborPrihlaskaPage() {
                   Táborové <strong>video a fotky</strong>.
                 </li>
                 <li>
-                  Propracovaný <strong>táborový příběh</strong>.
+                  Celotáborový příběh — v roce {CAMP.year} nás čeká{" "}
+                  <strong>
+                    vesmírná mise inspirovaná světem galaktických hrdinů
+                  </strong>
+                  .
                 </li>
                 <li>
                   <strong>Bodování po týmech.</strong>
@@ -240,13 +243,14 @@ export default function TaborPrihlaskaPage() {
                 </a>
               </p>
               <p className="mt-3">
-                <strong>Příjezd na tábor</strong> bude {arrivalDate} od
-                16:00–17:00 (prosíme nejezděte dříve kvůli probíhajícím
-                přípravám). <strong>Odjezd z tábora</strong> bude {departureDate}{" "}
-                od 10:00–11:00. Děti dostanou obědový balíček.
+                <strong>Přesné časy příjezdu a odjezdu upřesníme před
+                táborem</strong>{" "}
+                (v minulém ročníku: příjezd v sobotu 16:00–17:00, odjezd
+                v sobotu 10:00–11:00). Děti dostanou při odjezdu obědový
+                balíček.
               </p>
             </AccordionItem>
-          </div>
+          </Reveal>
         </div>
 
         {/* Pravý sloupec — sticky formulář */}

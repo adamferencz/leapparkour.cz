@@ -52,8 +52,7 @@ export const CAMP = {
   year: 2027,
   label: "Leap Camp 2027",
   edition: "10. ročník",
-  /** TODO: upřesnit termín tábora 2027 */
-  dates: "4. 7. – 11. 7. 2027",
+  dates: "2. 7. – 10. 7. 2027",
   price: "7 450 Kč",
   venue: "Táborové středisko Radost u Světlé nad Sázavou",
   venueAddress: "Nová Ves u Světlé 103, 582 91 Nová Ves u Světlé",

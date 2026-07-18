@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { ClubForm } from "@/components/forms/ClubForm";
 import { AccordionItem } from "@/components/ui/Accordion";
+import { Reveal } from "@/components/ui/Reveal";
 import { CLUB_SEASON, INSURANCE_URL } from "@/lib/config";
 
 export const metadata: Metadata = {
@@ -92,9 +93,12 @@ export default function KrouzekPrihlaskaPage() {
       <div className="grid gap-12 lg:grid-cols-[1fr_minmax(0,440px)] lg:gap-16">
         {/* Levý sloupec — informace o kroužku */}
         <div>
-          <h1 className="text-4xl font-extrabold md:text-5xl">
-            Parkourový kroužek v Havlíčkově Brodě
-          </h1>
+          <Reveal>
+            <h1 className="text-4xl font-extrabold md:text-5xl">
+              Parkourový kroužek v Havlíčkově Brodě
+            </h1>
+          </Reveal>
+          <Reveal delay={0.06}>
           <p className="mt-5 text-lg">
             Pravidelné tréninky parkouru pro děti od 6 do 16 let pod vedením
             zkušených trenérů. Trénujeme každý čtvrtek a pátek.{" "}
@@ -115,18 +119,21 @@ export default function KrouzekPrihlaskaPage() {
               <span>{CLUB_SEASON.venue}</span>
             </li>
           </ul>
+          </Reveal>
 
           {/* Ceník */}
-          <h2 className="mt-12 text-3xl font-bold md:text-4xl">Ceník</h2>
+          <Reveal>
+            <h2 className="mt-12 text-3xl font-bold md:text-4xl">Ceník</h2>
+          </Reveal>
           <div className="mt-5 grid gap-4 sm:grid-cols-2">
-            <div className="rounded-2xl bg-slate-100 p-6">
+            <Reveal className="rounded-2xl bg-slate-100 p-6">
               <p className="text-sm font-medium text-steel">1x týdně</p>
               <p className="mt-1 text-2xl font-bold text-navy">
                 {CLUB_SEASON.priceOnceWeek}
               </p>
               <p className="mt-1 text-sm text-steel">za pololetí</p>
-            </div>
-            <div className="relative rounded-2xl bg-slate-100 p-6">
+            </Reveal>
+            <Reveal delay={0.08} className="relative rounded-2xl bg-slate-100 p-6">
               <span className="absolute right-4 top-4 rounded-full bg-brand px-3 py-1 text-xs font-semibold text-white">
                 Doporučujeme
               </span>
@@ -135,11 +142,12 @@ export default function KrouzekPrihlaskaPage() {
                 {CLUB_SEASON.priceTwiceWeek}
               </p>
               <p className="mt-1 text-sm text-steel">za pololetí</p>
-            </div>
+            </Reveal>
           </div>
 
           {/* Akordeony */}
           <div className="mt-10 space-y-3">
+            <Reveal>
             <AccordionItem title="Co cena zahrnuje" icon={<IconCheck />}>
               <ul className="list-disc space-y-1.5 pl-5">
                 <li>Tréninky pod vedením zkušených trenérů</li>
@@ -157,7 +165,9 @@ export default function KrouzekPrihlaskaPage() {
                 </li>
               </ul>
             </AccordionItem>
+            </Reveal>
 
+            <Reveal delay={0.05}>
             <AccordionItem title="Co si vzít s sebou" icon={<IconBackpack />}>
               <ul className="list-disc space-y-1.5 pl-5">
                 <li>Vodu</li>
@@ -166,7 +176,9 @@ export default function KrouzekPrihlaskaPage() {
                 <li>Přezuvky do tělocvičny</li>
               </ul>
             </AccordionItem>
+            </Reveal>
 
+            <Reveal delay={0.1}>
             <AccordionItem title="Storno podmínky" icon={<IconDocument />}>
               <div className="space-y-3">
                 <p>
@@ -215,7 +227,9 @@ export default function KrouzekPrihlaskaPage() {
                 </p>
               </div>
             </AccordionItem>
+            </Reveal>
 
+            <Reveal delay={0.15}>
             <AccordionItem title="První trénink zdarma" icon={<IconStar />}>
               <p>
                 Nevíte, jestli bude parkour vaše dítě bavit? První trénink je u
@@ -224,23 +238,26 @@ export default function KrouzekPrihlaskaPage() {
                 poté, co se rozhodnete pokračovat.
               </p>
             </AccordionItem>
+            </Reveal>
           </div>
         </div>
 
         {/* Pravý sloupec — sticky formulář */}
         <div>
-          <div className="rounded-3xl border border-slate-100 bg-white p-6 shadow-lg md:p-8 lg:sticky lg:top-24">
-            <h2 className="text-2xl font-bold">
-              Přihláška na kroužek — {CLUB_SEASON.label}
-            </h2>
-            <p className="mt-2 text-sm text-steel">
-              Prosíme o vyplnění formuláře. V případě registrace více dětí
-              vyplňte formulář zvlášť.
-            </p>
-            <div className="mt-6">
-              <ClubForm />
+          <Reveal from="none" className="lg:sticky lg:top-24">
+            <div className="rounded-3xl border border-slate-100 bg-white p-6 shadow-lg md:p-8">
+              <h2 className="text-2xl font-bold">
+                Přihláška na kroužek — {CLUB_SEASON.label}
+              </h2>
+              <p className="mt-2 text-sm text-steel">
+                Prosíme o vyplnění formuláře. V případě registrace více dětí
+                vyplňte formulář zvlášť.
+              </p>
+              <div className="mt-6">
+                <ClubForm />
+              </div>
             </div>
-          </div>
+          </Reveal>
         </div>
       </div>
     </div>

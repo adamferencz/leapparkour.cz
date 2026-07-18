@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { CAMP } from "@/lib/config";
+import { Reveal } from "@/components/ui/Reveal";
 
 export const metadata: Metadata = {
   title: "Děkujeme za přihlášku na tábor",
@@ -15,7 +16,8 @@ export default function TaborDekujemePage() {
   return (
     <div className="container-site py-16 md:py-24">
       <div className="mx-auto max-w-2xl text-center">
-        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-brand/10 text-brand">
+        <Reveal>
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-brand/10 text-brand">
           <svg
             width="32"
             height="32"
@@ -37,7 +39,9 @@ export default function TaborDekujemePage() {
         <p className="mt-4 text-lg">
           Vaši přihlášku na {CAMP.label} ({CAMP.dates}) jsme v pořádku přijali.
         </p>
+        </Reveal>
 
+        <Reveal delay={0.1}>
         {paymentUrl ? (
           <div className="mt-10 rounded-3xl border-2 border-brand bg-brand/5 p-8">
             <h2 className="text-2xl font-bold">Důležité: dokončete platbu</h2>
@@ -49,7 +53,7 @@ export default function TaborDekujemePage() {
               href={paymentUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-6 inline-block rounded-full bg-brand px-10 py-4 text-lg font-semibold text-white transition-colors hover:bg-brand-dark"
+              className="mt-6 inline-block rounded-full bg-brand px-10 py-4 text-lg font-semibold text-white transition-[background-color,transform] duration-200 hover:bg-brand-dark active:scale-[0.98]"
             >
               Přejít k platbě
             </a>
@@ -72,7 +76,7 @@ export default function TaborDekujemePage() {
         <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
           <Link
             href="/tabor/informace"
-            className="rounded-full bg-navy px-6 py-3 font-semibold text-white transition-colors hover:bg-navy/90"
+            className="rounded-full bg-navy px-6 py-3 font-semibold text-white transition-[background-color,transform] duration-200 hover:bg-navy/90 active:scale-[0.98]"
           >
             Důležité informace a dokumenty
           </Link>
@@ -83,6 +87,7 @@ export default function TaborDekujemePage() {
             Zpět na úvodní stránku →
           </Link>
         </div>
+        </Reveal>
       </div>
     </div>
   );

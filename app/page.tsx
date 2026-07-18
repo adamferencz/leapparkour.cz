@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { TimelineBlock } from "@/components/home/TimelineBlock";
+import { Reveal } from "@/components/ui/Reveal";
 
 export const metadata: Metadata = {
   title: { absolute: "Leap Parkour – Parkour komunita na Vysočině" },
@@ -10,9 +11,9 @@ export const metadata: Metadata = {
 };
 
 const BTN_PRIMARY =
-  "inline-flex items-center justify-center rounded-full bg-brand px-6 py-3 font-semibold text-white transition-colors hover:bg-brand-dark";
+  "inline-flex items-center justify-center rounded-full bg-brand px-6 py-3 font-semibold text-white transition-[background-color,color,transform] duration-200 hover:bg-brand-dark active:scale-[0.98]";
 const BTN_SECONDARY =
-  "inline-flex items-center justify-center rounded-full border-2 border-brand px-6 py-3 font-semibold text-brand transition-colors hover:bg-brand hover:text-white";
+  "inline-flex items-center justify-center rounded-full border-2 border-brand px-6 py-3 font-semibold text-brand transition-[background-color,color,transform] duration-200 hover:bg-brand hover:text-white active:scale-[0.98]";
 
 export default function HomePage() {
   return (
@@ -21,23 +22,30 @@ export default function HomePage() {
       <section className="py-16 md:py-24">
         <div className="container-site grid items-center gap-12 md:grid-cols-2 md:gap-16">
           <div>
-            <h1 className="text-4xl font-extrabold md:text-5xl">
-              Pořádáme parkourové kroužky a&nbsp;tábory
-            </h1>
-            <p className="mt-5 text-lg md:text-xl">
-              Největší parkourová komunita na Vysočině již od roku 2015
-            </p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Link href="/krouzek" className={BTN_PRIMARY}>
-                Přidej se na kroužek
-              </Link>
-              <Link href="/tabor" className={BTN_SECONDARY}>
-                Pojeď na tábor
-              </Link>
-            </div>
+            <Reveal from="bottom">
+              <h1 className="text-4xl font-extrabold md:text-5xl">
+                Pořádáme parkourové kroužky a&nbsp;tábory
+              </h1>
+            </Reveal>
+            <Reveal from="bottom" delay={0.08}>
+              <p className="mt-5 text-lg md:text-xl">
+                Největší parkourová komunita na Vysočině již od roku 2015
+              </p>
+            </Reveal>
+            <Reveal from="bottom" delay={0.16}>
+              <div className="mt-8 flex flex-wrap gap-3">
+                <Link href="/krouzek" className={BTN_PRIMARY}>
+                  Přidej se na kroužek
+                </Link>
+                <Link href="/tabor" className={BTN_SECONDARY}>
+                  Pojeď na tábor
+                </Link>
+              </div>
+            </Reveal>
           </div>
 
-          <div className="relative mx-auto w-full max-w-sm md:max-w-md">
+          {/* Fotka je LCP — jen krátký fade bez posunu a bez zpoždění */}
+          <Reveal from="none" className="relative mx-auto w-full max-w-sm md:max-w-md">
             <div
               aria-hidden
               className="absolute -inset-3 rotate-3 rounded-3xl bg-brand/10 md:-inset-4"
@@ -52,20 +60,21 @@ export default function HomePage() {
                 className="object-cover"
               />
             </div>
-          </div>
+          </Reveal>
         </div>
       </section>
 
       {/* ── O nás — příběhová timeline ───────────────────────── */}
-      <section className="py-16 md:py-24">
+      {/* overflow-x-clip: boční reveal (±28px) nesmí na mobilu vytvořit vodorovný scroll */}
+      <section className="overflow-x-clip py-16 md:py-24">
         <div className="container-site">
-          <div className="mx-auto max-w-2xl text-center">
+          <Reveal from="bottom" className="mx-auto max-w-2xl text-center">
             <h2 className="text-3xl font-bold md:text-4xl">O nás</h2>
             <p className="mt-4 text-lg [&_strong]:font-semibold [&_strong]:text-navy">
               V roce <strong>2015</strong> se v <strong>Havlíčkově Brodě</strong> potkala parta
               cílevědomých lidí. Lidí, kteří měli vášeň pro jednu jedinou věc.
             </p>
-          </div>
+          </Reveal>
 
           <ol className="relative mt-16 space-y-20 before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:-translate-x-1/2 before:rounded-full before:bg-brand/20 md:mt-24 md:space-y-28 md:before:left-1/2">
             <TimelineBlock
@@ -355,29 +364,31 @@ export default function HomePage() {
       {/* ── Merch — Collect moments, not things ──────────────── */}
       <section className="py-16 md:py-24">
         <div className="container-site">
-          <div className="grid items-center gap-8 overflow-hidden rounded-3xl bg-slate-100 md:grid-cols-2">
-            <div className="relative aspect-video h-full w-full md:aspect-auto md:self-stretch">
-              <Image
-                src="/images/2024_08_collcet-moments.jpg"
-                alt="Merch Leap Parkour s nápisem Collect moments, not things"
-                fill
-                sizes="(min-width: 768px) 36rem, 100vw"
-                className="object-cover"
-              />
-            </div>
-            <div className="p-8 md:p-12">
-              <h2 className="text-3xl font-bold md:text-4xl">Collect moments, not things.</h2>
-              <p className="mt-4 leading-relaxed">
-                Vyrábíme vlastní parkour oblečení, které prodáváme pouze osobně na táboře anebo na
-                kroužkách. Pro více informací nám prosím napište.
-              </p>
-              <div className="mt-8">
-                <Link href="/kontakt" className={BTN_PRIMARY}>
-                  Kontakt
-                </Link>
+          <Reveal from="bottom">
+            <div className="grid items-center gap-8 overflow-hidden rounded-3xl bg-slate-100 md:grid-cols-2">
+              <div className="relative aspect-video h-full w-full md:aspect-auto md:self-stretch">
+                <Image
+                  src="/images/2024_08_collcet-moments.jpg"
+                  alt="Merch Leap Parkour s nápisem Collect moments, not things"
+                  fill
+                  sizes="(min-width: 768px) 36rem, 100vw"
+                  className="object-cover"
+                />
+              </div>
+              <div className="p-8 md:p-12">
+                <h2 className="text-3xl font-bold md:text-4xl">Collect moments, not things.</h2>
+                <p className="mt-4 leading-relaxed">
+                  Vyrábíme vlastní parkour oblečení, které prodáváme pouze osobně na táboře anebo
+                  na kroužkách. Pro více informací nám prosím napište.
+                </p>
+                <div className="mt-8">
+                  <Link href="/kontakt" className={BTN_PRIMARY}>
+                    Kontakt
+                  </Link>
+                </div>
               </div>
             </div>
-          </div>
+          </Reveal>
         </div>
       </section>
     </>

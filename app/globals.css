@@ -24,6 +24,13 @@ h6 {
   color: var(--color-navy);
 }
 
+/* Bez JavaScriptu (crawlery, no-JS) musí být obsah vidět — přebije inline
+   opacity/transform, které Motion vykreslí do SSR HTML. */
+html.no-js [data-reveal] {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
 @utility container-site {
   margin-inline: auto;
   width: 100%;

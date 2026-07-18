@@ -32,6 +32,7 @@ export function Reveal({ children, className, delay = 0, from = "bottom" }: Reve
 
   return (
     <motion.div
+      data-reveal
       className={className}
       initial={initial}
       whileInView={{ opacity: 1, x: 0, y: 0 }}
