@@ -1,7 +1,6 @@
 "use client";
 
-import { useActionState, useState } from "react";
-import type { ChangeEvent } from "react";
+import { useActionState } from "react";
 import {
   submitClubRegistration,
   type ClubFormState,
@@ -21,17 +20,6 @@ export function ClubForm() {
     submitClubRegistration,
     initialState
   );
-  const [selectedTerms, setSelectedTerms] = useState<string[]>([]);
-
-  function handleTermsChange(e: ChangeEvent<HTMLDivElement>) {
-    const target = e.target as HTMLInputElement;
-    if (target.name !== "terms") return;
-    setSelectedTerms((prev) =>
-      target.checked
-        ? [...prev, target.value]
-        : prev.filter((v) => v !== target.value)
-    );
-  }
 
   return (
     <form action={formAction} className="space-y-5">
@@ -45,6 +33,15 @@ export function ClubForm() {
       />
 
       <TextField
+        label="Jméno a příjmení rodiče"
+        name="parent_name"
+        type="text"
+        required
+        autoComplete="name"
+        placeholder="Např. Petra Nováková"
+      />
+
+      <TextField
         label="Email"
         name="email"
         type="email"
@@ -54,13 +51,56 @@ export function ClubForm() {
       />
 
       <TextField
-        label="Telefon"
+        label="Telefon na rodiče"
         name="phone"
         type="tel"
         required
         autoComplete="tel"
         placeholder="+420 123 456 789"
       />
+
+      <div className="rounded-2xl border border-slate-200 bg-slate-50/70 p-4">
+        <h2 className="text-base font-semibold text-navy">Fakturační údaje</h2>
+        <p className="mt-1 text-xs text-steel/80">
+          Tyto údaje použijeme jen pro vystavení faktury k přihlášce.
+        </p>
+        <div className="mt-4 grid gap-4">
+          <TextField
+            label="Odběratel"
+            name="billing_name"
+            type="text"
+            required
+            autoComplete="name"
+            placeholder="Jméno a příjmení rodiče"
+          />
+          <TextField
+            label="Ulice a číslo popisné"
+            name="billing_street"
+            type="text"
+            required
+            autoComplete="street-address"
+            placeholder="Např. Pražská 12"
+          />
+          <div className="grid gap-4 sm:grid-cols-[1fr_1.4fr]">
+            <TextField
+              label="PSČ"
+              name="billing_zip"
+              type="text"
+              required
+              autoComplete="postal-code"
+              placeholder="580 01"
+            />
+            <TextField
+              label="Město"
+              name="billing_city"
+              type="text"
+              required
+              autoComplete="address-level2"
+              placeholder="Havlíčkův Brod"
+            />
+          </div>
+        </div>
+      </div>
 
       <fieldset>
         <legend className="mb-1.5 block text-sm font-medium text-navy">
@@ -93,7 +133,7 @@ export function ClubForm() {
           Pokud budete chodit 2x týdně (což doporučujeme), zaškrtněte oba
           termíny.
         </p>
-        <div className="space-y-2" onChange={handleTermsChange}>
+        <div className="space-y-2">
           {CLUB_SEASON.terms.map((term) => (
             <OptionRow
               key={term.id}
@@ -102,7 +142,6 @@ export function ClubForm() {
               value={term.id}
               label={term.label}
               sublabel={`${term.level}, ${term.age}`}
-              required={selectedTerms.length === 0}
             />
           ))}
         </div>

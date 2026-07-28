@@ -105,7 +105,7 @@ export default function KrouzekPrihlaskaPage() {
           <Reveal delay={0.06}>
           <p className="mt-5 text-lg">
             Pravidelné tréninky parkouru pro děti od 6 do 16 let pod vedením
-            zkušených trenérů. Trénujeme každý čtvrtek a pátek.{" "}
+            zkušených trenérů. Trénujeme každý čtvrtek a pátek. Začínáme{" "}
             {CLUB_SEASON.startNote}.
           </p>
 

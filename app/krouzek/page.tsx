@@ -50,7 +50,8 @@ export default function KrouzekPage() {
             </Reveal>
             <Reveal delay={0.08}>
               <p className="mt-4 text-lg text-steel md:text-xl">
-                Parkourové kroužky v Havlíčkově Brodě pro děti 6–16 let.
+                Parkour není jen o saltech. Učí děti odvaze, respektu,
+                vzájemné podpoře a radosti z pohybu.
               </p>
             </Reveal>
             <Reveal delay={0.16}>
@@ -88,6 +89,11 @@ export default function KrouzekPage() {
                   </strong>
                   . V případě, že se chcete zlepšit, výrazně doporučujeme chodit
                   2× týdně.
+                </p>
+                <p className="mt-4">
+                  Naším cílem není mít co nejvíce členů. Chceme vytvořit
+                  prostředí, kam se děti těší, kde si navzájem fandí a kde se
+                  mohou dlouhodobě rozvíjet svým vlastním tempem.
                 </p>
                 <div className="mt-6 rounded-2xl bg-brand/10 px-6 py-5">
                   <p className="text-navy">
@@ -159,8 +165,10 @@ export default function KrouzekPage() {
             <Reveal from="right" delay={0.08}>
               <h2 className="text-3xl font-bold md:text-4xl">Kde trénujeme</h2>
               <p className="mt-5">
-                <strong className="text-navy">{CLUB_SEASON.startNote}</strong> v
-                tělocvičně. V létě se přesouváme ven na parkourové hřiště.
+                Začínáme{" "}
+                <strong className="text-navy">{CLUB_SEASON.startNote}</strong>.
+                Tréninky probíhají v tělocvičně a v létě se přesouváme ven na
+                parkourové hřiště.
               </p>
               <div className="mt-6 flex items-start gap-4 rounded-2xl bg-white px-6 py-5 shadow-sm">
                 <svg
@@ -183,6 +191,93 @@ export default function KrouzekPage() {
                 <p className="font-medium text-navy">{CLUB_SEASON.venue}</p>
               </div>
             </Reveal>
+          </div>
+        </div>
+      </section>
+
+      {/* Dvě cesty podle zájmu dítěte */}
+      <section className="py-16 md:py-24">
+        <div className="container-site">
+          <Reveal className="mx-auto max-w-3xl text-center">
+            <h2 className="text-3xl font-bold md:text-4xl">
+              Dvě cesty podle zájmu dítěte
+            </h2>
+            <p className="mt-5 text-steel">
+              Každé dítě může parkour prožívat jinak. Někdo chce objevovat nový
+              pohyb a být součástí party, jiný se chce tréninku věnovat naplno.
+              Obě cesty u nás dávají smysl.
+            </p>
+          </Reveal>
+
+          <div className="mt-10 grid gap-6 md:grid-cols-2">
+            <Reveal className="rounded-3xl border border-slate-100 bg-white p-7 shadow-sm">
+              <h3 className="text-2xl font-bold text-navy">Parkour Klub</h3>
+              <p className="mt-4">
+                Skupina pro děti, které chtějí parkour objevovat, učit se nové
+                dovednosti a stát se součástí naší komunity. Nezáleží na tom,
+                jestli dítě začíná, nebo už má zkušenosti.
+              </p>
+              <p className="mt-4 text-steel">
+                Důležitá je chuť učit se, respekt k ostatním a pozitivní přístup
+                k tréninku.
+              </p>
+            </Reveal>
+
+            <Reveal
+              delay={0.08}
+              className="rounded-3xl border border-slate-100 bg-white p-7 shadow-sm"
+            >
+              <h3 className="text-2xl font-bold text-navy">Parkour tým</h3>
+              <p className="mt-4">
+                Skupina pro děti, které parkour opravdu baví a chtějí se mu
+                věnovat pravidelněji. Nejde o to, kdo umí nejtěžší triky.
+              </p>
+              <p className="mt-4 text-steel">
+                Rozhoduje dlouhodobý přístup, snaha, pravidelnost, respekt k
+                ostatním a opravdová chuť se zlepšovat. Do týmu děti zvou
+                trenéři podle toho, jak se na trénincích projevují.
+              </p>
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
+      {/* Jak přijímáme nové členy */}
+      <section className="bg-slate-50 py-16 md:py-24">
+        <div className="container-site">
+          <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+            <Reveal from="left">
+              <h2 className="text-3xl font-bold md:text-4xl">
+                Jak přijímáme nové členy
+              </h2>
+              <p className="mt-5">
+                Každý nový člen nejprve absolvuje zkušební období. Díky tomu
+                poznáme, jestli dítěti naše prostředí sedí, a rodiče zároveň
+                uvidí, jak u nás tréninky fungují.
+              </p>
+              <p className="mt-4 font-semibold text-navy">
+                Nehledáme děti, které jsou nejlepší. Hledáme děti, které chtějí
+                růst.
+              </p>
+            </Reveal>
+
+            <div className="grid gap-3 sm:grid-cols-2">
+              {[
+                "Chuť učit se novým věcem",
+                "Respekt k trenérům i ostatním dětem",
+                "Schopnost fungovat jako součást party",
+                "Snaha překonávat sám sebe",
+              ].map((item, index) => (
+                <Reveal
+                  key={item}
+                  delay={index * 0.04}
+                  className="flex items-start gap-3 rounded-2xl bg-white px-5 py-4 shadow-sm"
+                >
+                  <CheckIcon />
+                  <span className="font-medium text-navy">{item}</span>
+                </Reveal>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -233,12 +328,13 @@ export default function KrouzekPage() {
               Jak to u nás na kroužku funguje?
             </h2>
             <p className="mt-5 font-semibold text-navy">
-              Každý účastník kroužku od nás dostane ZDARMA i parkour deník, kde
-              má možnost si splnit lvl.1 – lvl.5 dle naší tabulky.
+              Respektujeme jeden druhého, pomáháme si a nevzdáváme se při
+              prvním neúspěchu.
             </p>
             <p className="mt-4">
-              Pro splnění je třeba prokázat, že účastník umí určité dovednosti
-              a techniky, jak je vidět v tabulce.
+              Každý účastník kroužku od nás dostane zdarma parkour deník, kde
+              může postupně plnit lvl.1 – lvl.5. Děti tak vidí svůj pokrok a
+              zároveň se učí, že zlepšování má každý vlastním tempem.
             </p>
           </Reveal>
           <Reveal className="mx-auto mt-10 max-w-4xl overflow-hidden rounded-3xl bg-white p-2 shadow-sm md:p-4">

@@ -8,6 +8,7 @@ const LINKS = [
   { href: "/admin", label: "Přehled", exact: true },
   { href: "/admin/krouzek", label: "Kroužek", exact: false },
   { href: "/admin/tabor", label: "Tábor", exact: false },
+  { href: "/admin/slevy", label: "Slevy", exact: false },
 ];
 
 export default function AdminNav() {

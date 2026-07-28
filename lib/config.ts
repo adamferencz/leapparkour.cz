@@ -5,11 +5,13 @@
 
 export const SITE = {
   name: "Leap Parkour",
-  legalName: "LeapParkour z.s.",
+  legalName: "Leap parkour z.s.",
   ico: "07195320",
   domain: "leapparkour.cz",
   email: "leapparkour@seznam.cz",
   address: "Práčat 1886, Havlíčkův Brod",
+  registry: "L 12040 vedená u Krajského soudu v Hradci Králové",
+  vatNote: "Neplátce DPH",
   instagram: "https://www.instagram.com/leapparkour/",
   facebook: "https://www.facebook.com/share/YG84oj6nvVgR4NvM/",
   youtube: "https://www.youtube.com/@LeapParkour",
@@ -19,11 +21,12 @@ export const SITE = {
 export const CLUB_SEASON = {
   id: "jaro-2027",
   label: "jaro 2027",
-  /** TODO: upřesnit datum zahájení pololetí 2027 */
-  startNote: "Začínáme ve čtvrtek 4. 2. a v pátek 5. 2. 2027",
+  startNote: "3. září a 4. září",
   venue: "ZŠ Wolkerova (tělocvična), v létě parkourové hřiště Plovárenská, Havlíčkův Brod",
-  priceOnceWeek: "2 950 Kč",
-  priceTwiceWeek: "4 600 Kč",
+  priceOnceWeek: "3 100 Kč",
+  priceTwiceWeek: "4 800 Kč",
+  priceOnceWeekCzk: 3100,
+  priceTwiceWeekCzk: 4800,
   terms: [
     {
       id: "ctvrtek-16",
@@ -53,7 +56,8 @@ export const CAMP = {
   label: "Leap Camp 2027",
   edition: "10. ročník",
   dates: "2. 7. – 10. 7. 2027",
-  price: "7 450 Kč",
+  price: "8 400 Kč",
+  priceCzk: 8400,
   venue: "Táborové středisko Radost u Světlé nad Sázavou",
   venueAddress: "Nová Ves u Světlé 103, 582 91 Nová Ves u Světlé",
   venueMapUrl:
@@ -62,7 +66,6 @@ export const CAMP = {
   infoNote: "Konkrétní informace pošleme 14 dní před konáním tábora.",
   documentsUrl:
     "https://drive.google.com/file/d/1J8n5H-w_rkIZ4TC6Ewi5xOt19a48o7X7/view?usp=sharing",
-  /** TODO: doplnit odkaz na platbu (po odeslání přihlášky) */
   paymentUrl: "",
 } as const;
 

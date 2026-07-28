@@ -120,7 +120,7 @@ export default function HomePage() {
             <TimelineBlock
               title="Komunita"
               mediaLeft
-              image={{ src: "/images/2024_08_28.png", alt: "Parkourová komunita" }}
+              image={{ src: "/images/2024_08_28.webp", alt: "Parkourová komunita" }}
             >
               <p>
                 Budovali komunitu podobně smýšlejících lidí. Z parkouru se stal{" "}
@@ -131,7 +131,7 @@ export default function HomePage() {
 
             <TimelineBlock
               title="Jamy"
-              image={{ src: "/images/2024_08_27.png", alt: "Parkourový jam" }}
+              image={{ src: "/images/2024_08_27.webp", alt: "Parkourový jam" }}
             >
               <p>
                 Začali jezdit po celé ČR na parkourové <strong>jamy</strong> (setkání). Tam sbírali
@@ -202,7 +202,7 @@ export default function HomePage() {
             <TimelineBlock
               title="Šíříme povědomí o parkouru"
               mediaLeft
-              image={{ src: "/images/2024_08_25.png", alt: "Parkourové vystoupení na akci" }}
+              image={{ src: "/images/2024_08_25.webp", alt: "Parkourové vystoupení na akci" }}
             >
               <p>
                 Vystoupení na maturitních plesech, dětských dnech, eventech, menších i větších
@@ -333,7 +333,7 @@ export default function HomePage() {
             <TimelineBlock
               title="Poslání"
               mediaLeft
-              image={{ src: "/images/2024_08_IMG_1583.jpeg", alt: "Společná fotka party Leap Parkour" }}
+              image={{ src: "/images/2024_08_IMG_1583.webp", alt: "Společná fotka party Leap Parkour" }}
               actions={
                 <>
                   <Link href="/krouzek" className={BTN_PRIMARY}>

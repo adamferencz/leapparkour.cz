@@ -38,6 +38,10 @@ export async function GET() {
     "Jiné sporty",
     "Spolubydlící",
     "Zdravotní omezení",
+    "Cena",
+    "Slevový kód",
+    "Sleva",
+    "K úhradě",
     "Status",
     "Poznámka administrátora",
   ];
@@ -57,6 +61,10 @@ export async function GET() {
     r.sports_other,
     r.roommates,
     r.health_notes,
+    r.base_amount_czk,
+    r.discount_code,
+    r.discount_amount_czk,
+    r.total_amount_czk,
     STATUS_LABELS[r.status],
     r.admin_notes,
   ]);

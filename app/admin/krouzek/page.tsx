@@ -15,14 +15,21 @@ export const metadata: Metadata = {
 
 type Row = Pick<
   ClubRegistration,
-  "id" | "created_at" | "child_name" | "email" | "phone" | "terms" | "status"
+  | "id"
+  | "created_at"
+  | "child_name"
+  | "parent_name"
+  | "email"
+  | "phone"
+  | "terms"
+  | "status"
 >;
 
 export default async function KrouzekListPage() {
   const supabase = await createClient();
   const { data } = await supabase
     .from("club_registrations")
-    .select("id, created_at, child_name, email, phone, terms, status")
+    .select("id, created_at, child_name, parent_name, email, phone, terms, status")
     .order("created_at", { ascending: false });
 
   const rows = (data ?? []) as Row[];
@@ -46,8 +53,9 @@ export default async function KrouzekListPage() {
               <tr className="border-b border-slate-100 text-xs uppercase tracking-wide text-steel/70">
                 <th className="px-5 py-3 font-semibold">Datum</th>
                 <th className="px-5 py-3 font-semibold">Dítě</th>
+                <th className="px-5 py-3 font-semibold">Rodič</th>
                 <th className="px-5 py-3 font-semibold">E-mail</th>
-                <th className="px-5 py-3 font-semibold">Telefon</th>
+                <th className="px-5 py-3 font-semibold">Telefon rodiče</th>
                 <th className="px-5 py-3 font-semibold">Termíny</th>
                 <th className="px-5 py-3 font-semibold">Status</th>
               </tr>
@@ -56,7 +64,7 @@ export default async function KrouzekListPage() {
               {rows.length === 0 ? (
                 <tr>
                   <td
-                    colSpan={6}
+                    colSpan={7}
                     className="px-5 py-10 text-center text-steel/60"
                   >
                     Zatím žádné přihlášky.
@@ -79,6 +87,11 @@ export default async function KrouzekListPage() {
                     <td className="px-5 py-3 font-medium text-navy">
                       <Link href={`/admin/krouzek/${row.id}`} className="block">
                         {row.child_name}
+                      </Link>
+                    </td>
+                    <td className="px-5 py-3 text-steel/80">
+                      <Link href={`/admin/krouzek/${row.id}`} className="block">
+                        {row.parent_name || "Neuvedeno"}
                       </Link>
                     </td>
                     <td className="px-5 py-3 text-steel/80">

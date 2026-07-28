@@ -399,7 +399,7 @@ export default function TaborPage() {
           <Reveal from="right">
             <div className="relative aspect-[4/3] overflow-hidden rounded-3xl">
               <Image
-                src="/images/2024_08_DSC02487-min.jpg"
+                src="/images/2024_08_DSC02487-min.webp"
                 alt="Děti při parkourovém tréninku na táboře"
                 fill
                 className="object-cover"

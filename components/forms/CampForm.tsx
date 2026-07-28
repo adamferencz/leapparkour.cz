@@ -177,6 +177,51 @@ export function CampForm() {
 
       <TextField label="S kým chcete být v chatce/pokoji?" name="roommates" />
 
+      <fieldset className="rounded-2xl border border-slate-200 bg-slate-50/70 p-4">
+        <legend className="px-1 text-sm font-semibold text-navy">
+          Fakturační údaje
+        </legend>
+        <p className="mt-1 mb-4 text-xs text-steel/80">
+          Tyto údaje použijeme na fakturu za tábor.
+        </p>
+        <div className="space-y-4">
+          <TextField
+            label="Jméno odběratele na faktuře"
+            name="billing_name"
+            required
+            placeholder="Např. Jana Nováková"
+          />
+          <TextField
+            label="Ulice a číslo popisné"
+            name="billing_street"
+            required
+            placeholder="Např. Práčat 1886"
+          />
+          <div className="grid gap-4 sm:grid-cols-[1fr_140px]">
+            <TextField
+              label="Město"
+              name="billing_city"
+              required
+              placeholder="Havlíčkův Brod"
+            />
+            <TextField
+              label="PSČ"
+              name="billing_zip"
+              required
+              placeholder="58001"
+            />
+          </div>
+        </div>
+      </fieldset>
+
+      <TextField
+        label="Slevový kód"
+        name="discount_code"
+        placeholder="Např. LEAP10"
+        autoComplete="off"
+        hint="Pokud od nás máte slevový kód, zadejte ho tady. Finální částku uvidíte v potvrzení a následné faktuře."
+      />
+
       {state?.error && (
         <p
           role="alert"
@@ -189,7 +234,7 @@ export function CampForm() {
       <div>
         <SubmitButton label="Odeslat přihlášku" pending={pending} />
         <p className="mt-3 text-center text-xs text-steel/80">
-          Po odeslání vás přesměrujeme na stránku s dalšími kroky k platbě.
+          Po odeslání vám pošleme potvrzení a fakturu na uvedený e-mail.
         </p>
       </div>
     </form>

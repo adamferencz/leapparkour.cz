@@ -5,6 +5,7 @@ import type { CampRegistration } from "@/lib/types";
 import { Card } from "@/components/admin/Card";
 import StatusBadge from "@/components/admin/StatusBadge";
 import ExportButton from "@/components/admin/ExportButton";
+import { formatCzk } from "@/lib/billing/config";
 import { formatDate, pluralRegistrations } from "../_lib/format";
 
 export const dynamic = "force-dynamic";
@@ -22,17 +23,20 @@ type Row = Pick<
   | "email"
   | "phone_mother"
   | "phone_father"
+  | "total_amount_czk"
   | "status"
 >;
 
 export default async function TaborListPage() {
   const supabase = await createClient();
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from("camp_registrations")
-    .select(
-      "id, created_at, child_name, child_age, email, phone_mother, phone_father, status"
-    )
+    .select("*")
     .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error("Načtení přihlášek na tábor selhalo:", error);
+  }
 
   const rows = (data ?? []) as Row[];
 
@@ -58,6 +62,7 @@ export default async function TaborListPage() {
                 <th className="px-5 py-3 font-semibold">Věk</th>
                 <th className="px-5 py-3 font-semibold">E-mail</th>
                 <th className="px-5 py-3 font-semibold">Telefony</th>
+                <th className="px-5 py-3 font-semibold">K úhradě</th>
                 <th className="px-5 py-3 font-semibold">Status</th>
               </tr>
             </thead>
@@ -65,7 +70,7 @@ export default async function TaborListPage() {
               {rows.length === 0 ? (
                 <tr>
                   <td
-                    colSpan={6}
+                    colSpan={7}
                     className="px-5 py-10 text-center text-steel/60"
                   >
                     Zatím žádné přihlášky.
@@ -105,6 +110,11 @@ export default async function TaborListPage() {
                       <td className="whitespace-nowrap px-5 py-3 text-steel/80">
                         <Link href={href} className="block">
                           {phones}
+                        </Link>
+                      </td>
+                      <td className="whitespace-nowrap px-5 py-3 font-medium text-navy">
+                        <Link href={href} className="block">
+                          {formatCzk(row.total_amount_czk ?? 8400)}
                         </Link>
                       </td>
                       <td className="px-5 py-3">
