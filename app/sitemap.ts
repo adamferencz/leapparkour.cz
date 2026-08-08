@@ -75,6 +75,24 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly",
       priority: 0.7,
     },
+    {
+      url: `${baseUrl}/obchodni-podminky`,
+      lastModified: UPDATED_AT,
+      changeFrequency: "yearly",
+      priority: 0.3,
+    },
+    {
+      url: `${baseUrl}/ochrana-osobnich-udaju`,
+      lastModified: UPDATED_AT,
+      changeFrequency: "yearly",
+      priority: 0.3,
+    },
+    {
+      url: `${baseUrl}/cookies`,
+      lastModified: UPDATED_AT,
+      changeFrequency: "yearly",
+      priority: 0.2,
+    },
   ];
 
   const blogPages: MetadataRoute.Sitemap = BLOG_POSTS.map((post) => ({

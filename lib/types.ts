@@ -25,6 +25,8 @@ export interface ClubRegistration {
   billing_street: string | null;
   billing_city: string | null;
   billing_zip: string | null;
+  legal_terms_accepted_at: string | null;
+  photo_consent: boolean;
   status: RegistrationStatus;
   admin_notes: string | null;
 }
@@ -54,6 +56,8 @@ export interface CampRegistration {
   billing_street: string | null;
   billing_city: string | null;
   billing_zip: string | null;
+  legal_terms_accepted_at: string | null;
+  photo_consent: boolean;
   status: RegistrationStatus;
   admin_notes: string | null;
 }

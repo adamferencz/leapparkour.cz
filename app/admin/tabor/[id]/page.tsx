@@ -78,7 +78,7 @@ export default async function TaborDetailPage({
     buyerEmail: invoice?.buyer_email ?? reg.email,
     itemName:
       invoice?.item_name ??
-      "Členský příspěvek na LEAP camp 2027 v termínu 2.7.-10.7.2027",
+      "Členský příspěvek na LEAP camp 2027 v termínu 3.7.-10.7.2027",
     baseAmountCzk: invoice?.base_amount_czk ?? reg.base_amount_czk ?? 8400,
     discountCode: invoice?.discount_code ?? reg.discount_code ?? "",
     discountAmountCzk:
@@ -135,6 +135,16 @@ export default async function TaborDetailPage({
       label: "Zdravotní omezení",
       value: reg.health_notes,
       highlight: !!reg.health_notes,
+    },
+    {
+      label: "Souhlas s podmínkami a GDPR",
+      value: reg.legal_terms_accepted_at
+        ? formatDateTime(reg.legal_terms_accepted_at)
+        : "Neuloženo",
+    },
+    {
+      label: "Souhlas s fotkami a videem",
+      value: reg.photo_consent ? "Ano" : "Ne",
     },
   ];
 

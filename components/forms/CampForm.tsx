@@ -2,6 +2,7 @@
 
 import { useActionState, useState } from "react";
 import type { ChangeEvent } from "react";
+import Link from "next/link";
 import {
   submitCampRegistration,
   type CampFormState,
@@ -221,6 +222,43 @@ export function CampForm() {
         autoComplete="off"
         hint="Pokud od nás máte slevový kód, zadejte ho tady. Finální částku uvidíte v potvrzení a následné faktuře."
       />
+
+      <fieldset className="space-y-3 rounded-2xl border border-slate-200 bg-white p-4">
+        <legend className="px-1 text-sm font-semibold text-navy">
+          Souhlasy a informace
+        </legend>
+        <label className="flex cursor-pointer items-start gap-3 text-sm text-steel">
+          <input
+            type="checkbox"
+            name="legal_acceptance"
+            required
+            className="mt-1 h-4 w-4 shrink-0 accent-brand"
+          />
+          <span>
+            Souhlasím s{" "}
+            <Link href="/obchodni-podminky" className="font-semibold text-brand hover:text-brand-dark" target="_blank">
+              obchodními podmínkami
+            </Link>{" "}
+            a beru na vědomí{" "}
+            <Link href="/ochrana-osobnich-udaju" className="font-semibold text-brand hover:text-brand-dark" target="_blank">
+              zpracování osobních údajů
+            </Link>
+            . <span className="text-brand">*</span>
+          </span>
+        </label>
+        <label className="flex cursor-pointer items-start gap-3 text-sm text-steel">
+          <input
+            type="checkbox"
+            name="photo_consent"
+            className="mt-1 h-4 w-4 shrink-0 accent-brand"
+          />
+          <span>
+            Souhlasím s použitím fotek a videí dítěte z tábora pro web,
+            sociální sítě a propagační materiály Leap Parkour. Souhlas je
+            dobrovolný a lze ho kdykoliv odvolat.
+          </span>
+        </label>
+      </fieldset>
 
       {state?.error && (
         <p

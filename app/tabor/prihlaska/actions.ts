@@ -27,7 +27,7 @@ function isMissingBillingSchema(error: { code?: string; message?: string } | nul
   return (
     error.code === "PGRST205" ||
     error.code === "PGRST204" ||
-    /discount_codes|base_amount_czk|discount_code|total_amount_czk|billing_name|billing_street|billing_city|billing_zip/i.test(
+    /discount_codes|base_amount_czk|discount_code|total_amount_czk|billing_name|billing_street|billing_city|billing_zip|legal_terms_accepted_at|photo_consent/i.test(
       error.message ?? "",
     )
   );
@@ -50,6 +50,8 @@ function registrationPayload({
   billingStreet,
   billingCity,
   billingZip,
+  legalTermsAcceptedAt,
+  photoConsent,
 }: {
   childName: string;
   fatherName: string;
@@ -67,6 +69,8 @@ function registrationPayload({
   billingStreet: string;
   billingCity: string;
   billingZip: string;
+  legalTermsAcceptedAt: string;
+  photoConsent: boolean;
 }) {
   return {
     camp: CAMP.id,
@@ -86,6 +90,8 @@ function registrationPayload({
     billing_street: billingStreet,
     billing_city: billingCity,
     billing_zip: billingZip,
+    legal_terms_accepted_at: legalTermsAcceptedAt,
+    photo_consent: photoConsent,
   };
 }
 
@@ -262,6 +268,8 @@ export async function submitCampRegistration(
   const billingCity = get("billing_city");
   const billingZip = get("billing_zip");
   const discountCode = normalizeDiscountCode(get("discount_code"));
+  const legalAcceptance = formData.get("legal_acceptance") === "on";
+  const photoConsent = formData.get("photo_consent") === "on";
 
   if (
     !childName ||
@@ -280,6 +288,13 @@ export async function submitCampRegistration(
 
   if (!EMAIL_REGEX.test(email)) {
     return { error: "Zadejte prosím platnou e-mailovou adresu." };
+  }
+
+  if (!legalAcceptance) {
+    return {
+      error:
+        "Potvrďte prosím, že souhlasíte s obchodními podmínkami a berete na vědomí zpracování osobních údajů.",
+    };
   }
 
   const childAge = Number(childAgeRaw);
@@ -326,6 +341,7 @@ export async function submitCampRegistration(
     }
 
     const totalAmountCzk = BILLING.baseAmountCzk - discountAmountCzk;
+    const legalTermsAcceptedAt = new Date().toISOString();
     const basePayload = registrationPayload({
       childName,
       fatherName,
@@ -343,6 +359,8 @@ export async function submitCampRegistration(
       billingStreet,
       billingCity,
       billingZip,
+      legalTermsAcceptedAt,
+      photoConsent,
     });
     let registrationId: string | null = randomUUID();
     let billingSchemaAvailable = true;
@@ -388,6 +406,9 @@ export async function submitCampRegistration(
               basePayload.billing_name,
               basePayload.billing_street,
               `${basePayload.billing_zip} ${basePayload.billing_city}`,
+              "",
+              `Souhlas s podmínkami a GDPR: ${legalTermsAcceptedAt}`,
+              `Souhlas s fotkami a videem: ${photoConsent ? "ano" : "ne"}`,
             ].join("\n"),
           });
 

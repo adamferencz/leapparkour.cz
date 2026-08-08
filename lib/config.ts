@@ -5,11 +5,11 @@
 
 export const SITE = {
   name: "Leap Parkour",
-  legalName: "Leap parkour z.s.",
+  legalName: "Leap parkour, z. s.",
   ico: "07195320",
   domain: "leapparkour.cz",
   email: "leapparkour@seznam.cz",
-  address: "Práčat 1886, Havlíčkův Brod",
+  address: "Práčat 1886, 580 01 Havlíčkův Brod",
   registry: "L 12040 vedená u Krajského soudu v Hradci Králové",
   vatNote: "Neplátce DPH",
   instagram: "https://www.instagram.com/leapparkour/",
@@ -55,7 +55,7 @@ export const CAMP = {
   year: 2027,
   label: "Leap Camp 2027",
   edition: "10. ročník",
-  dates: "2. 7. – 10. 7. 2027",
+  dates: "3. 7. – 10. 7. 2027",
   price: "8 400 Kč",
   priceCzk: 8400,
   venue: "Táborové středisko Radost u Světlé nad Sázavou",

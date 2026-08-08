@@ -9,7 +9,7 @@ export const metadata: Metadata = createPageMetadata({
   title: "Důležité informace o táboře",
   description: `Adresa, příjezd a odjezd, potřebné dokumenty, storno podmínky a doporučený seznam věcí na letní tábor ${CAMP.label}.`,
   path: "/tabor/informace",
-  image: "/images/2024_08_TABOROVA2022.jpg",
+  image: "/images/camp-fotky/camp-01.webp",
   imageAlt: `Důležité informace k letnímu táboru ${CAMP.label}`,
 });
 

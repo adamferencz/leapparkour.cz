@@ -33,6 +33,8 @@ export async function GET() {
     "Termíny",
     "WhatsApp skupina",
     "Zdravotní omezení",
+    "Souhlas s podmínkami a GDPR",
+    "Souhlas s fotkami a videem",
     "Status",
     "Poznámka administrátora",
   ];
@@ -47,6 +49,8 @@ export async function GET() {
     termLabels(r.terms),
     whatsappLabel(r),
     r.health_notes,
+    r.legal_terms_accepted_at ? formatDateTime(r.legal_terms_accepted_at) : "",
+    r.photo_consent ? "Ano" : "Ne",
     STATUS_LABELS[r.status],
     r.admin_notes,
   ]);

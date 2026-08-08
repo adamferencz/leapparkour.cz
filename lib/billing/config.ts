@@ -7,7 +7,7 @@ export const BILLING = {
   iban: "CZ1103000000000341788799",
   bic: "CEKOCZPP",
   dueInDays: 14,
-  itemName: `Členský příspěvek na LEAP camp ${CAMP.year} v termínu 2.7.-10.7.2027`,
+  itemName: `Členský příspěvek na LEAP camp ${CAMP.year} v termínu 3.7.-10.7.2027`,
   supplier: {
     name: SITE.legalName,
     addressLines: ["Práčat 1886", "58001 Havlíčkův Brod", "Česká republika"],

@@ -112,6 +112,16 @@ export default async function KrouzekDetailPage({
       value: reg.health_notes,
       highlight: !!reg.health_notes,
     },
+    {
+      label: "Souhlas s podmínkami a GDPR",
+      value: reg.legal_terms_accepted_at
+        ? formatDateTime(reg.legal_terms_accepted_at)
+        : "Neuloženo",
+    },
+    {
+      label: "Souhlas s fotkami a videem",
+      value: reg.photo_consent ? "Ano" : "Ne",
+    },
   ];
 
   return (

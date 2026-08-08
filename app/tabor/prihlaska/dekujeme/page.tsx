@@ -8,7 +8,7 @@ export const metadata: Metadata = createPageMetadata({
   title: "Děkujeme za přihlášku na tábor",
   description: `Přihlášku na ${CAMP.label} jsme přijali — další kroky k platbě a dokumentům.`,
   path: "/tabor/prihlaska/dekujeme",
-  image: "/images/2024_08_TABOROVA2022.jpg",
+  image: "/images/camp-fotky/camp-01.webp",
   imageAlt: `Děkujeme za přihlášku na ${CAMP.label}`,
   robots: { index: false, follow: false },
 });

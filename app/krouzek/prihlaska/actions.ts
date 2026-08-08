@@ -28,6 +28,14 @@ const GENERIC_ERROR =
 
 type SupabaseServerClient = Awaited<ReturnType<typeof createClient>>;
 
+function isMissingLegalSchema(error: { code?: string; message?: string } | null) {
+  if (!error) return false;
+  return (
+    error.code === "PGRST204" ||
+    /legal_terms_accepted_at|photo_consent/i.test(error.message ?? "")
+  );
+}
+
 function buildBuyerAddress({
   billingStreet,
   billingCity,
@@ -154,6 +162,8 @@ export async function submitClubRegistration(
   const billingStreet = String(formData.get("billing_street") ?? "").trim();
   const billingCity = String(formData.get("billing_city") ?? "").trim();
   const billingZip = String(formData.get("billing_zip") ?? "").trim();
+  const legalAcceptance = formData.get("legal_acceptance") === "on";
+  const photoConsent = formData.get("photo_consent") === "on";
 
   const validTermIds: string[] = CLUB_SEASON.terms.map((t) => t.id);
   const terms = formData
@@ -176,6 +186,12 @@ export async function submitClubRegistration(
   if (!billingName || !billingStreet || !billingCity || !billingZip) {
     return { error: "Vyplňte prosím fakturační údaje." };
   }
+  if (!legalAcceptance) {
+    return {
+      error:
+        "Potvrďte prosím, že souhlasíte s obchodními podmínkami a berete na vědomí zpracování osobních údajů.",
+    };
+  }
   if (!WHATSAPP_VALUES.includes(whatsappChoice as WhatsappChoice)) {
     return { error: "Vyberte prosím jednu z možností u WhatsApp skupiny." };
   }
@@ -187,6 +203,7 @@ export async function submitClubRegistration(
     const supabase = await createClient();
     const totalAmountCzk = getClubAmountCzk(terms);
     const registrationId = randomUUID();
+    const legalTermsAcceptedAt = new Date().toISOString();
     const { error } = await supabase.from("club_registrations").insert({
       id: registrationId,
       child_name: childName,
@@ -204,11 +221,47 @@ export async function submitClubRegistration(
       billing_street: billingStreet,
       billing_city: billingCity,
       billing_zip: billingZip,
+      legal_terms_accepted_at: legalTermsAcceptedAt,
+      photo_consent: photoConsent,
     });
 
     if (error) {
-      console.error("club_registrations insert failed:", error?.message);
-      return { error: GENERIC_ERROR };
+      if (isMissingLegalSchema(error)) {
+        console.warn(
+          "Právní sloupce zatím nejsou v Supabase, ukládám přihlášku bez nich.",
+          error,
+        );
+        const fallback = await supabase.from("club_registrations").insert({
+          id: registrationId,
+          child_name: childName,
+          parent_name: parentName,
+          email,
+          phone,
+          whatsapp_choice: whatsappChoice,
+          whatsapp_other: null,
+          terms,
+          health_notes: healthNotes || null,
+          season: CLUB_SEASON.id,
+          base_amount_czk: totalAmountCzk,
+          total_amount_czk: totalAmountCzk,
+          billing_name: billingName,
+          billing_street: billingStreet,
+          billing_city: billingCity,
+          billing_zip: billingZip,
+          admin_notes: [
+            `Souhlas s podmínkami a GDPR: ${legalTermsAcceptedAt}`,
+            `Souhlas s fotkami a videem: ${photoConsent ? "ano" : "ne"}`,
+          ].join("\n"),
+        });
+
+        if (fallback.error) {
+          console.error("club_registrations fallback insert failed:", fallback.error?.message);
+          return { error: GENERIC_ERROR };
+        }
+      } else {
+        console.error("club_registrations insert failed:", error?.message);
+        return { error: GENERIC_ERROR };
+      }
     }
 
     try {

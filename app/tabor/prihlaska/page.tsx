@@ -9,7 +9,7 @@ export const metadata: Metadata = createPageMetadata({
   title: `Přihláška na ${CAMP.label}`,
   description: `Online přihláška na letní parkourový tábor ${CAMP.label} — ${CAMP.dates}, ${CAMP.venue}, pro děti ${CAMP.ageRange}.`,
   path: "/tabor/prihlaska",
-  image: "/images/2024_08_TABOROVA2022.jpg",
+  image: "/images/camp-fotky/camp-01.webp",
   imageAlt: `Online přihláška na letní parkourový tábor ${CAMP.label}`,
 });
 

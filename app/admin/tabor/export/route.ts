@@ -42,6 +42,8 @@ export async function GET() {
     "Slevový kód",
     "Sleva",
     "K úhradě",
+    "Souhlas s podmínkami a GDPR",
+    "Souhlas s fotkami a videem",
     "Status",
     "Poznámka administrátora",
   ];
@@ -65,6 +67,8 @@ export async function GET() {
     r.discount_code,
     r.discount_amount_czk,
     r.total_amount_czk,
+    r.legal_terms_accepted_at ? formatDateTime(r.legal_terms_accepted_at) : "",
+    r.photo_consent ? "Ano" : "Ne",
     STATUS_LABELS[r.status],
     r.admin_notes,
   ]);

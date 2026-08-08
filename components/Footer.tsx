@@ -10,7 +10,7 @@ export default function Footer() {
 
   return (
     <footer className="bg-navy text-white">
-      <div className="container-site grid gap-10 py-14 md:grid-cols-3">
+      <div className="container-site grid gap-10 py-14 md:grid-cols-4">
         <div>
           <p className="text-lg font-bold">Leap Parkour</p>
           <p className="mt-3 text-sm leading-relaxed text-white/70">
@@ -56,10 +56,32 @@ export default function Footer() {
             </li>
           </ul>
         </div>
+
+        <div>
+          <p className="font-semibold">Právní informace</p>
+          <ul className="mt-3 space-y-2 text-sm text-white/70">
+            <li>
+              <Link href="/obchodni-podminky" className="hover:text-white">
+                Obchodní podmínky
+              </Link>
+            </li>
+            <li>
+              <Link href="/ochrana-osobnich-udaju" className="hover:text-white">
+                Ochrana osobních údajů
+              </Link>
+            </li>
+            <li>
+              <Link href="/cookies" className="hover:text-white">
+                Cookies
+              </Link>
+            </li>
+          </ul>
+        </div>
       </div>
       <div className="border-t border-white/10">
-        <div className="container-site py-5 text-center text-xs text-white/50">
-          © {new Date().getFullYear()} Leap Parkour · leapparkour.cz
+        <div className="container-site py-5 text-center text-xs leading-relaxed text-white/50">
+          © {new Date().getFullYear()} {SITE.legalName} · IČO {SITE.ico} ·{" "}
+          {SITE.address} · leapparkour.cz
         </div>
       </div>
     </footer>
