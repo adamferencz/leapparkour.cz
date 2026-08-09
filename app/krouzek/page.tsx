@@ -18,6 +18,8 @@ export const metadata: Metadata = createPageMetadata({
 const WHY_ITEMS = [
   {
     title: "Dítě vidí, že dokáže věci, které mu dříve připadaly nemožné",
+    image: "/images/2024_08_1.jpeg",
+    imageAlt: "Dítě překonává parkourovou překážku při tréninku",
     paragraphs: [
       "Na začátku může přijít dítě, které se bojí přeskočit jednoduchou překážku. Za několik týdnů ji přeskočí. Později se naučí nový trik.",
       "A najednou zjistí: „Když na něčem pracuju, dokážu se zlepšit.“",
@@ -26,6 +28,8 @@ const WHY_ITEMS = [
   },
   {
     title: "Parkour není jen pro talentované děti",
+    image: "/images/2024_08_krouzek.jpg",
+    imageAlt: "Děti při společném parkourovém tréninku v tělocvičně",
     paragraphs: [
       "Začít může prakticky každý. Dítě nemusí před prvním tréninkem umět salto. Nemusí být nejsilnější. Nemusí být nejrychlejší. A nemusí mít žádnou předchozí zkušenost s parkourem.",
       "Každý začíná na jiné úrovni. Někdo se nejdříve učí bezpečně dopadnout. Jiný pracuje na přeskoku přes překážku. Pokročilejší dítě může trénovat salta a složitější kombinace.",
@@ -34,6 +38,8 @@ const WHY_ITEMS = [
   },
   {
     title: "Nejdřív bezpečný základ. Potom triky.",
+    image: "/images/2024_08_25.webp",
+    imageAlt: "Parkourista při bezpečně připraveném vystoupení",
     paragraphs: [
       "Když rodič slyší slovo parkour, často si představí skoky ze střech a nebezpečné kousky. Tak parkour neučíme.",
       "Děti vedeme postupně. Nejdříve se učí správně dopadat, pracovat se svým tělem a zvládnout základní pohyby. Teprve potom postupují k náročnějším prvkům.",
@@ -45,6 +51,11 @@ const WHY_ITEMS = [
 const GROUPS = [
   {
     title: "Parkour přípravka",
+    number: "01",
+    image: "/images/2024_08_krouzek.jpg",
+    imageAlt: "Parkour přípravka při tréninku s trenérem",
+    accent: "bg-emerald-500",
+    tint: "bg-emerald-50 text-emerald-800",
     times: ["Čtvrtek 16:00–17:00", "Pátek 16:00–17:00"],
     text: [
       "Pro děti, které chtějí objevovat pohyb a parkour bez tlaku na výkon.",
@@ -54,6 +65,11 @@ const GROUPS = [
   },
   {
     title: "Parkour tým",
+    number: "02",
+    image: "/images/2024_08_25.webp",
+    imageAlt: "Parkour tým při společném vystoupení",
+    accent: "bg-brand",
+    tint: "bg-blue-50 text-blue-800",
     times: ["Čtvrtek 17:00–18:00"],
     text: [
       "Pro děti, které už mají parkourové základy a chtějí se posouvat dál.",
@@ -63,6 +79,11 @@ const GROUPS = [
   },
   {
     title: "Parkour Core",
+    number: "03",
+    image: "/images/2024_08_28.webp",
+    imageAlt: "Členové parkourové komunity Leap Parkour",
+    accent: "bg-amber-400",
+    tint: "bg-amber-50 text-amber-900",
     times: ["Nejvyšší úroveň naší komunity"],
     text: [
       "Core tvoří starší členové, kteří prošli našimi kroužky a stali se součástí celé Leap party.",
@@ -130,6 +151,17 @@ function PrimaryCta({ children }: { children: string }) {
   );
 }
 
+function SecondaryCta({ children }: { children: string }) {
+  return (
+    <Link
+      href="/krouzek/prihlaska"
+      className="inline-flex rounded-full border border-navy/20 bg-white px-6 py-3 font-semibold text-navy transition-[border-color,background-color,transform] duration-200 hover:border-brand hover:bg-blue-50 active:scale-[0.98]"
+    >
+      {children}
+    </Link>
+  );
+}
+
 export default function KrouzekPage() {
   return (
     <>
@@ -165,8 +197,8 @@ export default function KrouzekPage() {
                 <span className="rounded-full bg-white px-4 py-2 shadow-sm">Začátečníci i pokročilí</span>
               </div>
               <div className="mt-8 flex flex-wrap items-center gap-4">
-                <PrimaryCta>Chci si parkour vyzkoušet zdarma</PrimaryCta>
-                <span className="font-semibold text-navy">První trénink je zdarma.</span>
+                <PrimaryCta>Přihlásit se na kroužek</PrimaryCta>
+                <SecondaryCta>Vyzkoušet první trénink</SecondaryCta>
               </div>
             </Reveal>
           </div>
@@ -194,23 +226,46 @@ export default function KrouzekPage() {
         </div>
       </section>
 
-      <section className="py-16 md:py-24">
+      <section className="overflow-hidden py-16 md:py-24">
         <div className="container-site">
           <Reveal className="mx-auto max-w-3xl text-center">
             <h2 className="text-3xl font-bold md:text-4xl">Proč Leap Parkour?</h2>
+            <p className="mt-5 leading-relaxed text-steel">
+              Děti vedeme k pohybu postupně, bezpečně a bez porovnávání.
+              Každý nový krok je viditelný úspěch.
+            </p>
           </Reveal>
-          <div className="mt-10 grid gap-6 lg:grid-cols-3">
+          <div className="mt-12 space-y-8 md:space-y-12">
             {WHY_ITEMS.map((item, index) => (
               <Reveal
                 key={item.title}
                 delay={index * 0.06}
-                className="rounded-3xl bg-slate-50 p-7"
+                className={`grid overflow-hidden rounded-3xl bg-slate-50 shadow-sm md:grid-cols-2 ${
+                  index % 2 === 1 ? "md:[&>div:first-child]:order-2" : ""
+                }`}
               >
-                <h3 className="text-xl font-bold text-navy">{item.title}</h3>
-                <div className="mt-5 space-y-4 leading-relaxed text-steel">
-                  {item.paragraphs.map((paragraph) => (
-                    <p key={paragraph}>{paragraph}</p>
-                  ))}
+                <div className="relative min-h-[280px] md:min-h-[440px]">
+                  <Image
+                    src={item.image}
+                    alt={item.imageAlt}
+                    fill
+                    className="object-cover"
+                    sizes="(min-width: 768px) 50vw, 100vw"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-navy/35 via-transparent to-transparent" />
+                  <span className="absolute bottom-5 left-5 rounded-full bg-white/92 px-4 py-2 text-sm font-bold text-navy shadow-sm backdrop-blur">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                </div>
+                <div className="flex flex-col justify-center p-7 md:p-10 lg:p-12">
+                  <h3 className="text-2xl font-bold leading-tight text-navy md:text-3xl">
+                    {item.title}
+                  </h3>
+                  <div className="mt-6 space-y-4 leading-relaxed text-steel">
+                    {item.paragraphs.map((paragraph) => (
+                      <p key={paragraph}>{paragraph}</p>
+                    ))}
+                  </div>
                 </div>
               </Reveal>
             ))}
@@ -260,29 +315,60 @@ export default function KrouzekPage() {
               je jeho vlastní zájem, přístup a fungování v partě.
             </p>
           </Reveal>
-          <div className="mt-10 grid gap-6 lg:grid-cols-3">
+          <div className="relative mt-12 hidden grid-cols-3 items-center px-[16%] lg:grid">
+            <div className="absolute left-[18%] right-[18%] top-1/2 h-1 -translate-y-1/2 bg-gradient-to-r from-emerald-400 via-brand to-amber-400" />
+            {GROUPS.map((group) => (
+              <div key={group.number} className="relative flex justify-center">
+                <span className={`grid h-12 w-12 place-items-center rounded-full ${group.accent} text-sm font-extrabold text-white shadow-lg ring-8 ring-white`}>
+                  {group.number}
+                </span>
+              </div>
+            ))}
+          </div>
+          <div className="mt-8 grid gap-6 lg:grid-cols-3">
             {GROUPS.map((group, index) => (
               <Reveal
                 key={group.title}
                 delay={index * 0.06}
-                className="flex h-full flex-col rounded-3xl border border-slate-100 bg-white p-7 shadow-sm"
+                className="flex h-full flex-col overflow-hidden rounded-3xl border border-slate-100 bg-white shadow-sm transition-transform duration-300 hover:-translate-y-1"
               >
-                <h3 className="text-2xl font-bold text-navy">{group.title}</h3>
-                <div className="mt-4 space-y-2">
-                  {group.times.map((time) => (
-                    <p key={time} className="rounded-full bg-brand/10 px-4 py-2 text-sm font-semibold text-brand">
-                      {time}
-                    </p>
-                  ))}
+                <div className="relative aspect-[16/10] overflow-hidden">
+                  <Image
+                    src={group.image}
+                    alt={group.imageAlt}
+                    fill
+                    className="object-cover transition-transform duration-500 hover:scale-[1.03]"
+                    sizes="(min-width: 1024px) 32vw, 100vw"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-navy/72 via-transparent to-transparent" />
+                  <span className={`absolute left-5 top-5 grid h-11 w-11 place-items-center rounded-full ${group.accent} text-sm font-extrabold text-white shadow-md lg:hidden`}>
+                    {group.number}
+                  </span>
+                  <h3 className="absolute bottom-5 left-5 right-5 text-2xl font-bold !text-white">
+                    {group.title}
+                  </h3>
                 </div>
-                <div className="mt-5 space-y-4 leading-relaxed text-steel">
-                  {group.text.map((paragraph) => (
-                    <p key={paragraph}>{paragraph}</p>
-                  ))}
+                <div className="flex flex-1 flex-col p-7">
+                  <div className="space-y-2">
+                    {group.times.map((time) => (
+                      <p key={time} className={`rounded-full px-4 py-2 text-sm font-semibold ${group.tint}`}>
+                        {time}
+                      </p>
+                    ))}
+                  </div>
+                  <div className="mt-5 space-y-4 leading-relaxed text-steel">
+                    {group.text.map((paragraph) => (
+                      <p key={paragraph}>{paragraph}</p>
+                    ))}
+                  </div>
                 </div>
               </Reveal>
             ))}
           </div>
+          <Reveal className="mt-10 flex flex-wrap items-center justify-center gap-4">
+            <PrimaryCta>Přihlásit se na kroužek</PrimaryCta>
+            <SecondaryCta>Vyzkoušet první trénink</SecondaryCta>
+          </Reveal>
         </div>
       </section>
 
@@ -493,17 +579,18 @@ export default function KrouzekPage() {
         <div className="container-site">
           <Reveal className="mx-auto max-w-3xl text-center">
             <h2 className="text-3xl font-bold md:text-4xl">
-              Pořád nevíte, jestli bude parkour dítě bavit?
+              Můžete se rovnou přihlásit. Nebo nejdřív přijít na zkoušku.
             </h2>
             <div className="mt-6 space-y-4 leading-relaxed text-steel">
               <p>Nemusíte se rozhodovat naslepo. Přijďte si první trénink jednoduše vyzkoušet.</p>
               <p>Dítě pozná trenéry. Vyzkouší si parkour. Uvidí ostatní děti. A vy zjistíte, jestli mu naše prostředí sedí.</p>
             </div>
-            <p className="mt-6 text-xl font-extrabold uppercase text-navy">
-              První trénink je zdarma
+            <p className="mx-auto mt-6 inline-flex rounded-full bg-emerald-50 px-4 py-2 text-sm font-bold text-emerald-800">
+              První zkušební trénink je zdarma
             </p>
-            <div className="mt-8">
-              <PrimaryCta>Chci rezervovat zkušební trénink</PrimaryCta>
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
+              <PrimaryCta>Přihlásit se na kroužek</PrimaryCta>
+              <SecondaryCta>Vyzkoušet první trénink</SecondaryCta>
             </div>
           </Reveal>
         </div>
@@ -542,10 +629,11 @@ export default function KrouzekPage() {
                 A zkušenost, že když něco nejde napoprvé, neznamená to, že to
                 nejde vůbec.
               </p>
-              <p>Přijďte si Leap Parkour vyzkoušet. První trénink je zdarma.</p>
+              <p>Vyberte si rovnou pravidelný kroužek, nebo nejdřív zkušební trénink.</p>
             </div>
-            <div className="mt-8">
-              <PrimaryCta>Chci přihlásit dítě na zkušební trénink</PrimaryCta>
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
+              <PrimaryCta>Přihlásit se na kroužek</PrimaryCta>
+              <SecondaryCta>Vyzkoušet první trénink</SecondaryCta>
             </div>
             <p className="mt-8 text-slate-200">
               Máte otázku?{" "}

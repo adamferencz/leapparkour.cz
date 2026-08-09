@@ -9,19 +9,16 @@ import CampGallery from "@/components/CampGallery";
 import { createPageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = createPageMetadata({
-  title: `LeapCamp ${CAMP.year}: tábor pro děti ${CAMP.ageRange}`,
+  title: `Leap Camp ${CAMP.year}: tábor pro děti ${CAMP.ageRange}`,
   description:
     "Tábor, ze kterého si děti neodvezou jen zážitky. Odvezou si dovednosti, kamarády a větší důvěru v sebe.",
   path: "/tabor",
   image: "/images/camp-fotky/camp-01.webp",
-  imageAlt: `LeapCamp ${CAMP.year} - letní parkourový tábor pro děti`,
+  imageAlt: `Leap Camp ${CAMP.year} - letní parkourový tábor pro děti`,
 });
 
 const ctaButton =
   "inline-block rounded-full bg-brand px-6 py-3 font-semibold text-white transition-[background-color,transform] duration-200 hover:bg-brand-dark active:scale-[0.98]";
-
-const ctaSecondary =
-  "inline-block rounded-full border border-navy/15 bg-white px-6 py-3 font-semibold text-navy transition-[background-color,transform] duration-200 hover:bg-slate-100 active:scale-[0.98]";
 
 const iconProps = {
   viewBox: "0 0 24 24",
@@ -128,6 +125,15 @@ const BENEFITS = [
   "zkušenost s překonáváním vlastních hranic",
 ];
 
+const CAMP_STATS = [
+  ["10.", "ročník Leap Campu"],
+  ["10+ let", "budování parkourové komunity"],
+  ["stovky", "dětí, které prošly našimi tréninky"],
+  ["15 členů", "týmu na posledním ročníku"],
+  ["8–16 let", "věk účastníků"],
+  ["7 dní", "plných pohybu, dobrodružství a zážitků"],
+] as const;
+
 const PRICE_INCLUDES = [
   "ubytování na celý pobyt",
   "celodenní strava a pitný režim",
@@ -143,26 +149,26 @@ const PRICE_INCLUDES = [
 
 const FAQ_ITEMS: { question: string; answer: string }[] = [
   {
-    question: "Moje dítě nikoho nezná. Co když tam bude samo?",
+    question: "Moje dítě nikoho nezná?",
     answer:
       "To vůbec nevadí. Tábor je prostředí, kde se děti velmi rychle seznamují prostřednictvím týmů, her a společných tréninků.",
   },
   {
-    question: "Nikdy nedělalo parkour. Nevadí to?",
+    question: "Nikdy nedělalo parkour?",
     answer:
-      "Nevadí. LeapCamp je určený začátečníkům i pokročilým a dítě trénuje podle své úrovně.",
+      "Nevadí. Leap Camp je určený začátečníkům i pokročilým a dítě trénuje podle své úrovně.",
   },
   {
-    question: "Musí umět salto?",
+    question: "Neumí salto?",
     answer: "Nemusí. Salta nejsou podmínkou účasti.",
   },
   {
-    question: "Co když se bojí některého triku?",
+    question: "Bojí se některého triku?",
     answer:
       "Do žádného triku dítě nenutíme. Postupuje vlastním tempem a trenér mu pomůže přes jednodušší varianty.",
   },
   {
-    question: "Co když je dítě naopak hodně pokročilé?",
+    question: "Je naopak hodně pokročilé?",
     answer:
       "I zkušenější děti dostávají odpovídající výzvy a mohou pracovat na náročnějších dovednostech.",
   },
@@ -172,7 +178,7 @@ const GALLERY = Array.from({ length: 41 }, (_, index) => {
   const number = String(index + 1).padStart(2, "0");
   return {
     src: `/images/camp-fotky/camp-${number}.webp`,
-    alt: `Fotka z LeapCampu ${CAMP.year} - moment ${index + 1}`,
+    alt: `Fotka z Leap Campu ${CAMP.year} - moment ${index + 1}`,
   };
 });
 
@@ -251,11 +257,8 @@ export default function TaborPage() {
         <div className="container-site grid items-center gap-12 lg:grid-cols-2">
           <div>
             <Reveal>
-              <p className="text-sm font-semibold uppercase text-brand">
-                Letní parkourový tábor
-              </p>
-              <h1 className="mt-3 text-4xl font-extrabold leading-tight text-navy md:text-6xl">
-                LeapCamp {CAMP.year}
+              <h1 className="text-4xl font-extrabold leading-tight text-navy md:text-6xl">
+                Leap Camp {CAMP.year}
               </h1>
             </Reveal>
             <Reveal delay={0.08}>
@@ -267,7 +270,7 @@ export default function TaborPage() {
               </p>
               <p className="mt-4 max-w-2xl leading-relaxed text-steel">
                 Ať už tvoje dítě parkour nikdy nezkusilo, nebo už trénuje
-                několik let, na LeapCampu dostane prostor posunout se z místa,
+                několik let, na Leap Campu dostane prostor posunout se z místa,
                 na kterém právě je.
               </p>
               <ul className="mt-6 grid gap-3 sm:grid-cols-2">
@@ -283,9 +286,6 @@ export default function TaborPage() {
               <div className="mt-8 flex flex-wrap items-center gap-4">
                 <Link href="/tabor/prihlaska" className={ctaButton}>
                   Chci jet na Leap Camp
-                </Link>
-                <Link href="/tabor/informace" className={ctaSecondary}>
-                  Informace pro rodiče
                 </Link>
               </div>
               <p className="mt-5 max-w-md text-sm text-steel">
@@ -325,9 +325,6 @@ export default function TaborPage() {
                   sizes="(min-width: 1024px) 23vw, 46vw"
                 />
               </div>
-              <p className="absolute bottom-5 left-5 rounded-full bg-white/90 px-4 py-1.5 text-sm font-semibold text-navy shadow-sm">
-                LeapCamp pořádáme od roku 2018
-              </p>
             </div>
           </div>
         </div>
@@ -347,43 +344,46 @@ export default function TaborPage() {
           <Reveal>
             <div className="mx-auto max-w-3xl text-center">
               <p className="text-sm font-semibold uppercase text-blue-100">
-                Proč to dává smysl
+                Proč Leap Camp?
               </p>
               <h2 className="mt-3 text-3xl font-bold text-white md:text-4xl">
-                Proč Leap Camp?
+                Neučíme děti jen salta. Učíme je překonávat sebe samé.
               </h2>
-              <p className="mt-5 leading-relaxed text-blue-50">
-                Neučíme děti jen salta. Učíme je překonávat sebe samé. Na
-                začátku může dítě stát před překážkou a říkat: „Tohle nedám.“
-                Pak to zkusí, nepovede se to, zkusí to znovu a nakonec přijde
-                moment: „Já jsem to fakt zvládl!“
-              </p>
+              <div className="mt-5 space-y-3 leading-relaxed text-blue-50">
+                <p>Na začátku může dítě stát před překážkou a říkat: „Tohle nedám.“</p>
+                <p>Pak to zkusí. Nepovede se to. Zkusí to znovu.</p>
+                <p>A nakonec přijde moment: „Já jsem to fakt zvládl!“</p>
+                <p>Právě tyhle okamžiky chceme dětem vytvářet.</p>
+                <p>
+                  Parkour je skvělý nástroj, díky kterému se děti učí
+                  nevzdávat se po prvním neúspěchu, postupovat krok za krokem,
+                  překonávat strach a věřit tomu, že se mohou zlepšit.
+                </p>
+                <p>
+                  A to jsou principy, které mohou využít mnohem déle než jen
+                  během jednoho týdne na táboře.
+                </p>
+              </div>
             </div>
           </Reveal>
-          <div className="mt-12 grid gap-6 lg:grid-cols-3">
+          <div className="mt-12 grid gap-6 sm:grid-cols-3">
             {[
               {
-                title: "Krok za krokem",
-                text: "Parkour učí děti nevzdávat se po prvním neúspěchu, postupovat postupně a věřit, že se mohou zlepšit.",
                 image: "/images/camp-fotky/camp-23.webp",
                 alt: "Parkourový trénink krok za krokem",
               },
               {
-                title: "Strach se dá zvládnout",
-                text: "Dítě nemusí hned skočit největší překážku. Učí se rozumět svému tělu, tempu a bezpečné cestě vpřed.",
                 image: "/images/camp-fotky/camp-10.webp",
                 alt: "Dítě překonává překážku s podporou trenérů",
               },
               {
-                title: "Dovednosti i pro život",
-                text: "Sebedůvěra, trpělivost a schopnost zkoušet věci znovu se hodí mnohem déle než jen během jednoho týdne.",
                 image: "/images/camp-fotky/camp-14.webp",
                 alt: "Radost po zvládnuté výzvě na LeapCampu",
               },
             ].map((item, i) => (
-              <Reveal key={item.title} delay={i * 0.06}>
-                <article className="h-full overflow-hidden rounded-2xl bg-white/92 shadow-xl shadow-navy/20 backdrop-blur">
-                  <div className="relative aspect-[16/10]">
+              <Reveal key={item.image} delay={i * 0.06}>
+                <div className="overflow-hidden rounded-2xl shadow-xl shadow-navy/20">
+                  <div className="relative aspect-[4/3]">
                     <Image
                       src={item.image}
                       alt={item.alt}
@@ -392,11 +392,7 @@ export default function TaborPage() {
                       sizes="(min-width: 1024px) 25vw, 90vw"
                     />
                   </div>
-                  <div className="p-6">
-                    <h3 className="text-xl font-bold text-navy">{item.title}</h3>
-                    <p className="mt-3 leading-relaxed text-steel">{item.text}</p>
-                  </div>
-                </article>
+                </div>
               </Reveal>
             ))}
           </div>
@@ -406,22 +402,21 @@ export default function TaborPage() {
       <section className="bg-slate-50 py-16 md:py-24">
         <div className="container-site grid items-center gap-12 lg:grid-cols-2">
           <Reveal from="left">
-            <p className="text-sm font-semibold uppercase tracking-wider text-brand">
-              Program
-            </p>
             <h2 className="mt-3 text-3xl font-bold md:text-4xl">
               50 % parkour. 50 % program, který pomáhají vybírat samotné děti.
             </h2>
             <p className="mt-6 leading-relaxed">
               Nechceme vytvořit tábor podle toho, co baví nás. Chceme vytvořit
-              tábor, který bude bavit děti. Proto přibližně polovinu programu
-              tvoří parkour a pohybové aktivity. Druhou polovinu si děti
-              pomáhají sestavit samy.
+              tábor, který bude bavit děti.
+            </p>
+            <p className="mt-4 leading-relaxed">
+              Proto přibližně polovinu programu tvoří parkour a pohybové
+              aktivity. Druhou polovinu si děti pomáhají sestavit samy.
             </p>
             <p className="mt-4 leading-relaxed">
               Už před táborem dostanou dotazník, ve kterém nám řeknou, co by
-              chtěly během týdne zažít. Dítě tak není jen účastníkem tábora.
-              Částečně si svůj tábor vytváří samo.
+              chtěly během týdne zažít. Podle jejich zájmu pak do programu
+              zařazujeme například:
             </p>
             <div className="mt-6 flex flex-wrap gap-2">
               {ACTIVITY_ITEMS.map((item) => (
@@ -430,6 +425,10 @@ export default function TaborPage() {
                 </span>
               ))}
             </div>
+            <p className="mt-6 leading-relaxed">
+              Dítě tak není jen účastníkem tábora. Částečně si svůj tábor
+              vytváří samo.
+            </p>
           </Reveal>
           <Reveal from="right">
             <div className="relative min-h-[420px]">
@@ -485,9 +484,9 @@ export default function TaborPage() {
               „Ale moje dítě parkour neumí…“
             </h2>
             <p className="mt-6 leading-relaxed">
-              To vůbec nevadí. Na LeapCamp jezdí začátečníci i pokročilí.
-              Nemusíš umět salto, přemet ani před táborem chodit na parkourový
-              kroužek.
+              To vůbec nevadí. Na Leap Camp jezdí začátečníci i pokročilí.
+              Nemusíš umět salto. Nemusíš umět přemet. Nemusíš před táborem
+              chodit na parkourový kroužek.
             </p>
             <p className="mt-4 leading-relaxed">
               Každé dítě začíná na své úrovni. Někdo se během týdne naučí svůj
@@ -515,20 +514,18 @@ export default function TaborPage() {
         <div className="container-site relative">
           <div className="grid gap-12 lg:grid-cols-[1fr_1.15fr] lg:items-center">
             <Reveal from="left">
-              <p className="text-sm font-semibold uppercase tracking-wider text-blue-100">
-                Zázemí
-              </p>
-              <h2 className="mt-3 text-3xl font-bold !text-white md:text-4xl">
+              <h2 className="text-3xl font-bold !text-white md:text-4xl">
                 Parkourové hřiště, které si přivezeme s sebou
               </h2>
               <p className="mt-6 leading-relaxed text-slate-100">
                 Na tábor každý rok přivážíme vybavení, díky kterému můžeme
-                vytvořit velké tréninkové zázemí přímo v areálu. Trenéři
-                věnují přípravě zázemí celý den ještě před příjezdem dětí.
+                vytvořit velké tréninkové zázemí přímo v areálu.
               </p>
+              <p className="mt-4 leading-relaxed text-slate-100">Děti čekají například:</p>
               <p className="mt-4 leading-relaxed text-slate-100">
-                Protože když máme děti něco učit, chceme pro to vytvořit co
-                nejlepší podmínky.
+                Trenéři věnují přípravě zázemí celý den ještě před příjezdem
+                dětí. Protože když máme děti něco učit, chceme pro to vytvořit
+                co nejlepší podmínky.
               </p>
             </Reveal>
             <Reveal from="right">
@@ -555,16 +552,28 @@ export default function TaborPage() {
               <p className="mt-6 leading-relaxed">
                 Protože přesně takhle začal náš vlastní příběh. V roce 2014
                 jsme byli obyčejní kluci a holky ze základní školy. Spojovala
-                nás vášeň pro pohyb a parkour.
+                nás jedna věc: vášeň pro pohyb a parkour.
               </p>
               <p className="mt-4 leading-relaxed">
-                Parkour nás naučil nevzdávat se, překonávat strach, podporovat
-                jeden druhého, pracovat na sobě a dělat věci, které nám
-                zpočátku připadaly nemožné.
+                Společně jsme trénovali, překonávali své hranice a postupně se
+                učili nové pohybové dovednosti, salta a triky. Parkour nás ale
+                naučil ještě něco mnohem důležitějšího.
               </p>
+              <ul className="mt-5 grid gap-2 sm:grid-cols-2">
+                {["Nevzdávat se.", "Překonávat strach.", "Podporovat jeden druhého.", "Pracovat na sobě.", "Dělat věci, které nám zpočátku připadaly nemožné."].map((item) => (
+                  <li key={item} className="flex items-start gap-2 font-semibold text-navy">
+                    <IconCheck />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
               <p className="mt-4 leading-relaxed">
                 Dnes jsme dospělí a tyhle principy používáme pořád. A právě
-                proto se jednou za rok znovu sejdeme a pořádáme LeapCamp.
+                proto se jednou za rok znovu sejdeme a pořádáme Leap Camp.
+              </p>
+              <p className="mt-4 font-semibold leading-relaxed text-navy">
+                Ne proto, abychom vytvořili co největší tábor. Ale proto,
+                abychom další generaci předali něco z toho, co dal parkour nám.
               </p>
             </Reveal>
             <Reveal from="right">
@@ -602,13 +611,14 @@ export default function TaborPage() {
                 <p className="mt-6 leading-relaxed">
                   Každé dítě se postupně hledá. Zjišťuje, co ho baví, v čem je
                   dobré a kým chce jednou být. Proto chceme, aby kolem sebe na
-                  LeapCampu vidělo lidi, kteří sami sportují, učí se nové věci
-                  a překonávají své hranice.
+                  Leap Campu vidělo lidi, kteří sami sportují, učí se nové věci
+                  a překonávají své hranice a zároveň dokážou udělat chybu a
+                  zasmát se jí.
                 </p>
                 <p className="mt-4 leading-relaxed">
                   Děti nás mohou vidět dělat salta a triky, které jim dnes
                   připadají nemožné. Ale zároveň vidí, že ani my jsme je
-                  neuměli odjakživa.
+                  neuměli odjakživa. Také jsme kdysi stáli na jejich místě.
                 </p>
               </div>
             </article>
@@ -633,10 +643,11 @@ export default function TaborPage() {
                   lidí, se kterými ho poprvé zvládlo, může zůstat celý život.
                 </p>
                 <p className="mt-4 leading-relaxed">
-                  LeapCamp chceme vytvářet jako místo, kde si děti navzájem
-                  fandí, kde zkušenější pomáhají začátečníkům a kde může dítě
-                  potkat kamarády, se kterými se bude vídat ještě dlouho po
-                  skončení tábora.
+                  Leap Camp chceme vytvářet jako místo, kde děti spojuje
+                  společný zájem o pohyb, dobrodružství a nové výzvy.
+                  Kde si navzájem fandí. Kde zkušenější pomáhají začátečníkům.
+                  A kde může dítě potkat kamarády, se kterými se bude vídat
+                  ještě dlouho po skončení tábora.
                 </p>
               </div>
             </article>
@@ -658,10 +669,7 @@ export default function TaborPage() {
             </div>
           </Reveal>
           <Reveal from="right">
-            <p className="text-sm font-semibold uppercase tracking-wider text-brand">
-              Bezpečnost
-            </p>
-            <h2 className="mt-3 text-3xl font-bold md:text-4xl">
+            <h2 className="text-3xl font-bold md:text-4xl">
               Bezpečný progres před bezhlavým riskováním
             </h2>
             <p className="mt-6 leading-relaxed">
@@ -689,18 +697,24 @@ export default function TaborPage() {
         </div>
       </section>
 
-      <section className="relative overflow-hidden bg-[#050816] py-16 text-white md:py-24">
-        <div className="absolute inset-0 bg-[linear-gradient(135deg,#050816_0%,#0f172a_52%,#111827_100%)]" />
-        <div className="absolute inset-0 opacity-40 [background-image:radial-gradient(circle,#ffffff_1px,transparent_1px)] [background-size:34px_34px]" />
+      <section className="relative overflow-hidden bg-[#eef3fb] py-16 md:py-24">
+        <div className="absolute inset-0 bg-[linear-gradient(135deg,#f8fbff_0%,#eef3fb_55%,#e4edfb_100%)]" />
+        <div className="absolute inset-0 opacity-25 [background-image:radial-gradient(circle,#4a6ca8_1px,transparent_1px)] [background-size:34px_34px]" />
         <div className="container-site relative grid items-center gap-12 lg:grid-cols-[1.02fr_0.98fr]">
           <Reveal from="left">
-            <p className="text-sm font-semibold uppercase tracking-[0.28em] text-yellow-300">
-              Téma LeapCampu {CAMP.year}
+            <p className="text-sm font-semibold uppercase tracking-[0.28em] text-brand">
+              Týden se promění v jeden velký příběh
             </p>
-            <h2 className="mt-3 text-4xl font-black uppercase tracking-wide text-yellow-300 md:text-6xl">
-              Star Wars
+            <h2 className="mt-3 text-4xl font-black uppercase tracking-wide text-navy md:text-6xl">
+              Téma Leap Campu {CAMP.year}: Star Wars
             </h2>
-            <div className="mt-6 space-y-4 leading-relaxed text-slate-100">
+            <div className="mt-6 space-y-4 leading-relaxed text-steel">
+              <p>
+                Leap Camp není jen série tréninků od pondělí do neděle. Každý
+                rok vytváříme nový táborový svět. Děti jsou rozdělené do týmů,
+                získávají body, plní mise, překonávají výzvy a postupně
+                odhalují příběh, který se odehrává kolem nich.
+              </p>
               <p>
                 Byla objevena tajemná Hvězdná brána, která dokáže otevřít cestu
                 na vzdálené planety.
@@ -716,26 +730,26 @@ export default function TaborPage() {
                 jen společně ji mohou zastavit.
               </p>
             </div>
-            <p className="mt-6 font-semibold text-white">
+            <p className="mt-6 border-l-4 border-amber-400 pl-5 font-semibold leading-relaxed text-navy">
               Parkour, hry a jednotlivé výzvy se tak stanou součástí jednoho
               velkého dobrodružství, jehož konec budou mít děti ve vlastních
               rukou.
             </p>
           </Reveal>
           <Reveal from="right">
-            <div className="relative aspect-[4/3] overflow-hidden rounded-3xl border border-cyan-300/30 bg-slate-950 shadow-[0_0_45px_rgba(34,211,238,0.22)]">
+            <div className="relative aspect-[4/3] overflow-hidden rounded-3xl border border-white bg-white shadow-xl shadow-navy/15">
               <Image
                 src="/images/camp-fotky/camp-29.webp"
                 alt="Táborová výzva jako součást příběhu LeapCampu"
                 fill
-                className="object-cover opacity-70"
+                className="object-cover"
                 sizes="(min-width: 1024px) 50vw, 100vw"
               />
-              <div className="absolute inset-0 bg-[linear-gradient(120deg,rgba(5,8,22,0.12),rgba(5,8,22,0.82))]" />
-              <div className="absolute bottom-5 left-5 right-5 rounded-2xl border border-white/10 bg-black/50 p-5 backdrop-blur">
+              <div className="absolute inset-0 bg-gradient-to-t from-navy/25 via-transparent to-transparent" />
+              <div className="absolute bottom-5 left-5 right-5 rounded-2xl border border-white/70 bg-white/92 p-5 shadow-lg backdrop-blur">
                 <div className="flex items-start gap-3">
                   <IconSpark />
-                  <p className="text-sm leading-relaxed text-slate-100">
+                  <p className="text-sm font-semibold leading-relaxed text-navy">
                     Každý den nový svět, týmová mise a další část příběhu.
                   </p>
                 </div>
@@ -748,11 +762,8 @@ export default function TaborPage() {
       <section className="py-16 md:py-24">
         <div className="container-site">
           <Reveal>
-            <SectionIntro title="Co dítě během LeapCampu získá?">
-              <p>
-                Kromě programu a zážitků si odveze hlavně pocit, že dokáže víc,
-                než si předtím myslelo.
-              </p>
+            <SectionIntro title="Co dítě během Leap Campu získá?">
+              <p>Parkour, program, zážitky a zkušenosti, které nekončí posledním dnem tábora.</p>
             </SectionIntro>
           </Reveal>
           <div className="mt-12 grid gap-4 sm:grid-cols-2">
@@ -765,6 +776,32 @@ export default function TaborPage() {
               </Reveal>
             ))}
           </div>
+          <Reveal delay={0.08}>
+            <div className="mx-auto mt-10 max-w-3xl rounded-2xl bg-navy px-6 py-7 text-center text-white">
+              <p className="text-sm font-semibold uppercase text-blue-200">Ale hlavně</p>
+              <p className="mt-2 text-2xl font-bold">
+                Pocit, že dokáže víc, než si předtím myslelo.
+              </p>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      <section className="bg-slate-50 py-16 md:py-24">
+        <div className="container-site">
+          <Reveal>
+            <SectionIntro title="Leap Camp v číslech" />
+          </Reveal>
+          <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {CAMP_STATS.map(([value, label], index) => (
+              <Reveal key={label} delay={(index % 3) * 0.05}>
+                <div className="h-full border-l-4 border-brand bg-white px-6 py-5 shadow-sm">
+                  <p className="text-3xl font-extrabold text-navy">{value}</p>
+                  <p className="mt-2 leading-relaxed text-steel">{label}</p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -772,12 +809,11 @@ export default function TaborPage() {
         <div className="container-site">
           <Reveal>
             <SectionIntro
-              eyebrow="Aftermovie"
-              title="Podívejte se, jak LeapCamp opravdu vypadá"
+              title="Podívejte se, jak Leap Camp opravdu vypadá"
             >
               <p>
                 Fotky jsou fajn. Ale nejlepší způsob, jak pochopit atmosféru
-                LeapCampu, je podívat se přímo na děti, trenéry, hry, parkour a
+                Leap Campu, je podívat se přímo na děti, trenéry, hry, parkour a
                 celý tábor v akci.
               </p>
             </SectionIntro>
@@ -946,7 +982,7 @@ export default function TaborPage() {
               <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(28,36,75,0.94),rgba(47,99,212,0.66))]" />
               <div className="relative">
                 <p className="text-sm font-semibold uppercase tracking-wider text-brand">
-                  LeapCamp {CAMP.year}
+                  Leap Camp {CAMP.year}
                 </p>
                 <h2 className="mx-auto mt-3 max-w-3xl text-3xl font-bold !text-white md:text-4xl">
                   Jednou za rok se naše původní parta znovu sejde.
@@ -961,18 +997,30 @@ export default function TaborPage() {
                   <Link href="/tabor/prihlaska" className={ctaButton}>
                     Chci přihlásit dítě na Leap Camp
                   </Link>
-                  <a
-                    href="mailto:leapparkour@seznam.cz"
-                    className="font-semibold text-white underline-offset-4 hover:underline"
-                  >
-                    Máte otázku? Napište nám
-                  </a>
                 </div>
                 <p className="mt-6 text-sm text-slate-200/80">
                   {CAMP.dates} · {CAMP.venue} · {CAMP.ageRange} · {CAMP.price}
                 </p>
+                <p className="mt-3 text-sm font-semibold text-white">
+                  Počet míst je omezený kapacitou tábora.
+                </p>
               </div>
             </div>
+          </Reveal>
+        </div>
+      </section>
+
+      <section className="bg-slate-50 py-16 md:py-20">
+        <div className="container-site text-center">
+          <Reveal>
+            <h2 className="text-3xl font-bold md:text-4xl">Máte ještě otázku?</h2>
+            <p className="mx-auto mt-5 max-w-2xl leading-relaxed text-steel">
+              Napište nám na{" "}
+              <a className="font-semibold text-brand underline-offset-4 hover:underline" href="mailto:leapparkour@seznam.cz">
+                leapparkour@seznam.cz
+              </a>
+              . Rádi vám před přihlášením odpovíme na vše, co vás zajímá.
+            </p>
           </Reveal>
         </div>
       </section>
