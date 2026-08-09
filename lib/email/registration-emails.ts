@@ -202,7 +202,7 @@ export async function sendCampRegistrationEmails(data: CampRegistrationEmail) {
     `Jméno dítěte: ${data.childName}`,
     `Termín: ${CAMP.dates}`,
     `Místo: ${CAMP.venue}`,
-    `Cena: ${formatCzk(data.baseAmountCzk)}`,
+    `Cena: ${formatCzk(data.totalAmountCzk)}`,
     ``,
     invoiceNote,
     ``,
@@ -227,7 +227,7 @@ export async function sendCampRegistrationEmails(data: CampRegistrationEmail) {
            ["Jméno dítěte", data.childName],
            ["Termín", CAMP.dates],
            ["Místo", CAMP.venue],
-           ["Cena", formatCzk(data.baseAmountCzk)],
+           ["Cena", formatCzk(data.totalAmountCzk)],
          ])}</table>
          <p>${escapeHtml(invoiceNote)}</p>
          <p>Pokud potřebujete cokoli doplnit nebo opravit, napište nám na <a href="mailto:${escapeHtml(

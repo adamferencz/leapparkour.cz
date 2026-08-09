@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Reveal } from "@/components/ui/Reveal";
+import { ClearFormDraft } from "@/components/forms/FormDraft";
 import { createPageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = createPageMetadata({
@@ -16,6 +17,7 @@ export const metadata: Metadata = createPageMetadata({
 export default function DekujemePage() {
   return (
     <div className="container-site py-16 md:py-24">
+      <ClearFormDraft storageKey="leap-club-registration-draft" />
       <div className="mx-auto max-w-xl text-center">
         <Reveal>
           <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-brand/10 text-brand">

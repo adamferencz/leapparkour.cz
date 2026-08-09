@@ -12,6 +12,7 @@ import {
   TextAreaField,
   TextField,
 } from "@/components/forms/fields";
+import { useFormDraft } from "@/components/forms/FormDraft";
 import { CLUB_SEASON, WHATSAPP_CHOICES } from "@/lib/config";
 
 const initialState: ClubFormState = null;
@@ -21,9 +22,10 @@ export function ClubForm() {
     submitClubRegistration,
     initialState
   );
+  const formRef = useFormDraft("leap-club-registration-draft", state);
 
   return (
-    <form action={formAction} className="space-y-5">
+    <form ref={formRef} action={formAction} className="space-y-5">
       <TextField
         label="Jméno a příjmení dítěte"
         name="child_name"
@@ -194,6 +196,7 @@ export function ClubForm() {
       {state?.error && (
         <p
           role="alert"
+          aria-live="polite"
           className="rounded-xl bg-red-50 px-4 py-3 text-sm font-medium text-red-600"
         >
           {state.error}

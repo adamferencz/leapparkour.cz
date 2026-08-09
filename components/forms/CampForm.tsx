@@ -12,6 +12,7 @@ import {
   TextAreaField,
   TextField,
 } from "@/components/forms/fields";
+import { useFormDraft } from "@/components/forms/FormDraft";
 import { CAMP, CAMP_SPORTS } from "@/lib/config";
 
 export function CampForm() {
@@ -21,6 +22,7 @@ export function CampForm() {
   );
   const [sportsOpen, setSportsOpen] = useState(false);
   const [selectedSports, setSelectedSports] = useState<string[]>([]);
+  const formRef = useFormDraft("leap-camp-registration-draft", state);
 
   function handleSportsChange(e: ChangeEvent<HTMLDivElement>) {
     const target = e.target as HTMLInputElement;
@@ -39,7 +41,7 @@ export function CampForm() {
       : `${selectedSports.length} vybráno`;
 
   return (
-    <form action={formAction} className="space-y-5">
+    <form ref={formRef} action={formAction} className="space-y-5">
       <TextField
         label="Jméno a příjmení dítěte, které se zúčastní tábora"
         name="child_name"
@@ -263,6 +265,7 @@ export function CampForm() {
       {state?.error && (
         <p
           role="alert"
+          aria-live="polite"
           className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700"
         >
           {state.error}

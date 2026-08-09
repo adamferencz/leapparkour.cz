@@ -24,7 +24,7 @@ const WHATSAPP_VALUES = ["add", "no_add"] as const;
 type WhatsappChoice = (typeof WHATSAPP_VALUES)[number];
 
 const GENERIC_ERROR =
-  "Přihlášku se nepodařilo odeslat. Zkuste to prosím znovu, nebo nám napište na e-mail.";
+  "Přihlášku se nepodařilo uložit. Vyplněné údaje zůstaly zachované. Zkuste to prosím za chvíli znovu, nebo nám napište na e-mail.";
 
 type SupabaseServerClient = Awaited<ReturnType<typeof createClient>>;
 

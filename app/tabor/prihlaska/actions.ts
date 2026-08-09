@@ -327,7 +327,7 @@ export async function submitCampRegistration(
         if (!isMissingBillingSchema(discountError)) {
           return {
             error:
-              "Slevový kód se nepodařilo ověřit. Zkuste to prosím znovu, nebo pole nechte prázdné.",
+              "Slevový kód se teď nepodařilo ověřit. Vyplněné údaje zůstaly zachované. Zkuste to prosím za chvíli znovu, nebo pole nechte prázdné.",
           };
         }
       }
@@ -416,7 +416,7 @@ export async function submitCampRegistration(
           console.error("Uložení přihlášky na tábor selhalo:", fallback.error);
           return {
             error:
-              "Přihlášku se nepodařilo odeslat. Zkuste to prosím znovu, nebo nám napište na e-mail.",
+              "Přihlášku se nepodařilo uložit. Vyplněné údaje zůstaly zachované. Zkuste to prosím za chvíli znovu, nebo nám napište na e-mail.",
           };
         }
 
@@ -424,7 +424,7 @@ export async function submitCampRegistration(
         console.error("Uložení přihlášky na tábor selhalo:", inserted.error);
         return {
           error:
-            "Přihlášku se nepodařilo odeslat. Zkuste to prosím znovu, nebo nám napište na e-mail.",
+            "Přihlášku se nepodařilo uložit. Vyplněné údaje zůstaly zachované. Zkuste to prosím za chvíli znovu, nebo nám napište na e-mail.",
         };
       }
     }
@@ -483,7 +483,7 @@ export async function submitCampRegistration(
     console.error("Odeslání přihlášky na tábor selhalo:", err);
     return {
       error:
-        "Přihlášku se nepodařilo odeslat. Zkuste to prosím znovu, nebo nám napište na e-mail.",
+        "Přihlášku se nepodařilo uložit. Vyplněné údaje zůstaly zachované. Zkuste to prosím za chvíli znovu, nebo nám napište na e-mail.",
     };
   }
 

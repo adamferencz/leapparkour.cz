@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { CAMP } from "@/lib/config";
 import { Reveal } from "@/components/ui/Reveal";
+import { ClearFormDraft } from "@/components/forms/FormDraft";
 import { createPageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = createPageMetadata({
@@ -19,6 +20,7 @@ export default function TaborDekujemePage() {
 
   return (
     <div className="container-site py-16 md:py-24">
+      <ClearFormDraft storageKey="leap-camp-registration-draft" />
       <div className="mx-auto max-w-2xl text-center">
         <Reveal>
           <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-brand/10 text-brand">
