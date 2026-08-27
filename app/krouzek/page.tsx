@@ -5,6 +5,7 @@ import { Reveal } from "@/components/ui/Reveal";
 import { CLUB_SEASON, INSURANCE_URL, SITE } from "@/lib/config";
 import { createPageMetadata } from "@/lib/seo";
 import ParkourLevels from "@/components/ParkourLevels";
+import { TrialTrainingButton } from "@/components/ui/TrialTrainingModal";
 
 export const metadata: Metadata = createPageMetadata({
   title: "Parkour kroužky v Havlíčkově Brodě",
@@ -93,19 +94,6 @@ const GROUPS = [
   },
 ];
 
-const TRAINING_ITEMS = [
-  "základním parkourovým technikám",
-  "přeskokům přes překážky",
-  "bezpečným dopadům",
-  "lezení",
-  "rovnováze",
-  "síle a koordinaci",
-  "saltům a akrobacii podle úrovně dítěte",
-  "pohybovým výzvám",
-  "hrám",
-  "vlastnímu kreativnímu pohybu",
-];
-
 const INCLUDED = [
   "pravidelný trénink pod vedením trenérů",
   "parkour tabulka levelů (LVL 1–5)",
@@ -151,17 +139,6 @@ function PrimaryCta({ children }: { children: string }) {
   );
 }
 
-function SecondaryCta({ children }: { children: string }) {
-  return (
-    <Link
-      href="/krouzek/prihlaska"
-      className="inline-flex rounded-full border border-navy/20 bg-white px-6 py-3 font-semibold text-navy transition-[border-color,background-color,transform] duration-200 hover:border-brand hover:bg-blue-50 active:scale-[0.98]"
-    >
-      {children}
-    </Link>
-  );
-}
-
 export default function KrouzekPage() {
   return (
     <>
@@ -185,20 +162,15 @@ export default function KrouzekPage() {
                   Parkour není jen o saltech a tricích. Je to pohyb, díky
                   kterému děti získávají odvahu, učí se nevzdávat po prvním
                   neúspěchu, podporovat ostatní a postupně objevovat, co
-                  všechno jejich tělo dokáže.
+                  všechno jejich tělo dokáže. A přesně takové prostředí
+                  chceme na našich trénincích vytvářet.
                 </p>
-                <p>A přesně takové prostředí chceme na našich trénincích vytvářet.</p>
               </div>
             </Reveal>
             <Reveal delay={0.16}>
-              <div className="mt-8 flex flex-wrap gap-3 text-sm font-semibold text-navy">
-                <span className="rounded-full bg-white px-4 py-2 shadow-sm">Pro děti od 6 do 16 let</span>
-                <span className="rounded-full bg-white px-4 py-2 shadow-sm">Havlíčkův Brod</span>
-                <span className="rounded-full bg-white px-4 py-2 shadow-sm">Začátečníci i pokročilí</span>
-              </div>
               <div className="mt-8 flex flex-wrap items-center gap-4">
                 <PrimaryCta>Přihlásit se na kroužek</PrimaryCta>
-                <SecondaryCta>Vyzkoušet první trénink</SecondaryCta>
+                <TrialTrainingButton />
               </div>
             </Reveal>
           </div>
@@ -231,8 +203,7 @@ export default function KrouzekPage() {
           <Reveal className="mx-auto max-w-3xl text-center">
             <h2 className="text-3xl font-bold md:text-4xl">Proč Leap Parkour?</h2>
             <p className="mt-5 leading-relaxed text-steel">
-              Děti vedeme k pohybu postupně, bezpečně a bez porovnávání.
-              Každý nový krok je viditelný úspěch.
+              Děti vedeme k pohybu postupně a bezpečně.
             </p>
           </Reveal>
           <div className="mt-12 space-y-8 md:space-y-12">
@@ -282,16 +253,8 @@ export default function KrouzekPage() {
               </h2>
               <div className="mt-6 space-y-4 leading-relaxed text-steel">
                 <p>
-                  Pro děti máme připravenou tabulku levelů LVL 1 až po LVL 5.
-                  Dítě tak nemusí přemýšlet: „Jsem v parkouru dobrý?“
-                </p>
-                <p>
-                  Může se podívat zpět a vidět: „Tohle jsem před měsícem
-                  neuměl. A dneska to zvládnu.“
-                </p>
-                <p>
-                  Parkour se tak promění v dlouhodobou cestu, na které dítě
-                  jasně vidí svůj vlastní pokrok.
+                  Pro děti máme připravenou tabulku levelů level 1 až level 8.
+                  Každý se tak může zlepšovat a jasně vidí, jak na tom je.
                 </p>
               </div>
             </Reveal>
@@ -367,119 +330,8 @@ export default function KrouzekPage() {
           </div>
           <Reveal className="mt-10 flex flex-wrap items-center justify-center gap-4">
             <PrimaryCta>Přihlásit se na kroužek</PrimaryCta>
-            <SecondaryCta>Vyzkoušet první trénink</SecondaryCta>
+            <TrialTrainingButton />
           </Reveal>
-        </div>
-      </section>
-
-      <section className="bg-navy py-16 text-white md:py-24">
-        <div className="container-site grid items-center gap-12 lg:grid-cols-2">
-          <Reveal from="left">
-            <h2 className="text-3xl font-bold !text-white md:text-4xl">
-              Parta je stejně důležitá jako samotný parkour
-            </h2>
-            <div className="mt-6 space-y-4 leading-relaxed text-slate-100">
-              <p>
-                Parkour jsme sami nezačali dělat proto, že bychom chtěli jednou
-                získat medaili. Začali jsme jednoduše trénovat s kamarády.
-              </p>
-              <p>
-                Navzájem jsme se učili nové věci, podporovali se, cestovali na
-                parkourové akce a postupně kolem sebe vytvořili komunitu.
-                Právě to chceme předávat dál.
-              </p>
-              <p>
-                Na tréninku proto dítě není jen někdo, kdo čeká, až mu trenér
-                ukáže další cvik. Je součástí party.
-              </p>
-              <p>
-                Když někdo poprvé zvládne nový trik, ostatní mu fandí. Když se
-                něco nepovede, zkusíme to znovu. A když někdo něco umí lépe,
-                může pomoci ostatním.
-              </p>
-            </div>
-          </Reveal>
-          <Reveal from="right">
-            <div className="relative aspect-[4/3] overflow-hidden rounded-3xl">
-              <Image
-                src="/images/leapcamp-selected/leapcamp-group-listening.webp"
-                alt="Parta dětí na tréninku Leap Parkour"
-                fill
-                className="object-cover"
-                sizes="(min-width: 1024px) 44vw, 100vw"
-              />
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      <section className="py-16 md:py-24">
-        <div className="container-site grid items-center gap-12 lg:grid-cols-2">
-          <Reveal from="left">
-            <div className="relative aspect-[4/3] overflow-hidden rounded-3xl">
-              <Image
-                src="/images/2024_08_krouzek.jpg"
-                alt="Parkourový kroužek v Havlíčkově Brodě"
-                fill
-                className="object-cover"
-                sizes="(min-width: 1024px) 44vw, 100vw"
-              />
-            </div>
-          </Reveal>
-          <Reveal from="right">
-            <h2 className="text-3xl font-bold md:text-4xl">
-              Proč jsme kroužky vůbec založili?
-            </h2>
-            <div className="mt-6 space-y-4 leading-relaxed text-steel">
-              <p>
-                V roce 2015 se v Havlíčkově Brodě dala dohromady parta lidí,
-                které spojovala jedna věc. Parkour.
-              </p>
-              <p>
-                Začali jsme společně trénovat. Jezdili jsme na parkourové jamy
-                po celé České republice. Cestovali. Učili se od dalších
-                parkouristů. Natáčeli videa. Pořádali workshopy.
-              </p>
-              <p>
-                A postupně jsme zjistili, že nejlepší, co můžeme se svými
-                zkušenostmi udělat, je předávat je dál mladší generaci. Tak
-                vznikly první parkourové kroužky v Havlíčkově Brodě.
-              </p>
-              <p>
-                Od té doby prošly našimi tréninky stovky dětí. Dnes chceme
-                pořád dělat stejnou věc: vytvářet prostředí, ve kterém děti
-                spojuje pohyb, progres a dobrá parta.
-              </p>
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      <section className="bg-slate-50 py-16 md:py-24">
-        <div className="container-site grid gap-12 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
-          <Reveal from="left">
-            <h2 className="text-3xl font-bold md:text-4xl">Jak vypadá běžný trénink?</h2>
-            <div className="mt-6 space-y-4 leading-relaxed text-steel">
-              <p>Každý trénink je trochu jiný.</p>
-              <p>Děti se ale postupně věnují například:</p>
-            </div>
-            <p className="mt-6 leading-relaxed text-steel">
-              Nejde nám o to, aby děti hodinu stály v řadě a čekaly na svůj
-              pokus. Chceme, aby se hýbaly, zkoušely, objevovaly a bavily se.
-            </p>
-          </Reveal>
-          <div className="grid gap-3 sm:grid-cols-2">
-            {TRAINING_ITEMS.map((item, index) => (
-              <Reveal
-                key={item}
-                delay={index * 0.03}
-                className="flex items-start gap-3 rounded-2xl bg-white px-5 py-4 shadow-sm"
-              >
-                <CheckIcon />
-                <span className="font-medium text-navy">{item}</span>
-              </Reveal>
-            ))}
-          </div>
         </div>
       </section>
 
@@ -590,7 +442,7 @@ export default function KrouzekPage() {
             </p>
             <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
               <PrimaryCta>Přihlásit se na kroužek</PrimaryCta>
-              <SecondaryCta>Vyzkoušet první trénink</SecondaryCta>
+              <TrialTrainingButton />
             </div>
           </Reveal>
         </div>
@@ -633,7 +485,7 @@ export default function KrouzekPage() {
             </div>
             <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
               <PrimaryCta>Přihlásit se na kroužek</PrimaryCta>
-              <SecondaryCta>Vyzkoušet první trénink</SecondaryCta>
+              <TrialTrainingButton />
             </div>
             <p className="mt-8 text-slate-200">
               Máte otázku?{" "}

@@ -9,6 +9,7 @@ export const SITE = {
   ico: "07195320",
   domain: "leapparkour.cz",
   email: "leapparkour@seznam.cz",
+  phone: "776 191 962",
   address: "Práčat 1886, 580 01 Havlíčkův Brod",
   registry: "L 12040 vedená u Krajského soudu v Hradci Králové",
   vatNote: "Neplátce DPH",
