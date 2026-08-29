@@ -43,10 +43,13 @@ function inputClass() {
 
 export default async function TaborDetailPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ sent?: string }>;
 }) {
   const { id } = await params;
+  const { sent } = await searchParams;
   const supabase = await createClient();
   const { data } = await supabase
     .from("camp_registrations")
@@ -165,6 +168,18 @@ export default async function TaborDetailPage({
       >
         ← Zpět na seznam
       </Link>
+
+      {sent === "ok" && (
+        <p className="mt-4 rounded-xl bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-700">
+          Faktura byla úspěšně odeslána rodiči na e-mail.
+        </p>
+      )}
+      {sent === "error" && (
+        <p className="mt-4 rounded-xl bg-red-50 px-4 py-3 text-sm font-medium text-red-600">
+          Odeslání faktury se nepodařilo. Zkuste to prosím znovu, nebo zkontrolujte
+          nastavení e-mailu.
+        </p>
+      )}
 
       <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
         <h1 className="text-2xl font-bold text-navy">{reg.child_name}</h1>

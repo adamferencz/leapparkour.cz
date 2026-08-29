@@ -242,10 +242,10 @@ export async function sendIssuedInvoice(id: string, invoiceId?: string) {
 
   if (registrationError || !registrationData) {
     console.error("Načtení kroužkové přihlášky pro odeslání faktury selhalo:", registrationError);
-    return;
+    redirect(`/admin/krouzek/${id}?sent=error`);
   }
 
-  let invoice: Invoice | null;
+  let invoice: Invoice | null | undefined;
   if (invoiceId) {
     const { data, error } = await supabase
       .from("invoices")
@@ -254,13 +254,15 @@ export async function sendIssuedInvoice(id: string, invoiceId?: string) {
       .single();
     if (error || !data) {
       console.error("Načtení kroužkové faktury pro odeslání selhalo:", error);
-      return;
+      redirect(`/admin/krouzek/${id}?sent=error`);
     }
     invoice = data as Invoice;
   } else {
     invoice = await issueInvoiceRecord(id);
   }
-  if (!invoice) return;
+  if (!invoice) {
+    redirect(`/admin/krouzek/${id}?sent=error`);
+  }
 
   const downloaded = await supabase.storage
     .from("invoices")
@@ -268,9 +270,10 @@ export async function sendIssuedInvoice(id: string, invoiceId?: string) {
 
   if (downloaded.error || !downloaded.data) {
     console.error("Stažení PDF kroužkové faktury pro e-mail selhalo:", downloaded.error);
-    return;
+    redirect(`/admin/krouzek/${id}?sent=error`);
   }
 
+  let sendFailed = false;
   try {
     const reg = registrationData as ClubRegistration;
     await sendClubInvoiceEmail({
@@ -287,10 +290,12 @@ export async function sendIssuedInvoice(id: string, invoiceId?: string) {
       .eq("id", invoice.id);
   } catch (error) {
     console.error("Odeslání kroužkové faktury rodiči selhalo:", error);
+    sendFailed = true;
   }
 
   revalidatePath(`/admin/krouzek/${id}`);
   revalidatePath("/admin/krouzek");
+  redirect(`/admin/krouzek/${id}?sent=${sendFailed ? "error" : "ok"}`);
 }
 
 export async function updateInvoice(id: string, invoiceId: string, formData: FormData) {
