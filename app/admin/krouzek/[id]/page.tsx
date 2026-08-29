@@ -296,6 +296,7 @@ export default async function KrouzekDetailPage({
             </div>
 
             <form
+              key={`${inv.id}:${inv.base_amount_czk}:${inv.due_date}:${inv.item_name}:${inv.variable_symbol}:${inv.buyer_name}:${inv.buyer_email}:${inv.buyer_address}`}
               action={updateInvoice.bind(null, reg.id, inv.id)}
               className="mt-4 grid gap-4 md:grid-cols-2"
             >

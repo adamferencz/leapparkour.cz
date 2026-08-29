@@ -183,12 +183,13 @@ export function ClubForm() {
           <input
             type="checkbox"
             name="photo_consent"
+            required
             className="mt-1 h-4 w-4 shrink-0 accent-brand"
           />
           <span>
             Souhlasím s použitím fotek a videí dítěte z kroužku pro web,
-            sociální sítě a propagační materiály Leap Parkour. Souhlas je
-            dobrovolný a lze ho kdykoliv odvolat.
+            sociální sítě a propagační materiály Leap Parkour.{" "}
+            <span className="text-brand">*</span>
           </span>
         </label>
       </fieldset>

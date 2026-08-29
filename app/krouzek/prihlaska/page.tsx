@@ -125,6 +125,42 @@ export default function KrouzekPrihlaskaPage() {
           </ul>
           </Reveal>
 
+          <Reveal delay={0.1}>
+            <div className="mt-8 rounded-2xl border border-blue-100 bg-blue-50/60 p-6">
+              <h2 className="text-lg font-bold text-navy">Jak se přihlásit</h2>
+              <ol className="mt-4 space-y-4 text-steel">
+                <li className="flex gap-3">
+                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-brand text-sm font-bold text-white">
+                    1
+                  </span>
+                  <span>
+                    Vyplňte online přihlášku vpravo — tím dítě na kroužek přihlásíte.
+                  </span>
+                </li>
+                <li className="flex gap-3">
+                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-brand text-sm font-bold text-white">
+                    2
+                  </span>
+                  <span>
+                    <a
+                      href="/documents/prihlaska-krouzek.pdf"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-semibold text-brand hover:underline"
+                    >
+                      Stáhněte si papírovou přihlášku
+                    </a>
+                    , vytiskněte ji, podepište a přineste na první trénink.{" "}
+                    <strong className="text-navy">
+                      Pokud jste ji už dříve vyplňovali a odevzdávali, dělat to
+                      znovu nemusíte.
+                    </strong>
+                  </span>
+                </li>
+              </ol>
+            </div>
+          </Reveal>
+
           {/* Ceník */}
           <Reveal>
             <h2 className="mt-12 text-3xl font-bold md:text-4xl">Ceník</h2>

@@ -192,6 +192,12 @@ export async function submitClubRegistration(
         "Potvrďte prosím, že souhlasíte s obchodními podmínkami a berete na vědomí zpracování osobních údajů.",
     };
   }
+  if (!photoConsent) {
+    return {
+      error:
+        "Potvrďte prosím souhlas s použitím fotek a videí dítěte z kroužku.",
+    };
+  }
   if (!WHATSAPP_VALUES.includes(whatsappChoice as WhatsappChoice)) {
     return { error: "Vyberte prosím jednu z možností u WhatsApp skupiny." };
   }

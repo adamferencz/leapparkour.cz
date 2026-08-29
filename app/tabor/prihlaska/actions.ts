@@ -297,6 +297,13 @@ export async function submitCampRegistration(
     };
   }
 
+  if (!photoConsent) {
+    return {
+      error:
+        "Potvrďte prosím souhlas s použitím fotek a videí dítěte z tábora.",
+    };
+  }
+
   const childAge = Number(childAgeRaw);
   if (!childAgeRaw || !Number.isInteger(childAge) || childAge < 5 || childAge > 18) {
     return { error: "Zadejte prosím věk dítěte jako číslo v rozmezí 5–18 let." };

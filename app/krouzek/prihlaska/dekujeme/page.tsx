@@ -50,6 +50,28 @@ export default function DekujemePage() {
           </p>
         </Reveal>
 
+        <Reveal delay={0.17}>
+          <div className="mt-8 rounded-2xl border border-blue-100 bg-blue-50/60 p-6 text-left">
+            <h2 className="text-lg font-bold text-navy">Ještě jedna věc</h2>
+            <p className="mt-2 text-steel">
+              Stáhněte si a vytiskněte papírovou přihlášku, podepište ji a přineste
+              na první trénink.{" "}
+              <strong className="text-navy">
+                Pokud jste ji už dříve vyplňovali a odevzdávali, dělat to znovu
+                nemusíte.
+              </strong>
+            </p>
+            <a
+              href="/documents/prihlaska-krouzek.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-4 inline-flex rounded-full bg-brand px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-dark"
+            >
+              Stáhnout přihlášku (PDF)
+            </a>
+          </div>
+        </Reveal>
+
         <Reveal delay={0.2}>
           <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Link
