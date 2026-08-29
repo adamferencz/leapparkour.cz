@@ -19,6 +19,7 @@ import {
   issueInvoice,
   sendIssuedInvoice,
   updateInvoice,
+  splitInvoice,
 } from "../actions";
 
 export const dynamic = "force-dynamic";
@@ -55,12 +56,20 @@ export default async function TaborDetailPage({
 
   if (!data) notFound();
   const reg = data as CampRegistration;
-  const { data: invoiceData } = await supabase
+  const { data: invoicesData } = await supabase
     .from("invoices")
     .select("*")
     .eq("camp_registration_id", id)
-    .maybeSingle();
-  const invoice = invoiceData as Invoice | null;
+    .order("created_at", { ascending: true });
+  const invoices = (invoicesData ?? []) as Invoice[];
+  const invoice = invoices[0] ?? null;
+  const canSplit = invoices.length === 1 && !invoice?.installment_of;
+
+  function invoiceLabel(inv: Invoice) {
+    if (inv.installment_of) return "Faktura — 2. splátka";
+    if (invoices.some((other) => other.installment_of === inv.id)) return "Faktura — 1. splátka";
+    return "Faktura";
+  }
   const defaultBuyerName = [reg.billing_name, reg.mother_name, reg.father_name]
     .filter(Boolean)
     .join(" / ");
@@ -172,188 +181,332 @@ export default async function TaborDetailPage({
       </Card>
 
       <Card className="mt-6 p-5">
-        <div className="flex flex-wrap items-start justify-between gap-4">
-          <div>
-            <h2 className="text-base font-semibold text-navy">Faktura a platba</h2>
-            <p className="mt-1 text-sm text-steel/80">
-              Částka k úhradě:{" "}
-              <strong className="text-navy">
-                {formatCzk(reg.total_amount_czk ?? 8400)}
-              </strong>
+        <h2 className="text-base font-semibold text-navy">Faktura a platba</h2>
+        <p className="mt-1 text-sm text-steel/80">
+          Cena tábora:{" "}
+          <strong className="text-navy">{formatCzk(reg.total_amount_czk ?? 8400)}</strong>
+        </p>
+
+        {invoices.length === 0 && (
+          <>
+            <p className="mt-3 text-sm text-steel/80">
+              Faktura zatím není vystavená. Po kliknutí se vygeneruje PDF,
+              uloží k přihlášce a budete ji moct zkontrolovat před odesláním.
             </p>
-            {invoice ? (
-              <div className="mt-3 space-y-1 text-sm text-steel/80">
-                <p>
-                  Faktura:{" "}
-                  <strong className="text-navy">{invoice.invoice_number}</strong>
-                </p>
-                <p>
-                  Variabilní symbol:{" "}
-                  <strong className="text-navy">{invoice.variable_symbol}</strong>
-                </p>
-                <p>
-                  Stav:{" "}
-                  <strong className="text-navy">
-                    {invoice.status === "sent" ? "odeslaná" : "vystavená"}
-                  </strong>
-                  {invoice.sent_at ? ` (${formatDateTime(invoice.sent_at)})` : ""}
-                </p>
+            <form
+              action={issueInvoice.bind(null, reg.id)}
+              className="mt-5 grid gap-4 md:grid-cols-2"
+            >
+              <label>
+                <span className="mb-1.5 block text-sm font-medium text-navy">
+                  Odběratel
+                </span>
+                <input
+                  name="buyer_name"
+                  defaultValue={invoiceDefaults.buyerName}
+                  className={inputClass()}
+                />
+              </label>
+              <label>
+                <span className="mb-1.5 block text-sm font-medium text-navy">
+                  E-mail pro fakturu
+                </span>
+                <input
+                  name="buyer_email"
+                  type="email"
+                  defaultValue={invoiceDefaults.buyerEmail}
+                  className={inputClass()}
+                />
+              </label>
+              <label className="md:col-span-2">
+                <span className="mb-1.5 block text-sm font-medium text-navy">
+                  Fakturační adresa odběratele
+                </span>
+                <input
+                  name="buyer_address"
+                  defaultValue={invoiceDefaults.buyerAddress}
+                  placeholder="Ulice a číslo, PSČ město"
+                  className={inputClass()}
+                />
+              </label>
+              <label className="md:col-span-2">
+                <span className="mb-1.5 block text-sm font-medium text-navy">
+                  Název položky na faktuře
+                </span>
+                <input
+                  name="item_name"
+                  defaultValue={invoiceDefaults.itemName}
+                  className={inputClass()}
+                />
+              </label>
+              <label>
+                <span className="mb-1.5 block text-sm font-medium text-navy">
+                  Datum splatnosti
+                </span>
+                <input
+                  name="due_date"
+                  type="date"
+                  defaultValue={invoiceDefaults.dueDate}
+                  className={inputClass()}
+                />
+              </label>
+              <label>
+                <span className="mb-1.5 block text-sm font-medium text-navy">
+                  Základní cena Kč
+                </span>
+                <input
+                  name="base_amount_czk"
+                  type="number"
+                  min={0}
+                  defaultValue={invoiceDefaults.baseAmountCzk}
+                  className={inputClass()}
+                />
+              </label>
+              <label>
+                <span className="mb-1.5 block text-sm font-medium text-navy">
+                  Slevový kód na faktuře
+                </span>
+                <input
+                  name="discount_code"
+                  defaultValue={invoiceDefaults.discountCode}
+                  className={inputClass()}
+                />
+              </label>
+              <label>
+                <span className="mb-1.5 block text-sm font-medium text-navy">
+                  Sleva Kč
+                </span>
+                <input
+                  name="discount_amount_czk"
+                  type="number"
+                  min={0}
+                  defaultValue={invoiceDefaults.discountAmountCzk}
+                  className={inputClass()}
+                />
+              </label>
+              <div className="flex items-end justify-between gap-3 rounded-xl bg-slate-50 px-4 py-3 md:col-span-2">
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-wide text-steel/70">
+                    Výsledek
+                  </p>
+                  <p className="mt-1 text-lg font-bold text-navy">
+                    {formatCzk(
+                      Math.max(
+                        0,
+                        invoiceDefaults.baseAmountCzk - invoiceDefaults.discountAmountCzk,
+                      ),
+                    )}
+                  </p>
+                </div>
+                <button className="rounded-full bg-brand px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-brand-dark">
+                  Vystavit náhled faktury
+                </button>
               </div>
-            ) : (
-              <p className="mt-3 text-sm text-steel/80">
-                Faktura zatím není vystavená. Po kliknutí se vygeneruje PDF,
-                uloží k přihlášce a budete ji moct zkontrolovat před odesláním.
-              </p>
-            )}
-          </div>
-          <div className="flex flex-wrap gap-2">
-            {invoice && (
+            </form>
+          </>
+        )}
+
+        {invoices.map((inv, index) => (
+          <div
+            key={inv.id}
+            className={index === 0 ? "mt-5" : "mt-6 border-t border-slate-100 pt-6"}
+          >
+            <div className="flex flex-wrap items-start justify-between gap-4">
+              <div>
+                <h3 className="text-sm font-semibold text-navy">{invoiceLabel(inv)}</h3>
+                <div className="mt-2 space-y-1 text-sm text-steel/80">
+                  <p>
+                    Číslo: <strong className="text-navy">{inv.invoice_number}</strong>
+                  </p>
+                  <p>
+                    Variabilní symbol:{" "}
+                    <strong className="text-navy">{inv.variable_symbol}</strong>
+                  </p>
+                  <p>
+                    Částka: <strong className="text-navy">{formatCzk(inv.total_amount_czk)}</strong>
+                  </p>
+                  <p>
+                    Stav:{" "}
+                    <strong className="text-navy">
+                      {inv.status === "sent" ? "odeslaná" : "vystavená"}
+                    </strong>
+                    {inv.sent_at ? ` (${formatDateTime(inv.sent_at)})` : ""}
+                  </p>
+                </div>
+              </div>
               <Link
-                href={`/admin/tabor/${reg.id}/faktura`}
+                href={`/admin/tabor/${reg.id}/faktura?invoice=${inv.id}`}
                 target="_blank"
                 className="rounded-full border border-slate-200 px-4 py-2 text-sm font-semibold text-navy transition-colors hover:bg-slate-50"
               >
                 Zobrazit fakturu
               </Link>
+            </div>
+
+            <form
+              action={updateInvoice.bind(null, reg.id, inv.id)}
+              className="mt-4 grid gap-4 md:grid-cols-2"
+            >
+              <label>
+                <span className="mb-1.5 block text-sm font-medium text-navy">
+                  Odběratel
+                </span>
+                <input name="buyer_name" defaultValue={inv.buyer_name} className={inputClass()} />
+              </label>
+              <label>
+                <span className="mb-1.5 block text-sm font-medium text-navy">
+                  E-mail pro fakturu
+                </span>
+                <input
+                  name="buyer_email"
+                  type="email"
+                  defaultValue={inv.buyer_email}
+                  className={inputClass()}
+                />
+              </label>
+              <label className="md:col-span-2">
+                <span className="mb-1.5 block text-sm font-medium text-navy">
+                  Fakturační adresa odběratele
+                </span>
+                <input
+                  name="buyer_address"
+                  defaultValue={inv.buyer_address}
+                  placeholder="Ulice a číslo, PSČ město"
+                  className={inputClass()}
+                />
+              </label>
+              <label className="md:col-span-2">
+                <span className="mb-1.5 block text-sm font-medium text-navy">
+                  Název položky na faktuře
+                </span>
+                <input name="item_name" defaultValue={inv.item_name} className={inputClass()} />
+              </label>
+              <label>
+                <span className="mb-1.5 block text-sm font-medium text-navy">
+                  Variabilní symbol
+                </span>
+                <input
+                  name="variable_symbol"
+                  defaultValue={inv.variable_symbol}
+                  className={inputClass()}
+                />
+              </label>
+              <label>
+                <span className="mb-1.5 block text-sm font-medium text-navy">
+                  Datum splatnosti
+                </span>
+                <input
+                  name="due_date"
+                  type="date"
+                  defaultValue={inv.due_date}
+                  className={inputClass()}
+                />
+              </label>
+              <label>
+                <span className="mb-1.5 block text-sm font-medium text-navy">
+                  Základní cena Kč
+                </span>
+                <input
+                  name="base_amount_czk"
+                  type="number"
+                  min={0}
+                  defaultValue={inv.base_amount_czk}
+                  className={inputClass()}
+                />
+              </label>
+              <label>
+                <span className="mb-1.5 block text-sm font-medium text-navy">
+                  Slevový kód na faktuře
+                </span>
+                <input
+                  name="discount_code"
+                  defaultValue={inv.discount_code ?? ""}
+                  className={inputClass()}
+                />
+              </label>
+              <label>
+                <span className="mb-1.5 block text-sm font-medium text-navy">
+                  Sleva Kč
+                </span>
+                <input
+                  name="discount_amount_czk"
+                  type="number"
+                  min={0}
+                  defaultValue={inv.discount_amount_czk}
+                  className={inputClass()}
+                />
+              </label>
+              <div className="flex items-end justify-between gap-3 rounded-xl bg-slate-50 px-4 py-3 md:col-span-2">
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-wide text-steel/70">
+                    Výsledek
+                  </p>
+                  <p className="mt-1 text-lg font-bold text-navy">
+                    {formatCzk(inv.total_amount_czk)}
+                  </p>
+                </div>
+                <button className="rounded-full bg-brand px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-brand-dark">
+                  Uložit a regenerovat PDF
+                </button>
+              </div>
+            </form>
+
+            <form
+              action={sendIssuedInvoice.bind(null, reg.id, inv.id)}
+              className="mt-3 inline-block"
+            >
+              <button className="rounded-full bg-brand px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-brand-dark">
+                Vystavit a odeslat rodiči
+              </button>
+            </form>
+
+            {canSplit && index === 0 && (
+              <details className="mt-4 rounded-xl border border-slate-200 p-4">
+                <summary className="cursor-pointer text-sm font-semibold text-navy">
+                  Rozdělit fakturu na 2 splátky
+                </summary>
+                <p className="mt-2 text-xs text-steel/80">
+                  Tato faktura se sníží na zadanou částku. Na zbytek se rovnou vystaví
+                  druhá faktura se splatností za zvolený počet měsíců.
+                </p>
+                <form
+                  action={splitInvoice.bind(null, reg.id, inv.id)}
+                  className="mt-3 grid gap-4 sm:grid-cols-[1fr_1fr_auto] sm:items-end"
+                >
+                  <label>
+                    <span className="mb-1.5 block text-sm font-medium text-navy">
+                      Částka první splátky (Kč)
+                    </span>
+                    <input
+                      name="first_amount_czk"
+                      type="number"
+                      min={1}
+                      max={inv.total_amount_czk - 1}
+                      required
+                      className={inputClass()}
+                    />
+                  </label>
+                  <label>
+                    <span className="mb-1.5 block text-sm font-medium text-navy">
+                      Zbytek zaplatit za (měsíců)
+                    </span>
+                    <input
+                      name="months_until_second"
+                      type="number"
+                      min={1}
+                      max={12}
+                      defaultValue={3}
+                      className={inputClass()}
+                    />
+                  </label>
+                  <button className="rounded-full bg-navy px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-navy/90">
+                    Rozdělit fakturu
+                  </button>
+                </form>
+              </details>
             )}
           </div>
-        </div>
-
-        <form
-          action={
-            invoice
-              ? updateInvoice.bind(null, reg.id, invoice.id)
-              : issueInvoice.bind(null, reg.id)
-          }
-          className="mt-5 grid gap-4 md:grid-cols-2"
-        >
-          <label>
-            <span className="mb-1.5 block text-sm font-medium text-navy">
-              Odběratel
-            </span>
-            <input
-              name="buyer_name"
-              defaultValue={invoiceDefaults.buyerName}
-              className={inputClass()}
-            />
-          </label>
-          <label>
-            <span className="mb-1.5 block text-sm font-medium text-navy">
-              E-mail pro fakturu
-            </span>
-            <input
-              name="buyer_email"
-              type="email"
-              defaultValue={invoiceDefaults.buyerEmail}
-              className={inputClass()}
-            />
-          </label>
-          <label className="md:col-span-2">
-            <span className="mb-1.5 block text-sm font-medium text-navy">
-              Fakturační adresa odběratele
-            </span>
-            <input
-              name="buyer_address"
-              defaultValue={invoiceDefaults.buyerAddress}
-              placeholder="Ulice a číslo, PSČ město"
-              className={inputClass()}
-            />
-          </label>
-          <label className="md:col-span-2">
-            <span className="mb-1.5 block text-sm font-medium text-navy">
-              Název položky na faktuře
-            </span>
-            <input
-              name="item_name"
-              defaultValue={invoiceDefaults.itemName}
-              className={inputClass()}
-            />
-          </label>
-          {invoice && (
-            <label>
-              <span className="mb-1.5 block text-sm font-medium text-navy">
-                Variabilní symbol
-              </span>
-              <input
-                name="variable_symbol"
-                defaultValue={invoiceDefaults.variableSymbol}
-                className={inputClass()}
-              />
-            </label>
-          )}
-          <label>
-            <span className="mb-1.5 block text-sm font-medium text-navy">
-              Datum splatnosti
-            </span>
-            <input
-              name="due_date"
-              type="date"
-              defaultValue={invoiceDefaults.dueDate}
-              className={inputClass()}
-            />
-          </label>
-          <label>
-            <span className="mb-1.5 block text-sm font-medium text-navy">
-              Základní cena Kč
-            </span>
-            <input
-              name="base_amount_czk"
-              type="number"
-              min={0}
-              defaultValue={invoiceDefaults.baseAmountCzk}
-              className={inputClass()}
-            />
-          </label>
-          <label>
-            <span className="mb-1.5 block text-sm font-medium text-navy">
-              Slevový kód na faktuře
-            </span>
-            <input
-              name="discount_code"
-              defaultValue={invoiceDefaults.discountCode}
-              className={inputClass()}
-            />
-          </label>
-          <label>
-            <span className="mb-1.5 block text-sm font-medium text-navy">
-              Sleva Kč
-            </span>
-            <input
-              name="discount_amount_czk"
-              type="number"
-              min={0}
-              defaultValue={invoiceDefaults.discountAmountCzk}
-              className={inputClass()}
-            />
-          </label>
-          <div className="flex items-end justify-between gap-3 rounded-xl bg-slate-50 px-4 py-3 md:col-span-2">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-wide text-steel/70">
-                Výsledek
-              </p>
-              <p className="mt-1 text-lg font-bold text-navy">
-                {formatCzk(
-                  Math.max(
-                    0,
-                    invoiceDefaults.baseAmountCzk -
-                      invoiceDefaults.discountAmountCzk,
-                  ),
-                )}
-              </p>
-            </div>
-            <button className="rounded-full bg-brand px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-brand-dark">
-              {invoice ? "Uložit a regenerovat PDF" : "Vystavit náhled faktury"}
-            </button>
-          </div>
-        </form>
-
-        {invoice && (
-          <form action={sendIssuedInvoice.bind(null, reg.id)} className="mt-3">
-            <button className="rounded-full bg-brand px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-brand-dark">
-              Vystavit a odeslat rodiči
-            </button>
-          </form>
-        )}
+        ))}
       </Card>
 
       <div className="mt-6 grid gap-6 md:grid-cols-2">

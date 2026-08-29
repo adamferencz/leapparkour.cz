@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import {
   BILLING,
   addDays,
+  addMonths,
   buildInvoiceNumber,
   formatCzk,
   toDateInputValue,
@@ -12,7 +13,7 @@ import {
 import { generateInvoicePdf, type InvoicePdfData } from "@/lib/billing/invoice-pdf";
 import { sendCampInvoiceEmail } from "@/lib/email/invoice-email";
 import { createClient } from "@/lib/supabase/server";
-import { SITE } from "@/lib/config";
+import { CAMP, SITE } from "@/lib/config";
 import { STATUS_LABELS, type CampRegistration, type Invoice, type RegistrationStatus } from "@/lib/types";
 
 function parseCzk(value: FormDataEntryValue | null, fallback: number) {
@@ -142,6 +143,8 @@ async function issueInvoiceRecord(id: string, formData?: FormData) {
     .from("invoices")
     .select("*")
     .eq("camp_registration_id", id)
+    .order("created_at", { ascending: true })
+    .limit(1)
     .maybeSingle();
 
   if (existing.data) {
@@ -236,7 +239,7 @@ export async function issueInvoice(id: string, formData: FormData) {
   revalidatePath("/admin/slevy");
 }
 
-export async function sendIssuedInvoice(id: string) {
+export async function sendIssuedInvoice(id: string, invoiceId?: string) {
   const supabase = await createClient();
   const { data: registrationData, error: registrationError } = await supabase
     .from("camp_registrations")
@@ -249,7 +252,21 @@ export async function sendIssuedInvoice(id: string) {
     return;
   }
 
-  const invoice = await issueInvoiceRecord(id);
+  let invoice: Invoice | null | undefined;
+  if (invoiceId) {
+    const { data, error } = await supabase
+      .from("invoices")
+      .select("*")
+      .eq("id", invoiceId)
+      .single();
+    if (error || !data) {
+      console.error("Načtení faktury pro odeslání selhalo:", error);
+      return;
+    }
+    invoice = data as Invoice;
+  } else {
+    invoice = await issueInvoiceRecord(id);
+  }
   if (!invoice) return;
 
   const downloaded = await supabase.storage
@@ -364,19 +381,213 @@ export async function updateInvoice(id: string, invoiceId: string, formData: For
     })
     .eq("id", invoice.id);
 
-  await supabase
-    .from("camp_registrations")
-    .update({
-      base_amount_czk: updatedInvoice.baseAmountCzk,
-      discount_code: updatedInvoice.discountCode,
-      discount_amount_czk: updatedInvoice.discountAmountCzk,
-      total_amount_czk: updatedInvoice.totalAmountCzk,
-    })
-    .eq("id", reg.id);
-
   console.info(
     `Faktura ${invoice.invoice_number} upravena, nová částka ${formatCzk(totalAmountCzk)}`,
   );
   revalidatePath(`/admin/tabor/${id}`);
   revalidatePath("/admin/tabor");
+}
+
+export async function splitInvoice(id: string, invoiceId: string, formData: FormData) {
+  const supabase = await createClient();
+  const { data: invoiceData, error: invoiceError } = await supabase
+    .from("invoices")
+    .select("*")
+    .eq("id", invoiceId)
+    .single();
+
+  if (invoiceError || !invoiceData) {
+    console.error("Načtení faktury pro rozdělení na splátky selhalo:", invoiceError);
+    return;
+  }
+
+  const invoice = invoiceData as Invoice;
+  const firstAmountCzk = parseCzk(formData.get("first_amount_czk"), 0);
+  const monthsUntilSecond = Math.max(
+    1,
+    Math.round(Number(formData.get("months_until_second") ?? 3)) || 3,
+  );
+  const remainderCzk = invoice.total_amount_czk - firstAmountCzk;
+
+  if (firstAmountCzk <= 0 || remainderCzk <= 0) {
+    console.error(
+      "Rozdělení faktury selhalo: částka první splátky musí být kladná a menší než celková částka.",
+    );
+    return;
+  }
+
+  const firstItemName = `${invoice.item_name} (1. splátka)`;
+  const firstPdfData: InvoicePdfData = {
+    ...invoiceDataFromRow(invoice),
+    itemName: firstItemName,
+    baseAmountCzk: firstAmountCzk,
+    discountCode: null,
+    discountAmountCzk: 0,
+    totalAmountCzk: firstAmountCzk,
+  };
+  const firstPdf = await generateInvoicePdf(firstPdfData);
+  const firstUploaded = await supabase.storage
+    .from("invoices")
+    .upload(invoice.storage_path, firstPdf, { contentType: "application/pdf", upsert: true });
+
+  if (firstUploaded.error) {
+    console.error("Uložení PDF první splátky selhalo:", firstUploaded.error);
+    return;
+  }
+
+  await supabase
+    .from("invoices")
+    .update({
+      item_name: firstItemName,
+      base_amount_czk: firstAmountCzk,
+      discount_code: null,
+      discount_amount_czk: 0,
+      total_amount_czk: firstAmountCzk,
+      status: "issued",
+      sent_at: null,
+    })
+    .eq("id", invoice.id);
+
+  const sequence = await supabase.rpc("next_invoice_sequence");
+  if (sequence.error || sequence.data === null) {
+    console.error("Vygenerování čísla faktury pro druhou splátku selhalo:", sequence.error);
+    return;
+  }
+
+  const secondInvoiceNumber = buildInvoiceNumber(Number(sequence.data));
+  const secondDueDate = toDateInputValue(addMonths(new Date(), monthsUntilSecond));
+  const secondItemName = `${invoice.item_name} (2. splátka)`;
+  const secondPdfData: InvoicePdfData = {
+    invoiceNumber: secondInvoiceNumber,
+    variableSymbol: secondInvoiceNumber,
+    issueDate: invoice.issue_date,
+    dueDate: secondDueDate,
+    buyerName: invoice.buyer_name,
+    buyerAddress: invoice.buyer_address,
+    buyerEmail: invoice.buyer_email,
+    itemName: secondItemName,
+    baseAmountCzk: remainderCzk,
+    discountCode: null,
+    discountAmountCzk: 0,
+    totalAmountCzk: remainderCzk,
+  };
+  const secondPdf = await generateInvoicePdf(secondPdfData);
+  const secondStoragePath = `invoices/${new Date().getFullYear()}/${secondInvoiceNumber}.pdf`;
+  const secondUploaded = await supabase.storage
+    .from("invoices")
+    .upload(secondStoragePath, secondPdf, { contentType: "application/pdf", upsert: false });
+
+  if (secondUploaded.error) {
+    console.error("Uložení PDF druhé splátky selhalo:", secondUploaded.error);
+    return;
+  }
+
+  const secondInserted = await supabase.from("invoices").insert({
+    camp_registration_id: id,
+    club_registration_id: null,
+    invoice_number: secondInvoiceNumber,
+    variable_symbol: secondInvoiceNumber,
+    issue_date: invoice.issue_date,
+    due_date: secondDueDate,
+    supplier_name: invoice.supplier_name,
+    supplier_address: invoice.supplier_address,
+    supplier_ico: invoice.supplier_ico,
+    supplier_registry: invoice.supplier_registry,
+    supplier_vat_note: invoice.supplier_vat_note,
+    buyer_name: invoice.buyer_name,
+    buyer_address: invoice.buyer_address,
+    buyer_email: invoice.buyer_email,
+    item_name: secondItemName,
+    base_amount_czk: remainderCzk,
+    discount_code: null,
+    discount_amount_czk: 0,
+    total_amount_czk: remainderCzk,
+    bank_account: invoice.bank_account,
+    iban: invoice.iban,
+    bic: invoice.bic,
+    storage_path: secondStoragePath,
+    installment_of: invoice.id,
+  });
+
+  if (secondInserted.error) {
+    console.error("Uložení druhé splátky do databáze selhalo:", secondInserted.error);
+    return;
+  }
+
+  revalidatePath(`/admin/tabor/${id}`);
+  revalidatePath("/admin/tabor");
+}
+
+export async function createManualRegistration(formData: FormData) {
+  const get = (name: string) => String(formData.get(name) ?? "").trim();
+
+  const childName = get("child_name");
+  const fatherName = get("father_name");
+  const motherName = get("mother_name");
+  const email = get("email");
+  const childAgeRaw = get("child_age");
+  const childBirthdate = get("child_birthdate");
+  const phoneMother = get("phone_mother");
+  const phoneFather = get("phone_father");
+  const healthNotes = get("health_notes");
+  const sports = formData
+    .getAll("sports")
+    .map((value) => String(value).trim())
+    .filter(Boolean);
+  const sportsOther = get("sports_other");
+  const roommates = get("roommates");
+  const billingName = get("billing_name");
+  const billingStreet = get("billing_street");
+  const billingCity = get("billing_city");
+  const billingZip = get("billing_zip");
+  const childAge = Number(childAgeRaw) || 0;
+
+  if (!childName || !email || !childBirthdate) {
+    console.error(
+      "Ruční přidání přihlášky na tábor selhalo: chybí jméno dítěte, e-mail nebo datum narození.",
+    );
+    return;
+  }
+
+  const supabase = await createClient();
+  const inserted = await supabase
+    .from("camp_registrations")
+    .insert({
+      camp: CAMP.id,
+      child_name: childName,
+      father_name: fatherName,
+      mother_name: motherName,
+      email,
+      child_age: childAge,
+      child_birthdate: childBirthdate,
+      phone_mother: phoneMother,
+      phone_father: phoneFather,
+      health_notes: healthNotes,
+      sports,
+      sports_other: sportsOther || null,
+      roommates: roommates || null,
+      base_amount_czk: BILLING.baseAmountCzk,
+      discount_code_id: null,
+      discount_code: null,
+      discount_amount_czk: 0,
+      total_amount_czk: BILLING.baseAmountCzk,
+      billing_name: billingName || null,
+      billing_street: billingStreet || null,
+      billing_city: billingCity || null,
+      billing_zip: billingZip || null,
+      legal_terms_accepted_at: new Date().toISOString(),
+      photo_consent: false,
+      status: "confirmed",
+      admin_notes: "Přidáno ručně v administraci.",
+    })
+    .select("id")
+    .single();
+
+  if (inserted.error || !inserted.data) {
+    console.error("Ruční přidání přihlášky na tábor selhalo:", inserted.error);
+    return;
+  }
+
+  revalidatePath("/admin/tabor");
+  redirect(`/admin/tabor/${inserted.data.id}`);
 }

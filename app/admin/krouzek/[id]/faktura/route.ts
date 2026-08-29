@@ -5,16 +5,16 @@ import type { Invoice } from "@/lib/types";
 export const dynamic = "force-dynamic";
 
 export async function GET(
-  _request: Request,
+  request: Request,
   { params }: { params: Promise<{ id: string }> },
 ) {
   const { id } = await params;
+  const invoiceId = new URL(request.url).searchParams.get("invoice");
   const supabase = await createClient();
-  const { data, error } = await supabase
-    .from("invoices")
-    .select("*")
-    .eq("club_registration_id", id)
-    .maybeSingle();
+  const query = supabase.from("invoices").select("*").eq("club_registration_id", id);
+  const { data, error } = invoiceId
+    ? await query.eq("id", invoiceId).maybeSingle()
+    : await query.order("created_at", { ascending: true }).limit(1).maybeSingle();
 
   if (error || !data) {
     return NextResponse.json({ error: "Faktura nebyla nalezena." }, { status: 404 });

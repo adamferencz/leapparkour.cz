@@ -6,6 +6,7 @@ import {
   BILLING,
   CLUB_BILLING,
   addDays,
+  addMonths,
   formatCzk,
   getClubAmountCzk,
   buildInvoiceNumber,
@@ -136,6 +137,8 @@ async function issueInvoiceRecord(id: string, formData?: FormData) {
     .from("invoices")
     .select("*")
     .eq("club_registration_id", id)
+    .order("created_at", { ascending: true })
+    .limit(1)
     .maybeSingle();
 
   if (existing.data) {
@@ -229,7 +232,7 @@ export async function issueInvoice(id: string, formData: FormData) {
   revalidatePath("/admin/krouzek");
 }
 
-export async function sendIssuedInvoice(id: string) {
+export async function sendIssuedInvoice(id: string, invoiceId?: string) {
   const supabase = await createClient();
   const { data: registrationData, error: registrationError } = await supabase
     .from("club_registrations")
@@ -242,7 +245,21 @@ export async function sendIssuedInvoice(id: string) {
     return;
   }
 
-  const invoice = await issueInvoiceRecord(id);
+  let invoice: Invoice | null;
+  if (invoiceId) {
+    const { data, error } = await supabase
+      .from("invoices")
+      .select("*")
+      .eq("id", invoiceId)
+      .single();
+    if (error || !data) {
+      console.error("Načtení kroužkové faktury pro odeslání selhalo:", error);
+      return;
+    }
+    invoice = data as Invoice;
+  } else {
+    invoice = await issueInvoiceRecord(id);
+  }
   if (!invoice) return;
 
   const downloaded = await supabase.storage
@@ -338,17 +355,199 @@ export async function updateInvoice(id: string, invoiceId: string, formData: For
     })
     .eq("id", invoice.id);
 
-  await supabase
-    .from("club_registrations")
-    .update({
-      base_amount_czk: updatedInvoice.baseAmountCzk,
-      total_amount_czk: updatedInvoice.totalAmountCzk,
-    })
-    .eq("id", id);
-
   console.info(
     `Kroužková faktura ${invoice.invoice_number} upravena, nová částka ${formatCzk(baseAmountCzk)}`,
   );
   revalidatePath(`/admin/krouzek/${id}`);
   revalidatePath("/admin/krouzek");
+}
+
+export async function splitInvoice(id: string, invoiceId: string, formData: FormData) {
+  const supabase = await createClient();
+  const { data: invoiceData, error: invoiceError } = await supabase
+    .from("invoices")
+    .select("*")
+    .eq("id", invoiceId)
+    .single();
+
+  if (invoiceError || !invoiceData) {
+    console.error("Načtení kroužkové faktury pro rozdělení na splátky selhalo:", invoiceError);
+    return;
+  }
+
+  const invoice = invoiceData as Invoice;
+  const firstAmountCzk = parseCzk(formData.get("first_amount_czk"), 0);
+  const monthsUntilSecond = Math.max(
+    1,
+    Math.round(Number(formData.get("months_until_second") ?? 3)) || 3,
+  );
+  const remainderCzk = invoice.total_amount_czk - firstAmountCzk;
+
+  if (firstAmountCzk <= 0 || remainderCzk <= 0) {
+    console.error(
+      "Rozdělení kroužkové faktury selhalo: částka první splátky musí být kladná a menší než celková částka.",
+    );
+    return;
+  }
+
+  const firstItemName = `${invoice.item_name} (1. splátka)`;
+  const firstPdfData: InvoicePdfData = {
+    ...invoiceDataFromRow(invoice),
+    itemName: firstItemName,
+    baseAmountCzk: firstAmountCzk,
+    discountCode: null,
+    discountAmountCzk: 0,
+    totalAmountCzk: firstAmountCzk,
+  };
+  const firstPdf = await generateInvoicePdf(firstPdfData);
+  const firstUploaded = await supabase.storage
+    .from("invoices")
+    .upload(invoice.storage_path, firstPdf, { contentType: "application/pdf", upsert: true });
+
+  if (firstUploaded.error) {
+    console.error("Uložení PDF první splátky selhalo:", firstUploaded.error);
+    return;
+  }
+
+  await supabase
+    .from("invoices")
+    .update({
+      item_name: firstItemName,
+      base_amount_czk: firstAmountCzk,
+      discount_code: null,
+      discount_amount_czk: 0,
+      total_amount_czk: firstAmountCzk,
+      status: "issued",
+      sent_at: null,
+    })
+    .eq("id", invoice.id);
+
+  const sequence = await supabase.rpc("next_invoice_sequence");
+  if (sequence.error || sequence.data === null) {
+    console.error("Vygenerování čísla faktury pro druhou splátku selhalo:", sequence.error);
+    return;
+  }
+
+  const secondInvoiceNumber = buildInvoiceNumber(Number(sequence.data));
+  const secondDueDate = toDateInputValue(addMonths(new Date(), monthsUntilSecond));
+  const secondItemName = `${invoice.item_name} (2. splátka)`;
+  const secondPdfData: InvoicePdfData = {
+    invoiceNumber: secondInvoiceNumber,
+    variableSymbol: secondInvoiceNumber,
+    issueDate: invoice.issue_date,
+    dueDate: secondDueDate,
+    buyerName: invoice.buyer_name,
+    buyerAddress: invoice.buyer_address,
+    buyerEmail: invoice.buyer_email,
+    itemName: secondItemName,
+    baseAmountCzk: remainderCzk,
+    discountCode: null,
+    discountAmountCzk: 0,
+    totalAmountCzk: remainderCzk,
+  };
+  const secondPdf = await generateInvoicePdf(secondPdfData);
+  const secondStoragePath = `invoices/${new Date().getFullYear()}/${secondInvoiceNumber}.pdf`;
+  const secondUploaded = await supabase.storage
+    .from("invoices")
+    .upload(secondStoragePath, secondPdf, { contentType: "application/pdf", upsert: false });
+
+  if (secondUploaded.error) {
+    console.error("Uložení PDF druhé splátky selhalo:", secondUploaded.error);
+    return;
+  }
+
+  const secondInserted = await supabase.from("invoices").insert({
+    camp_registration_id: null,
+    club_registration_id: id,
+    invoice_number: secondInvoiceNumber,
+    variable_symbol: secondInvoiceNumber,
+    issue_date: invoice.issue_date,
+    due_date: secondDueDate,
+    supplier_name: invoice.supplier_name,
+    supplier_address: invoice.supplier_address,
+    supplier_ico: invoice.supplier_ico,
+    supplier_registry: invoice.supplier_registry,
+    supplier_vat_note: invoice.supplier_vat_note,
+    buyer_name: invoice.buyer_name,
+    buyer_address: invoice.buyer_address,
+    buyer_email: invoice.buyer_email,
+    item_name: secondItemName,
+    base_amount_czk: remainderCzk,
+    discount_code: null,
+    discount_amount_czk: 0,
+    total_amount_czk: remainderCzk,
+    bank_account: invoice.bank_account,
+    iban: invoice.iban,
+    bic: invoice.bic,
+    storage_path: secondStoragePath,
+    installment_of: invoice.id,
+  });
+
+  if (secondInserted.error) {
+    console.error("Uložení druhé splátky do databáze selhalo:", secondInserted.error);
+    return;
+  }
+
+  revalidatePath(`/admin/krouzek/${id}`);
+  revalidatePath("/admin/krouzek");
+}
+
+export async function createManualRegistration(formData: FormData) {
+  const childName = String(formData.get("child_name") ?? "").trim();
+  const parentName = String(formData.get("parent_name") ?? "").trim();
+  const email = String(formData.get("email") ?? "").trim();
+  const phone = String(formData.get("phone") ?? "").trim();
+  const whatsappChoice = String(formData.get("whatsapp_choice") ?? "no_add");
+  const healthNotes = String(formData.get("health_notes") ?? "").trim();
+  const billingName = String(formData.get("billing_name") ?? "").trim();
+  const billingStreet = String(formData.get("billing_street") ?? "").trim();
+  const billingCity = String(formData.get("billing_city") ?? "").trim();
+  const billingZip = String(formData.get("billing_zip") ?? "").trim();
+
+  const validTermIds: string[] = CLUB_SEASON.terms.map((t) => t.id);
+  const terms = formData
+    .getAll("terms")
+    .map(String)
+    .filter((t) => validTermIds.includes(t));
+
+  if (!childName || !email) {
+    console.error("Ruční přidání přihlášky na kroužek selhalo: chybí jméno dítěte nebo e-mail.");
+    return;
+  }
+
+  const totalAmountCzk = getClubAmountCzk(terms);
+  const supabase = await createClient();
+  const inserted = await supabase
+    .from("club_registrations")
+    .insert({
+      child_name: childName,
+      parent_name: parentName || null,
+      email,
+      phone,
+      whatsapp_choice: whatsappChoice,
+      whatsapp_other: null,
+      terms,
+      health_notes: healthNotes || null,
+      season: CLUB_SEASON.id,
+      base_amount_czk: totalAmountCzk,
+      total_amount_czk: totalAmountCzk,
+      billing_name: billingName || null,
+      billing_street: billingStreet || null,
+      billing_city: billingCity || null,
+      billing_zip: billingZip || null,
+      legal_terms_accepted_at: new Date().toISOString(),
+      photo_consent: false,
+      status: "confirmed",
+      admin_notes: "Přidáno ručně v administraci.",
+    })
+    .select("id")
+    .single();
+
+  if (inserted.error || !inserted.data) {
+    console.error("Ruční přidání přihlášky na kroužek selhalo:", inserted.error);
+    return;
+  }
+
+  revalidatePath("/admin/krouzek");
+  redirect(`/admin/krouzek/${inserted.data.id}`);
 }

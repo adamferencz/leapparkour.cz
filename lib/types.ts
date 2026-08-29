@@ -90,4 +90,5 @@ export interface Invoice {
   storage_path: string;
   sent_at: string | null;
   status: "issued" | "sent" | "cancelled";
+  installment_of: string | null;
 }

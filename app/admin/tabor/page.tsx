@@ -5,8 +5,10 @@ import type { CampRegistration } from "@/lib/types";
 import { Card } from "@/components/admin/Card";
 import StatusBadge from "@/components/admin/StatusBadge";
 import ExportButton from "@/components/admin/ExportButton";
+import DeleteButton from "@/components/admin/DeleteButton";
 import { formatCzk } from "@/lib/billing/config";
 import { formatDate, pluralRegistrations } from "../_lib/format";
+import { deleteRegistration } from "./actions";
 
 export const dynamic = "force-dynamic";
 
@@ -49,7 +51,15 @@ export default async function TaborListPage() {
             {pluralRegistrations(rows.length)} celkem
           </p>
         </div>
-        <ExportButton href="/admin/tabor/export" />
+        <div className="flex flex-wrap gap-2">
+          <Link
+            href="/admin/tabor/nova"
+            className="rounded-full bg-brand px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-brand-dark"
+          >
+            Přidat přihlášku
+          </Link>
+          <ExportButton href="/admin/tabor/export" />
+        </div>
       </div>
 
       <Card className="mt-6 overflow-hidden">

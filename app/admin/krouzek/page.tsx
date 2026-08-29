@@ -5,7 +5,9 @@ import type { ClubRegistration } from "@/lib/types";
 import { Card } from "@/components/admin/Card";
 import StatusBadge from "@/components/admin/StatusBadge";
 import ExportButton from "@/components/admin/ExportButton";
+import DeleteButton from "@/components/admin/DeleteButton";
 import { formatDate, termLabels, pluralRegistrations } from "../_lib/format";
+import { deleteRegistration } from "./actions";
 
 export const dynamic = "force-dynamic";
 
@@ -43,7 +45,15 @@ export default async function KrouzekListPage() {
             {pluralRegistrations(rows.length)} celkem
           </p>
         </div>
-        <ExportButton href="/admin/krouzek/export" />
+        <div className="flex flex-wrap gap-2">
+          <Link
+            href="/admin/krouzek/nova"
+            className="rounded-full bg-brand px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-brand-dark"
+          >
+            Přidat přihlášku
+          </Link>
+          <ExportButton href="/admin/krouzek/export" />
+        </div>
       </div>
 
       <Card className="mt-6 overflow-hidden">
@@ -58,13 +68,14 @@ export default async function KrouzekListPage() {
                 <th className="px-5 py-3 font-semibold">Telefon rodiče</th>
                 <th className="px-5 py-3 font-semibold">Termíny</th>
                 <th className="px-5 py-3 font-semibold">Status</th>
+                <th className="px-5 py-3 font-semibold" />
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
               {rows.length === 0 ? (
                 <tr>
                   <td
-                    colSpan={7}
+                    colSpan={8}
                     className="px-5 py-10 text-center text-steel/60"
                   >
                     Zatím žádné přihlášky.
@@ -113,6 +124,12 @@ export default async function KrouzekListPage() {
                       <Link href={`/admin/krouzek/${row.id}`} className="block">
                         <StatusBadge status={row.status} />
                       </Link>
+                    </td>
+                    <td className="whitespace-nowrap px-5 py-3 text-right">
+                      <DeleteButton
+                        action={deleteRegistration.bind(null, row.id)}
+                        label="Smazat"
+                      />
                     </td>
                   </tr>
                 ))
