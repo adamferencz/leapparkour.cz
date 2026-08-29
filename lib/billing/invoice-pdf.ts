@@ -16,6 +16,7 @@ export type InvoicePdfData = {
   discountCode: string | null;
   discountAmountCzk: number;
   totalAmountCzk: number;
+  stampSignature?: boolean;
 };
 
 function findFont(fileName = "NotoSans-Regular.ttf") {
@@ -38,6 +39,11 @@ function findLogo() {
   ];
 
   return candidates.find((candidate) => fs.existsSync(candidate));
+}
+
+function findStamp() {
+  const stampPath = path.join(process.cwd(), "public/images/faktura/razitko-podpis.png");
+  return fs.existsSync(stampPath) ? stampPath : undefined;
 }
 
 function formatDate(value: string) {
@@ -269,6 +275,13 @@ export async function generateInvoicePdf(data: InvoicePdfData) {
       width: 128,
       align: "right",
     });
+
+  if (data.stampSignature) {
+    const stampPath = findStamp();
+    if (stampPath) {
+      doc.image(stampPath, 400, 660, { width: 110 });
+    }
+  }
 
   font();
   doc

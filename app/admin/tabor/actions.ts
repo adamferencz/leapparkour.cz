@@ -55,6 +55,7 @@ function getInvoiceFormOverrides(reg: CampRegistration, formData?: FormData) {
       null,
     discountAmountCzk,
     totalAmountCzk,
+    stampSignature: formData?.get("stamp_signature") === "on",
   };
 }
 
@@ -121,6 +122,7 @@ function invoiceDataFromRow(invoice: Invoice): InvoicePdfData {
     discountCode: invoice.discount_code,
     discountAmountCzk: invoice.discount_amount_czk,
     totalAmountCzk: invoice.total_amount_czk,
+    stampSignature: invoice.stamp_signature,
   };
 }
 
@@ -173,6 +175,7 @@ async function issueInvoiceRecord(id: string, formData?: FormData) {
     discountCode: overrides.discountCode,
     discountAmountCzk: overrides.discountAmountCzk,
     totalAmountCzk: overrides.totalAmountCzk,
+    stampSignature: overrides.stampSignature,
   };
 
   const pdf = await generateInvoicePdf(invoiceData);
@@ -213,6 +216,7 @@ async function issueInvoiceRecord(id: string, formData?: FormData) {
       iban: BILLING.iban,
       bic: BILLING.bic,
       storage_path: storagePath,
+      stamp_signature: invoiceData.stampSignature ?? false,
     })
     .select("*")
     .single();
@@ -353,6 +357,7 @@ export async function updateInvoice(id: string, invoiceId: string, formData: For
       null,
     discountAmountCzk,
     totalAmountCzk,
+    stampSignature: formData.get("stamp_signature") === "on",
   };
 
   const pdf = await generateInvoicePdf(updatedInvoice);
@@ -381,6 +386,7 @@ export async function updateInvoice(id: string, invoiceId: string, formData: For
       discount_code: updatedInvoice.discountCode,
       discount_amount_czk: updatedInvoice.discountAmountCzk,
       total_amount_czk: updatedInvoice.totalAmountCzk,
+      stamp_signature: updatedInvoice.stampSignature ?? false,
       status: "issued",
       sent_at: null,
     })
@@ -475,6 +481,7 @@ export async function splitInvoice(id: string, invoiceId: string, formData: Form
     discountCode: null,
     discountAmountCzk: 0,
     totalAmountCzk: remainderCzk,
+    stampSignature: invoice.stamp_signature,
   };
   const secondPdf = await generateInvoicePdf(secondPdfData);
   const secondStoragePath = `invoices/${new Date().getFullYear()}/${secondInvoiceNumber}.pdf`;
@@ -512,6 +519,7 @@ export async function splitInvoice(id: string, invoiceId: string, formData: Form
     bic: invoice.bic,
     storage_path: secondStoragePath,
     installment_of: invoice.id,
+    stamp_signature: invoice.stamp_signature,
   });
 
   if (secondInserted.error) {

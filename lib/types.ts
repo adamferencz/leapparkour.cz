@@ -91,4 +91,5 @@ export interface Invoice {
   sent_at: string | null;
   status: "issued" | "sent" | "cancelled";
   installment_of: string | null;
+  stamp_signature: boolean;
 }

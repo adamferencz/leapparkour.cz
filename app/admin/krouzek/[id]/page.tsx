@@ -252,6 +252,14 @@ export default async function KrouzekDetailPage({
                   className={inputClass()}
                 />
               </label>
+              <label className="flex cursor-pointer items-center gap-2 text-sm text-navy md:col-span-2">
+                <input
+                  type="checkbox"
+                  name="stamp_signature"
+                  className="h-4 w-4 accent-brand"
+                />
+                Přidat razítko a podpis
+              </label>
               <div className="flex items-end justify-between gap-3 rounded-xl bg-slate-50 px-4 py-3 md:col-span-2">
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-wide text-steel/70">
@@ -311,7 +319,7 @@ export default async function KrouzekDetailPage({
             </div>
 
             <form
-              key={`${inv.id}:${inv.base_amount_czk}:${inv.due_date}:${inv.item_name}:${inv.variable_symbol}:${inv.buyer_name}:${inv.buyer_email}:${inv.buyer_address}`}
+              key={`${inv.id}:${inv.base_amount_czk}:${inv.due_date}:${inv.item_name}:${inv.variable_symbol}:${inv.buyer_name}:${inv.buyer_email}:${inv.buyer_address}:${inv.stamp_signature}`}
               action={updateInvoice.bind(null, reg.id, inv.id)}
               className="mt-4 grid gap-4 md:grid-cols-2"
             >
@@ -381,6 +389,15 @@ export default async function KrouzekDetailPage({
                   defaultValue={inv.base_amount_czk}
                   className={inputClass()}
                 />
+              </label>
+              <label className="flex cursor-pointer items-center gap-2 text-sm text-navy md:col-span-2">
+                <input
+                  type="checkbox"
+                  name="stamp_signature"
+                  defaultChecked={inv.stamp_signature}
+                  className="h-4 w-4 accent-brand"
+                />
+                Přidat razítko a podpis
               </label>
               <div className="flex items-end justify-between gap-3 rounded-xl bg-slate-50 px-4 py-3 md:col-span-2">
                 <div>

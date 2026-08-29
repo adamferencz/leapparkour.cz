@@ -53,6 +53,7 @@ function invoiceDataFromRow(invoice: Invoice): InvoicePdfData {
     discountCode: invoice.discount_code,
     discountAmountCzk: invoice.discount_amount_czk,
     totalAmountCzk: invoice.total_amount_czk,
+    stampSignature: invoice.stamp_signature,
   };
 }
 
@@ -79,6 +80,7 @@ function getInvoiceFormOverrides(reg: ClubRegistration, formData?: FormData) {
       String(formData?.get("due_date") ?? "").trim() || defaultDueDate,
     baseAmountCzk,
     totalAmountCzk: baseAmountCzk,
+    stampSignature: formData?.get("stamp_signature") === "on",
   };
 }
 
@@ -167,6 +169,7 @@ async function issueInvoiceRecord(id: string, formData?: FormData) {
     discountCode: null,
     discountAmountCzk: 0,
     totalAmountCzk: overrides.totalAmountCzk,
+    stampSignature: overrides.stampSignature,
   };
   const pdf = await generateInvoicePdf(invoiceData);
   const uploaded = await supabase.storage.from("invoices").upload(storagePath, pdf, {
@@ -205,6 +208,7 @@ async function issueInvoiceRecord(id: string, formData?: FormData) {
       iban: BILLING.iban,
       bic: BILLING.bic,
       storage_path: storagePath,
+      stamp_signature: invoiceData.stampSignature ?? false,
     })
     .select("*")
     .single();
@@ -330,6 +334,7 @@ export async function updateInvoice(id: string, invoiceId: string, formData: For
     discountCode: null,
     discountAmountCzk: 0,
     totalAmountCzk: baseAmountCzk,
+    stampSignature: formData.get("stamp_signature") === "on",
   };
   const pdf = await generateInvoicePdf(updatedInvoice);
   const uploaded = await supabase.storage.from("invoices").upload(invoice.storage_path, pdf, {
@@ -357,6 +362,7 @@ export async function updateInvoice(id: string, invoiceId: string, formData: For
       total_amount_czk: updatedInvoice.totalAmountCzk,
       status: "issued",
       sent_at: null,
+      stamp_signature: updatedInvoice.stampSignature ?? false,
     })
     .eq("id", invoice.id);
 
@@ -449,6 +455,7 @@ export async function splitInvoice(id: string, invoiceId: string, formData: Form
     discountCode: null,
     discountAmountCzk: 0,
     totalAmountCzk: remainderCzk,
+    stampSignature: invoice.stamp_signature,
   };
   const secondPdf = await generateInvoicePdf(secondPdfData);
   const secondStoragePath = `invoices/${new Date().getFullYear()}/${secondInvoiceNumber}.pdf`;
@@ -486,6 +493,7 @@ export async function splitInvoice(id: string, invoiceId: string, formData: Form
     bic: invoice.bic,
     storage_path: secondStoragePath,
     installment_of: invoice.id,
+    stamp_signature: invoice.stamp_signature,
   });
 
   if (secondInserted.error) {
