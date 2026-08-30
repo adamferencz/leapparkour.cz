@@ -20,8 +20,8 @@ export const SITE = {
 
 /** Kroužky — sezóna, na kterou se aktuálně přihlašuje */
 export const CLUB_SEASON = {
-  id: "jaro-2027",
-  label: "jaro 2027",
+  id: "podzim-2026",
+  label: "podzim 2026",
   startNote: "3. září a 4. září",
   venue: "ZŠ Wolkerova (tělocvična), v létě parkourové hřiště Plovárenská, Havlíčkův Brod",
   priceOnceWeek: "3 100 Kč",
