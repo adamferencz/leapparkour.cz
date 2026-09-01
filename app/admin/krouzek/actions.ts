@@ -23,8 +23,11 @@ import {
   type RegistrationStatus,
 } from "@/lib/types";
 
+type SupabaseServerClient = Awaited<ReturnType<typeof createClient>>;
+
 function parseCzk(value: FormDataEntryValue | null, fallback: number) {
-  const raw = String(value ?? "").replace(/\s/g, "").replace(",", ".");
+  const raw = String(value ?? "").trim().replace(/\s/g, "").replace(",", ".");
+  if (!raw) return fallback;
   const parsed = Number(raw);
   if (!Number.isFinite(parsed) || parsed < 0) return fallback;
   return Math.round(parsed);
@@ -130,32 +133,11 @@ export async function setActive(id: string, active: boolean) {
   revalidatePath("/admin");
 }
 
-async function issueInvoiceRecord(id: string, formData?: FormData) {
-  const supabase = await createClient();
-  const { data: registrationData, error: registrationError } = await supabase
-    .from("club_registrations")
-    .select("*")
-    .eq("id", id)
-    .single();
-
-  if (registrationError || !registrationData) {
-    console.error("Načtení kroužkové přihlášky pro fakturu selhalo:", registrationError);
-    return null;
-  }
-
-  const reg = registrationData as ClubRegistration;
-  const existing = await supabase
-    .from("invoices")
-    .select("*")
-    .eq("club_registration_id", id)
-    .order("created_at", { ascending: true })
-    .limit(1)
-    .maybeSingle();
-
-  if (existing.data) {
-    return existing.data as Invoice;
-  }
-
+async function createInvoiceRecord(
+  supabase: SupabaseServerClient,
+  id: string,
+  overrides: ReturnType<typeof getInvoiceFormOverrides>,
+) {
   const sequence = await supabase.rpc("next_invoice_sequence");
   if (sequence.error || sequence.data === null) {
     console.error("Vygenerování čísla kroužkové faktury selhalo:", sequence.error);
@@ -163,7 +145,6 @@ async function issueInvoiceRecord(id: string, formData?: FormData) {
   }
 
   const invoiceNumber = buildInvoiceNumber(Number(sequence.data));
-  const overrides = getInvoiceFormOverrides(reg, formData);
   const storagePath = `invoices/${new Date().getFullYear()}/${invoiceNumber}.pdf`;
   const invoiceData: InvoicePdfData = {
     invoiceNumber,
@@ -238,11 +219,94 @@ async function issueInvoiceRecord(id: string, formData?: FormData) {
   return inserted.data as Invoice;
 }
 
+async function issueInvoiceRecord(id: string, formData?: FormData) {
+  const supabase = await createClient();
+  const { data: registrationData, error: registrationError } = await supabase
+    .from("club_registrations")
+    .select("*")
+    .eq("id", id)
+    .single();
+
+  if (registrationError || !registrationData) {
+    console.error("Načtení kroužkové přihlášky pro fakturu selhalo:", registrationError);
+    return null;
+  }
+
+  const reg = registrationData as ClubRegistration;
+  const existing = await supabase
+    .from("invoices")
+    .select("*")
+    .eq("club_registration_id", id)
+    .order("created_at", { ascending: true })
+    .limit(1)
+    .maybeSingle();
+
+  if (existing.data) {
+    return existing.data as Invoice;
+  }
+
+  return createInvoiceRecord(supabase, id, getInvoiceFormOverrides(reg, formData));
+}
+
 export async function issueInvoice(id: string, formData: FormData) {
   await issueInvoiceRecord(id, formData);
 
   revalidatePath(`/admin/krouzek/${id}`);
   revalidatePath("/admin/krouzek");
+}
+
+export async function updateTerms(id: string, formData: FormData) {
+  const validTermIds: string[] = CLUB_SEASON.terms.map((t) => t.id);
+  const terms = formData
+    .getAll("terms")
+    .map(String)
+    .filter((t) => validTermIds.includes(t));
+
+  if (terms.length === 0) {
+    console.error("Úprava termínu selhala: musí být vybraný alespoň jeden termín.");
+    return;
+  }
+
+  const totalAmountCzk = getClubAmountCzk(terms);
+  const supabase = await createClient();
+  await supabase
+    .from("club_registrations")
+    .update({
+      terms,
+      base_amount_czk: totalAmountCzk,
+      total_amount_czk: totalAmountCzk,
+    })
+    .eq("id", id);
+
+  revalidatePath(`/admin/krouzek/${id}`);
+  revalidatePath("/admin/krouzek");
+}
+
+export async function renewForNewSeason(id: string) {
+  const supabase = await createClient();
+  const { data: registrationData, error: registrationError } = await supabase
+    .from("club_registrations")
+    .select("*")
+    .eq("id", id)
+    .single();
+
+  if (registrationError || !registrationData) {
+    console.error("Načtení kroužkové přihlášky pro prodloužení selhalo:", registrationError);
+    return;
+  }
+
+  const reg = registrationData as ClubRegistration;
+
+  await supabase
+    .from("club_registrations")
+    .update({ season: CLUB_SEASON.id, status: "confirmed", active: true })
+    .eq("id", id);
+
+  await createInvoiceRecord(supabase, id, getInvoiceFormOverrides(reg));
+
+  revalidatePath(`/admin/krouzek/${id}`);
+  revalidatePath("/admin/krouzek");
+  revalidatePath("/admin");
 }
 
 export async function sendIssuedInvoice(id: string, invoiceId?: string) {

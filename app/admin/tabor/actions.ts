@@ -17,7 +17,8 @@ import { CAMP, SITE } from "@/lib/config";
 import { STATUS_LABELS, type CampRegistration, type Invoice, type RegistrationStatus } from "@/lib/types";
 
 function parseCzk(value: FormDataEntryValue | null, fallback: number) {
-  const raw = String(value ?? "").replace(/\s/g, "").replace(",", ".");
+  const raw = String(value ?? "").trim().replace(/\s/g, "").replace(",", ".");
+  if (!raw) return fallback;
   const parsed = Number(raw);
   if (!Number.isFinite(parsed) || parsed < 0) return fallback;
   return Math.round(parsed);
