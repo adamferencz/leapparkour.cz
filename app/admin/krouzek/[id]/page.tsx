@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { CLUB_BILLING, formatCzk, getClubAmountCzk } from "@/lib/billing/config";
+import { CLUB_SEASON } from "@/lib/config";
 import type { ClubRegistration, Invoice } from "@/lib/types";
 import { Card } from "@/components/admin/Card";
 import StatusBadge from "@/components/admin/StatusBadge";
@@ -19,6 +20,8 @@ import {
   sendIssuedInvoice,
   updateInvoice,
   splitInvoice,
+  updateTerms,
+  renewForNewSeason,
 } from "../actions";
 
 export const dynamic = "force-dynamic";
@@ -111,7 +114,6 @@ export default async function KrouzekDetailPage({
         </a>
       ),
     },
-    { label: "Termíny", value: termLabels(reg.terms) },
     { label: "Cena", value: formatCzk(defaultAmount) },
     { label: "Fakturační jméno", value: reg.billing_name },
     {
@@ -171,6 +173,64 @@ export default async function KrouzekDetailPage({
           </h2>
         </div>
         <DetailTable items={items} />
+      </Card>
+
+      <Card className="mt-6 p-5">
+        <h2 className="text-base font-semibold text-navy">Termín kroužku</h2>
+        <p className="mt-1 text-sm text-steel/80">
+          Aktuálně: <strong className="text-navy">{termLabels(reg.terms)}</strong>. Termín jde
+          kdykoliv změnit, cena se dopočítá podle standardní sazby.
+        </p>
+        <form
+          key={reg.terms.join(",")}
+          action={updateTerms.bind(null, reg.id)}
+          className="mt-4 space-y-2"
+        >
+          {CLUB_SEASON.terms.map((term) => (
+            <label
+              key={term.id}
+              className="flex cursor-pointer items-start gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3"
+            >
+              <input
+                type="checkbox"
+                name="terms"
+                value={term.id}
+                defaultChecked={reg.terms.includes(term.id)}
+                className="mt-0.5 h-4 w-4 shrink-0 accent-brand"
+              />
+              <span className="text-sm">
+                <span className="font-medium text-navy">{term.label}</span>
+                <span className="mt-0.5 block text-xs text-steel/80">
+                  {term.level}, {term.age}
+                </span>
+              </span>
+            </label>
+          ))}
+          <button className="rounded-full bg-navy px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-navy/90">
+            Uložit termín
+          </button>
+        </form>
+      </Card>
+
+      <Card className="mt-6 p-5">
+        <h2 className="text-base font-semibold text-navy">Další pololetí</h2>
+        <p className="mt-1 text-sm text-steel/80">
+          Sezóna přihlášky: <strong className="text-navy">{reg.season}</strong>
+          {reg.season === CLUB_SEASON.id && (
+            <span className="ml-1 text-emerald-700">(aktuální)</span>
+          )}
+        </p>
+        <p className="mt-2 text-sm text-steel/80">
+          Pokud dítě pokračuje i další pololetí, klikni na tlačítko níže — přihláška
+          se označí jako aktuální a rovnou se vystaví nová faktura ke kontrole
+          (rodiči se automaticky neodešle, to uděláš ručně stejně jako u ostatních
+          faktur).
+        </p>
+        <form action={renewForNewSeason.bind(null, reg.id)} className="mt-4">
+          <button className="rounded-full bg-brand px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-dark">
+            Prodloužit na {CLUB_SEASON.label}
+          </button>
+        </form>
       </Card>
 
       <Card className="mt-6 p-5">
@@ -291,6 +351,7 @@ export default async function KrouzekDetailPage({
             <div className="flex flex-wrap items-start justify-between gap-4">
               <div>
                 <h3 className="text-sm font-semibold text-navy">{invoiceLabel(inv)}</h3>
+                <p className="mt-0.5 text-xs text-steel/70">{inv.item_name}</p>
                 <div className="mt-2 space-y-1 text-sm text-steel/80">
                   <p>
                     Číslo: <strong className="text-navy">{inv.invoice_number}</strong>
