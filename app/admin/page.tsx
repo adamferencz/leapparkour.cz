@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import type { ClubRegistration, CampRegistration } from "@/lib/types";
-import { StatCard, Card } from "@/components/admin/Card";
+import { StatCard, ActiveStatCard, Card } from "@/components/admin/Card";
 import StatusBadge from "@/components/admin/StatusBadge";
 import { formatDate } from "./_lib/format";
 
@@ -22,8 +22,10 @@ export default async function AdminOverviewPage() {
   const [
     clubTotal,
     clubNew,
+    clubActive,
     campTotal,
     campNew,
+    campActive,
     clubRecent,
     campRecent,
   ] = await Promise.all([
@@ -35,12 +37,20 @@ export default async function AdminOverviewPage() {
       .select("*", { count: "exact", head: true })
       .eq("status", "new"),
     supabase
+      .from("club_registrations")
+      .select("*", { count: "exact", head: true })
+      .eq("active", true),
+    supabase
       .from("camp_registrations")
       .select("*", { count: "exact", head: true }),
     supabase
       .from("camp_registrations")
       .select("*", { count: "exact", head: true })
       .eq("status", "new"),
+    supabase
+      .from("camp_registrations")
+      .select("*", { count: "exact", head: true })
+      .eq("active", true),
     supabase
       .from("club_registrations")
       .select("id, created_at, child_name, status")
@@ -63,17 +73,28 @@ export default async function AdminOverviewPage() {
         Souhrn přihlášek do kroužku a na tábor.
       </p>
 
-      <div className="mt-6 grid gap-4 sm:grid-cols-2">
+      <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard
           label="Kroužek — přihlášky"
           total={clubTotal.count ?? 0}
           fresh={clubNew.count ?? 0}
           href="/admin/krouzek"
         />
+        <ActiveStatCard
+          label="Aktivní děti — kroužek"
+          count={clubActive.count ?? 0}
+          href="/admin/krouzek"
+          caption="chodí toto pololetí"
+        />
         <StatCard
           label="Tábor — přihlášky"
           total={campTotal.count ?? 0}
           fresh={campNew.count ?? 0}
+          href="/admin/tabor"
+        />
+        <ActiveStatCard
+          label="Aktivní děti — tábor"
+          count={campActive.count ?? 0}
           href="/admin/tabor"
         />
       </div>

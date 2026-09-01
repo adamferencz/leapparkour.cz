@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Reveal } from "@/components/ui/Reveal";
 import { ClearFormDraft } from "@/components/forms/FormDraft";
 import { createPageMetadata } from "@/lib/seo";
+import { WHATSAPP_LINKS } from "@/lib/config";
 
 export const metadata: Metadata = createPageMetadata({
   title: "Děkujeme za přihlášku",
@@ -68,6 +69,25 @@ export default function DekujemePage() {
               className="mt-4 inline-flex rounded-full bg-brand px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-dark"
             >
               Stáhnout přihlášku (PDF)
+            </a>
+          </div>
+        </Reveal>
+
+        <Reveal delay={0.19}>
+          <div className="mt-6 rounded-2xl border border-emerald-100 bg-emerald-50/60 p-6 text-left">
+            <h2 className="text-lg font-bold text-navy">Přidejte se do WhatsApp skupiny</h2>
+            <p className="mt-2 text-steel">
+              Píšeme tam důležité informace ke kroužku — třeba zrušení kvůli počasí
+              nebo změny termínů. Doporučujeme se přidat, ať vám nic důležitého
+              neuteče.
+            </p>
+            <a
+              href={WHATSAPP_LINKS.club}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-4 inline-flex rounded-full bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-emerald-700"
+            >
+              Přidat se do WhatsApp skupiny
             </a>
           </div>
         </Reveal>

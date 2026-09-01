@@ -13,7 +13,7 @@ import {
   TextField,
 } from "@/components/forms/fields";
 import { useFormDraft } from "@/components/forms/FormDraft";
-import { CLUB_SEASON, WHATSAPP_CHOICES } from "@/lib/config";
+import { CLUB_SEASON } from "@/lib/config";
 
 const initialState: ClubFormState = null;
 
@@ -104,29 +104,6 @@ export function ClubForm() {
           </div>
         </div>
       </div>
-
-      <fieldset>
-        <legend className="mb-1.5 block text-sm font-medium text-navy">
-          WhatsApp skupina <span className="text-brand">*</span>
-        </legend>
-        <p className="mb-2 text-xs text-steel/80">
-          V této skupině se dozvíte o změnách kroužku (zrušení v případě
-          deštivého počasí apod.) a o dalších akcích. Do skupiny přidáme číslo
-          zákonného zástupce.
-        </p>
-        <div className="space-y-2">
-          {WHATSAPP_CHOICES.map((choice) => (
-            <OptionRow
-              key={choice.value}
-              type="radio"
-              name="whatsapp_choice"
-              value={choice.value}
-              label={choice.label}
-              required
-            />
-          ))}
-        </div>
-      </fieldset>
 
       <fieldset>
         <legend className="mb-1.5 block text-sm font-medium text-navy">

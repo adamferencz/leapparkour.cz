@@ -15,7 +15,7 @@ export interface ClubRegistration {
   parent_name: string | null;
   email: string;
   phone: string;
-  whatsapp_choice: "add" | "no_add" | "cannot" | "other";
+  whatsapp_choice: "add" | "no_add" | "cannot" | "other" | null;
   whatsapp_other: string | null;
   terms: string[];
   health_notes: string | null;
@@ -29,6 +29,7 @@ export interface ClubRegistration {
   photo_consent: boolean;
   status: RegistrationStatus;
   admin_notes: string | null;
+  active: boolean;
 }
 
 export interface CampRegistration {
@@ -60,6 +61,7 @@ export interface CampRegistration {
   photo_consent: boolean;
   status: RegistrationStatus;
   admin_notes: string | null;
+  active: boolean;
 }
 
 export interface Invoice {

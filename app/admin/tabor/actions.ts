@@ -96,6 +96,15 @@ export async function deleteRegistration(id: string) {
   redirect("/admin/tabor");
 }
 
+export async function setActive(id: string, active: boolean) {
+  const supabase = await createClient();
+  await supabase.from("camp_registrations").update({ active }).eq("id", id);
+
+  revalidatePath("/admin/tabor");
+  revalidatePath(`/admin/tabor/${id}`);
+  revalidatePath("/admin");
+}
+
 function buildBuyerName(reg: CampRegistration) {
   const parents = [reg.billing_name, reg.mother_name, reg.father_name]
     .filter(Boolean)

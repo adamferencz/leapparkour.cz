@@ -118,7 +118,9 @@ export default async function KrouzekDetailPage({
       label: "Fakturační adresa",
       value: defaultBuyerAddress,
     },
-    { label: "WhatsApp skupina", value: whatsappLabel(reg) },
+    ...(whatsappLabel(reg)
+      ? [{ label: "WhatsApp skupina (historicky)", value: whatsappLabel(reg) }]
+      : []),
     {
       label: "Zdravotní omezení",
       value: reg.health_notes,

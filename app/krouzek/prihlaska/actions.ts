@@ -20,9 +20,6 @@ export type ClubFormState = { error: string } | null;
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-const WHATSAPP_VALUES = ["add", "no_add"] as const;
-type WhatsappChoice = (typeof WHATSAPP_VALUES)[number];
-
 const GENERIC_ERROR =
   "Přihlášku se nepodařilo uložit. Vyplněné údaje zůstaly zachované. Zkuste to prosím za chvíli znovu, nebo nám napište na e-mail.";
 
@@ -156,7 +153,6 @@ export async function submitClubRegistration(
   const parentName = String(formData.get("parent_name") ?? "").trim();
   const email = String(formData.get("email") ?? "").trim();
   const phone = String(formData.get("phone") ?? "").trim();
-  const whatsappChoice = String(formData.get("whatsapp_choice") ?? "");
   const healthNotes = String(formData.get("health_notes") ?? "").trim();
   const billingName = String(formData.get("billing_name") ?? "").trim();
   const billingStreet = String(formData.get("billing_street") ?? "").trim();
@@ -198,9 +194,6 @@ export async function submitClubRegistration(
         "Potvrďte prosím souhlas s použitím fotek a videí dítěte z kroužku.",
     };
   }
-  if (!WHATSAPP_VALUES.includes(whatsappChoice as WhatsappChoice)) {
-    return { error: "Vyberte prosím jednu z možností u WhatsApp skupiny." };
-  }
   if (terms.length === 0) {
     return { error: "Vyberte prosím alespoň jeden termín kroužku." };
   }
@@ -216,8 +209,6 @@ export async function submitClubRegistration(
       parent_name: parentName,
       email,
       phone,
-      whatsapp_choice: whatsappChoice,
-      whatsapp_other: null,
       terms,
       health_notes: healthNotes || null,
       season: CLUB_SEASON.id,
@@ -243,8 +234,6 @@ export async function submitClubRegistration(
           parent_name: parentName,
           email,
           phone,
-          whatsapp_choice: whatsappChoice,
-          whatsapp_other: null,
           terms,
           health_notes: healthNotes || null,
           season: CLUB_SEASON.id,
@@ -287,7 +276,6 @@ export async function submitClubRegistration(
         parentName,
         email,
         phone,
-        whatsappChoice,
         terms,
         healthNotes,
         totalAmountCzk,

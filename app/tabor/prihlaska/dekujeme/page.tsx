@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { CAMP } from "@/lib/config";
+import { CAMP, WHATSAPP_LINKS } from "@/lib/config";
 import { Reveal } from "@/components/ui/Reveal";
 import { ClearFormDraft } from "@/components/forms/FormDraft";
 import { createPageMetadata } from "@/lib/seo";
@@ -78,6 +78,22 @@ export default function TaborDekujemePage() {
           táboře — najdete tam i seznam dokumentů, bez kterých dítě na tábor
           přijmout nemůžeme.
         </p>
+
+        <div className="mt-8 rounded-2xl border border-emerald-100 bg-emerald-50/60 p-8 text-left">
+          <h2 className="text-2xl font-bold text-navy">Přidejte se do WhatsApp skupiny</h2>
+          <p className="mt-3 text-steel">
+            Můžete se tam na cokoliv zeptat a budeme tam psát důležité informace
+            o táboře.
+          </p>
+          <a
+            href={WHATSAPP_LINKS.camp}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-5 inline-flex rounded-full bg-emerald-600 px-6 py-3 font-semibold text-white transition-colors hover:bg-emerald-700"
+          >
+            Přidat se do WhatsApp skupiny
+          </a>
+        </div>
 
         <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
           <Link

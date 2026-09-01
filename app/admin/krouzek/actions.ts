@@ -121,6 +121,15 @@ export async function deleteRegistration(id: string) {
   redirect("/admin/krouzek");
 }
 
+export async function setActive(id: string, active: boolean) {
+  const supabase = await createClient();
+  await supabase.from("club_registrations").update({ active }).eq("id", id);
+
+  revalidatePath("/admin/krouzek");
+  revalidatePath(`/admin/krouzek/${id}`);
+  revalidatePath("/admin");
+}
+
 async function issueInvoiceRecord(id: string, formData?: FormData) {
   const supabase = await createClient();
   const { data: registrationData, error: registrationError } = await supabase
@@ -510,7 +519,6 @@ export async function createManualRegistration(formData: FormData) {
   const parentName = String(formData.get("parent_name") ?? "").trim();
   const email = String(formData.get("email") ?? "").trim();
   const phone = String(formData.get("phone") ?? "").trim();
-  const whatsappChoice = String(formData.get("whatsapp_choice") ?? "no_add");
   const healthNotes = String(formData.get("health_notes") ?? "").trim();
   const billingName = String(formData.get("billing_name") ?? "").trim();
   const billingStreet = String(formData.get("billing_street") ?? "").trim();
@@ -537,8 +545,6 @@ export async function createManualRegistration(formData: FormData) {
       parent_name: parentName || null,
       email,
       phone,
-      whatsapp_choice: whatsappChoice,
-      whatsapp_other: null,
       terms,
       health_notes: healthNotes || null,
       season: CLUB_SEASON.id,

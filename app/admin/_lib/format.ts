@@ -18,10 +18,15 @@ const WHATSAPP_LABELS: Record<string, string> = Object.fromEntries(
   WHATSAPP_CHOICES.map((c) => [c.value, c.label])
 );
 
-/** Lidský popis volby WhatsApp skupiny včetně případné vlastní odpovědi */
+/**
+ * Lidský popis volby WhatsApp skupiny — historická data z doby, kdy se na to
+ * ptal formulář. Nové přihlášky už tuto hodnotu nemají (nahrazeno zvacím
+ * odkazem na děkovací stránce), proto vrací prázdný řetězec pro null.
+ */
 export function whatsappLabel(
   reg: Pick<ClubRegistration, "whatsapp_choice" | "whatsapp_other">
 ): string {
+  if (!reg.whatsapp_choice) return "";
   if (reg.whatsapp_choice === "other") {
     return reg.whatsapp_other
       ? `Jiná odpověď: ${reg.whatsapp_other}`

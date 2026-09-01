@@ -1,4 +1,4 @@
-import { CAMP, CLUB_SEASON, SITE, WHATSAPP_CHOICES } from "@/lib/config";
+import { CAMP, CLUB_SEASON, SITE } from "@/lib/config";
 import { formatCzk } from "@/lib/billing/config";
 import { sendAdminEmail, sendEmail } from "./mailer";
 
@@ -7,7 +7,6 @@ type ClubRegistrationEmail = {
   parentName: string;
   email: string;
   phone: string;
-  whatsappChoice: string;
   terms: string[];
   healthNotes: string;
   totalAmountCzk: number;
@@ -85,10 +84,6 @@ function termLabels(termIds: string[]) {
     .map((term) => `${term!.label} (${term!.level}, ${term!.age})`);
 }
 
-function whatsappLabel(value: string) {
-  return WHATSAPP_CHOICES.find((choice) => choice.value === value)?.label ?? value;
-}
-
 export async function sendClubRegistrationEmails(data: ClubRegistrationEmail) {
   const terms = termLabels(data.terms);
   const invoiceNote = data.invoiceAttachment
@@ -104,7 +99,6 @@ export async function sendClubRegistrationEmails(data: ClubRegistrationEmail) {
     `Termín: ${terms.join(", ")}`,
     `Cena: ${formatCzk(data.totalAmountCzk)}`,
     `Telefon na rodiče: ${data.phone}`,
-    `WhatsApp: ${whatsappLabel(data.whatsappChoice)}`,
     ``,
     invoiceNote,
     ``,
@@ -131,7 +125,6 @@ export async function sendClubRegistrationEmails(data: ClubRegistrationEmail) {
            ["Termín", terms.join(", ")],
            ["Cena", formatCzk(data.totalAmountCzk)],
            ["Telefon na rodiče", data.phone],
-           ["WhatsApp", whatsappLabel(data.whatsappChoice)],
          ])}</table>
          <p>${escapeHtml(invoiceNote)}</p>
          <p>Pokud potřebujete cokoli doplnit nebo opravit, napište nám na <a href="mailto:${escapeHtml(
@@ -151,7 +144,6 @@ export async function sendClubRegistrationEmails(data: ClubRegistrationEmail) {
         `Telefon na rodiče: ${data.phone}`,
         `Termín: ${terms.join(", ")}`,
         `Cena: ${formatCzk(data.totalAmountCzk)}`,
-        `WhatsApp: ${whatsappLabel(data.whatsappChoice)}`,
         `Zdravotní omezení: ${data.healthNotes || "Neuvedeno"}`,
       ].join("\n"),
       html: layout(
@@ -163,7 +155,6 @@ export async function sendClubRegistrationEmails(data: ClubRegistrationEmail) {
           ["Telefon na rodiče", data.phone],
           ["Termín", terms.join(", ")],
           ["Cena", formatCzk(data.totalAmountCzk)],
-          ["WhatsApp", whatsappLabel(data.whatsappChoice)],
           ["Zdravotní omezení", data.healthNotes],
         ])}</table>`,
       ),

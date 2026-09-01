@@ -6,9 +6,10 @@ import { STATUS_LABELS } from "@/lib/types";
 import { Card } from "@/components/admin/Card";
 import ExportButton from "@/components/admin/ExportButton";
 import DeleteButton from "@/components/admin/DeleteButton";
+import { ActiveSwitch } from "@/components/admin/ActiveSwitch";
 import { formatCzk } from "@/lib/billing/config";
 import { formatDate, pluralRegistrations } from "../_lib/format";
-import { deleteRegistration } from "./actions";
+import { deleteRegistration, setActive } from "./actions";
 
 export const dynamic = "force-dynamic";
 
@@ -18,7 +19,7 @@ export const metadata: Metadata = {
 
 type Row = Pick<
   CampRegistration,
-  "id" | "created_at" | "child_name" | "child_age" | "phone_mother" | "phone_father"
+  "id" | "created_at" | "child_name" | "child_age" | "phone_mother" | "phone_father" | "active"
 >;
 
 function inputClass() {
@@ -35,7 +36,7 @@ export default async function TaborListPage({
 
   let query = supabase
     .from("camp_registrations")
-    .select("id, created_at, child_name, child_age, phone_mother, phone_father")
+    .select("id, created_at, child_name, child_age, phone_mother, phone_father, active")
     .order("created_at", { ascending: false });
 
   const safeQ = q.trim().replace(/[,()]/g, "");
@@ -73,6 +74,101 @@ export default async function TaborListPage({
   }
 
   const hasFilters = Boolean(q || status);
+  const byName = (a: Row, b: Row) => a.child_name.localeCompare(b.child_name, "cs");
+  const activeRows = rows.filter((r) => r.active).sort(byName);
+  const inactiveRows = rows.filter((r) => !r.active).sort(byName);
+
+  function renderTable(list: Row[], emptyText: string) {
+    return (
+      <Card className="mt-4 overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[720px] text-left text-sm">
+            <thead>
+              <tr className="border-b border-slate-100 text-xs uppercase tracking-wide text-steel/70">
+                <th className="px-5 py-3 font-semibold">Datum</th>
+                <th className="px-5 py-3 font-semibold">Dítě</th>
+                <th className="px-5 py-3 font-semibold">Telefon na rodiče</th>
+                <th className="px-5 py-3 font-semibold">Věk</th>
+                <th className="px-5 py-3 font-semibold">Částka faktury</th>
+                <th className="px-5 py-3 font-semibold">Aktivní</th>
+                <th className="px-5 py-3 font-semibold" />
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100">
+              {list.length === 0 ? (
+                <tr>
+                  <td colSpan={7} className="px-5 py-8 text-center text-steel/60">
+                    {emptyText}
+                  </td>
+                </tr>
+              ) : (
+                list.map((row) => {
+                  const href = `/admin/tabor/${row.id}`;
+                  const phones = [row.phone_mother, row.phone_father]
+                    .filter(Boolean)
+                    .join(", ");
+                  const total = invoiceTotals.get(row.id);
+                  const count = invoiceCounts.get(row.id) ?? 0;
+                  return (
+                    <tr key={row.id} className="transition-colors hover:bg-slate-50">
+                      <td className="whitespace-nowrap px-5 py-3 text-steel/80">
+                        <Link href={href} className="block">
+                          {formatDate(row.created_at)}
+                        </Link>
+                      </td>
+                      <td className="px-5 py-3 font-medium text-navy">
+                        <Link href={href} className="block">
+                          {row.child_name}
+                        </Link>
+                      </td>
+                      <td className="whitespace-nowrap px-5 py-3 text-steel/80">
+                        <Link href={href} className="block">
+                          {phones}
+                        </Link>
+                      </td>
+                      <td className="whitespace-nowrap px-5 py-3 text-steel/80">
+                        <Link href={href} className="block">
+                          {row.child_age} let
+                        </Link>
+                      </td>
+                      <td className="whitespace-nowrap px-5 py-3 font-medium text-navy">
+                        <Link href={href} className="block">
+                          {total !== undefined ? (
+                            <>
+                              {formatCzk(total)}
+                              {count > 1 && (
+                                <span className="ml-1 text-xs font-normal text-steel/60">
+                                  ({count} splátky)
+                                </span>
+                              )}
+                            </>
+                          ) : (
+                            <span className="text-steel/50">Nevystavena</span>
+                          )}
+                        </Link>
+                      </td>
+                      <td className="whitespace-nowrap px-5 py-3">
+                        <ActiveSwitch
+                          active={row.active}
+                          action={setActive.bind(null, row.id, !row.active)}
+                        />
+                      </td>
+                      <td className="whitespace-nowrap px-5 py-3 text-right">
+                        <DeleteButton
+                          action={deleteRegistration.bind(null, row.id)}
+                          label="Smazat"
+                        />
+                      </td>
+                    </tr>
+                  );
+                })
+              )}
+            </tbody>
+          </table>
+        </div>
+      </Card>
+    );
+  }
 
   return (
     <main className="mx-auto max-w-6xl px-5 py-8">
@@ -80,7 +176,8 @@ export default async function TaborListPage({
         <div>
           <h1 className="text-2xl font-bold text-navy">Tábor</h1>
           <p className="mt-1 text-sm text-steel/80">
-            {pluralRegistrations(rows.length)} {hasFilters ? "nalezeno" : "celkem"}
+            {pluralRegistrations(rows.length)} {hasFilters ? "nalezeno" : "celkem"} ·{" "}
+            <span className="font-semibold text-emerald-700">{activeRows.length} aktivních</span>
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -136,92 +233,15 @@ export default async function TaborListPage({
         )}
       </form>
 
-      <Card className="mt-6 overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full min-w-[640px] text-left text-sm">
-            <thead>
-              <tr className="border-b border-slate-100 text-xs uppercase tracking-wide text-steel/70">
-                <th className="px-5 py-3 font-semibold">Datum</th>
-                <th className="px-5 py-3 font-semibold">Dítě</th>
-                <th className="px-5 py-3 font-semibold">Telefon na rodiče</th>
-                <th className="px-5 py-3 font-semibold">Věk</th>
-                <th className="px-5 py-3 font-semibold">Částka faktury</th>
-                <th className="px-5 py-3 font-semibold" />
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100">
-              {rows.length === 0 ? (
-                <tr>
-                  <td
-                    colSpan={6}
-                    className="px-5 py-10 text-center text-steel/60"
-                  >
-                    {hasFilters ? "Žádná přihláška neodpovídá filtru." : "Zatím žádné přihlášky."}
-                  </td>
-                </tr>
-              ) : (
-                rows.map((row) => {
-                  const href = `/admin/tabor/${row.id}`;
-                  const phones = [row.phone_mother, row.phone_father]
-                    .filter(Boolean)
-                    .join(", ");
-                  const total = invoiceTotals.get(row.id);
-                  const count = invoiceCounts.get(row.id) ?? 0;
-                  return (
-                    <tr
-                      key={row.id}
-                      className="cursor-pointer transition-colors hover:bg-slate-50"
-                    >
-                      <td className="whitespace-nowrap px-5 py-3 text-steel/80">
-                        <Link href={href} className="block">
-                          {formatDate(row.created_at)}
-                        </Link>
-                      </td>
-                      <td className="px-5 py-3 font-medium text-navy">
-                        <Link href={href} className="block">
-                          {row.child_name}
-                        </Link>
-                      </td>
-                      <td className="whitespace-nowrap px-5 py-3 text-steel/80">
-                        <Link href={href} className="block">
-                          {phones}
-                        </Link>
-                      </td>
-                      <td className="whitespace-nowrap px-5 py-3 text-steel/80">
-                        <Link href={href} className="block">
-                          {row.child_age} let
-                        </Link>
-                      </td>
-                      <td className="whitespace-nowrap px-5 py-3 font-medium text-navy">
-                        <Link href={href} className="block">
-                          {total !== undefined ? (
-                            <>
-                              {formatCzk(total)}
-                              {count > 1 && (
-                                <span className="ml-1 text-xs font-normal text-steel/60">
-                                  ({count} splátky)
-                                </span>
-                              )}
-                            </>
-                          ) : (
-                            <span className="text-steel/50">Nevystavena</span>
-                          )}
-                        </Link>
-                      </td>
-                      <td className="whitespace-nowrap px-5 py-3 text-right">
-                        <DeleteButton
-                          action={deleteRegistration.bind(null, row.id)}
-                          label="Smazat"
-                        />
-                      </td>
-                    </tr>
-                  );
-                })
-              )}
-            </tbody>
-          </table>
-        </div>
-      </Card>
+      <h2 className="mt-8 text-sm font-semibold uppercase tracking-wide text-steel/70">
+        Aktivní ({activeRows.length})
+      </h2>
+      {renderTable(activeRows, hasFilters ? "Žádná aktivní přihláška neodpovídá filtru." : "Zatím žádné aktivní přihlášky.")}
+
+      <h2 className="mt-8 text-sm font-semibold uppercase tracking-wide text-steel/70">
+        Neaktivní / odhlášení ({inactiveRows.length})
+      </h2>
+      {renderTable(inactiveRows, "Žádné odhlášené děti.")}
     </main>
   );
 }

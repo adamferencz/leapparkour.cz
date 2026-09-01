@@ -18,6 +18,12 @@ export const SITE = {
   youtube: "https://www.youtube.com/@LeapParkour",
 } as const;
 
+/** Zvací odkazy do WhatsApp skupin — sdílíme je rodičům na děkovací stránce po přihlášce. */
+export const WHATSAPP_LINKS = {
+  club: "https://chat.whatsapp.com/IXvXe15W4h24Y1z0W4xZof?s=cl&p=i&mlu=4",
+  camp: "https://chat.whatsapp.com/KhseYYrw1WFB2ukgqGP91E?s=cl&p=i&mlu=4",
+} as const;
+
 /** Kroužky — sezóna, na kterou se aktuálně přihlašuje */
 export const CLUB_SEASON = {
   id: "podzim-2026",
