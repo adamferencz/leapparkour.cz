@@ -74,9 +74,9 @@ export default async function TaborListPage({
   }
 
   const hasFilters = Boolean(q || status);
-  const byName = (a: Row, b: Row) => a.child_name.localeCompare(b.child_name, "cs");
-  const activeRows = rows.filter((r) => r.active).sort(byName);
-  const inactiveRows = rows.filter((r) => !r.active).sort(byName);
+  // rows už jsou seřazené od nejnovějších (query výše), filtr pořadí zachová
+  const activeRows = rows.filter((r) => r.active);
+  const inactiveRows = rows.filter((r) => !r.active);
 
   function renderTable(list: Row[], emptyText: string) {
     return (
