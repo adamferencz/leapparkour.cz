@@ -292,21 +292,138 @@ export async function renewForNewSeason(id: string) {
 
   if (registrationError || !registrationData) {
     console.error("Načtení kroužkové přihlášky pro prodloužení selhalo:", registrationError);
-    return;
+    redirect(`/admin/krouzek/${id}?renewed=error`);
   }
 
   const reg = registrationData as ClubRegistration;
+  const prevSeason = reg.season;
+  const prevStatus = reg.status;
+  const prevActive = reg.active;
 
   await supabase
     .from("club_registrations")
     .update({ season: CLUB_SEASON.id, status: "confirmed", active: true })
     .eq("id", id);
 
-  await createInvoiceRecord(supabase, id, getInvoiceFormOverrides(reg));
+  const invoice = await createInvoiceRecord(supabase, id, getInvoiceFormOverrides(reg));
 
   revalidatePath(`/admin/krouzek/${id}`);
   revalidatePath("/admin/krouzek");
   revalidatePath("/admin");
+
+  if (!invoice) {
+    redirect(`/admin/krouzek/${id}?renewed=error`);
+  }
+
+  const params = new URLSearchParams({
+    renewed: "ok",
+    invoiceId: invoice.id,
+    prevSeason,
+    prevStatus,
+    prevActive: String(prevActive),
+  });
+  redirect(`/admin/krouzek/${id}?${params.toString()}`);
+}
+
+export async function deleteInvoice(id: string, invoiceId: string) {
+  const supabase = await createClient();
+
+  const { data: invoiceData } = await supabase
+    .from("invoices")
+    .select("*")
+    .eq("id", invoiceId)
+    .eq("club_registration_id", id)
+    .maybeSingle();
+
+  if (invoiceData) {
+    await supabase.storage.from("invoices").remove([invoiceData.storage_path]);
+    await supabase.from("invoices").delete().eq("id", invoiceId);
+  }
+
+  const { data: remainingInvoice } = await supabase
+    .from("invoices")
+    .select("*")
+    .eq("club_registration_id", id)
+    .order("created_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  const { data: registrationData } = await supabase
+    .from("club_registrations")
+    .select("terms")
+    .eq("id", id)
+    .single();
+  const terms = (registrationData?.terms as string[] | undefined) ?? [];
+  const restoredAmount = remainingInvoice
+    ? (remainingInvoice as Invoice).total_amount_czk
+    : getClubAmountCzk(terms);
+
+  await supabase
+    .from("club_registrations")
+    .update({
+      base_amount_czk: restoredAmount,
+      total_amount_czk: restoredAmount,
+    })
+    .eq("id", id);
+
+  revalidatePath(`/admin/krouzek/${id}`);
+  revalidatePath("/admin/krouzek");
+}
+
+export async function undoRenewal(
+  id: string,
+  invoiceId: string,
+  prevSeason: string,
+  prevStatus: RegistrationStatus,
+  prevActive: boolean,
+) {
+  const supabase = await createClient();
+
+  const { data: invoiceData } = await supabase
+    .from("invoices")
+    .select("*")
+    .eq("id", invoiceId)
+    .eq("club_registration_id", id)
+    .maybeSingle();
+
+  if (invoiceData) {
+    await supabase.storage.from("invoices").remove([invoiceData.storage_path]);
+    await supabase.from("invoices").delete().eq("id", invoiceId);
+  }
+
+  const { data: remainingInvoice } = await supabase
+    .from("invoices")
+    .select("*")
+    .eq("club_registration_id", id)
+    .order("created_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  const { data: registrationData } = await supabase
+    .from("club_registrations")
+    .select("terms")
+    .eq("id", id)
+    .single();
+  const terms = (registrationData?.terms as string[] | undefined) ?? [];
+  const restoredAmount = remainingInvoice
+    ? (remainingInvoice as Invoice).total_amount_czk
+    : getClubAmountCzk(terms);
+
+  await supabase
+    .from("club_registrations")
+    .update({
+      season: prevSeason,
+      status: prevStatus,
+      active: prevActive,
+      base_amount_czk: restoredAmount,
+      total_amount_czk: restoredAmount,
+    })
+    .eq("id", id);
+
+  revalidatePath(`/admin/krouzek/${id}`);
+  revalidatePath("/admin/krouzek");
+  revalidatePath("/admin");
+  redirect(`/admin/krouzek/${id}?renewed=undone`);
 }
 
 export async function sendIssuedInvoice(id: string, invoiceId?: string) {

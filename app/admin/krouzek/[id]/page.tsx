@@ -4,13 +4,14 @@ import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { CLUB_BILLING, formatCzk, getClubAmountCzk } from "@/lib/billing/config";
 import { CLUB_SEASON } from "@/lib/config";
-import type { ClubRegistration, Invoice } from "@/lib/types";
+import type { ClubRegistration, Invoice, RegistrationStatus } from "@/lib/types";
 import { Card } from "@/components/admin/Card";
 import StatusBadge from "@/components/admin/StatusBadge";
 import DetailTable, { type DetailItem } from "@/components/admin/DetailTable";
 import StatusForm from "@/components/admin/StatusForm";
 import NotesForm from "@/components/admin/NotesForm";
 import DeleteButton from "@/components/admin/DeleteButton";
+import ConfirmSubmitButton from "@/components/admin/ConfirmSubmitButton";
 import { formatDateTime, termLabels, whatsappLabel } from "../../_lib/format";
 import {
   updateStatus,
@@ -22,6 +23,8 @@ import {
   splitInvoice,
   updateTerms,
   renewForNewSeason,
+  undoRenewal,
+  deleteInvoice,
 } from "../actions";
 
 export const dynamic = "force-dynamic";
@@ -39,10 +42,17 @@ export default async function KrouzekDetailPage({
   searchParams,
 }: {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ sent?: string }>;
+  searchParams: Promise<{
+    sent?: string;
+    renewed?: string;
+    invoiceId?: string;
+    prevSeason?: string;
+    prevStatus?: string;
+    prevActive?: string;
+  }>;
 }) {
   const { id } = await params;
-  const { sent } = await searchParams;
+  const { sent, renewed, invoiceId, prevSeason, prevStatus, prevActive } = await searchParams;
   const supabase = await createClient();
   const { data } = await supabase
     .from("club_registrations")
@@ -160,6 +170,34 @@ export default async function KrouzekDetailPage({
           nastavení e-mailu.
         </p>
       )}
+      {renewed === "ok" && invoiceId && prevSeason && prevStatus && prevActive && (
+        <div className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-xl bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-700">
+          <span>Přihláška byla prodloužena a vystavena nová faktura ke kontrole.</span>
+          <ConfirmSubmitButton
+            action={undoRenewal.bind(
+              null,
+              reg.id,
+              invoiceId,
+              prevSeason,
+              prevStatus as RegistrationStatus,
+              prevActive === "true",
+            )}
+            confirmMessage="Opravdu chcete prodloužení zrušit? Nově vytvořená faktura se trvale smaže."
+            label="Zrušit prodloužení"
+            className="rounded-full border border-emerald-300 bg-white px-4 py-2 text-xs font-semibold text-emerald-700 transition-colors hover:bg-emerald-100"
+          />
+        </div>
+      )}
+      {renewed === "undone" && (
+        <p className="mt-4 rounded-xl bg-slate-100 px-4 py-3 text-sm font-medium text-steel">
+          Prodloužení bylo zrušeno, přihláška je zpět v původním stavu.
+        </p>
+      )}
+      {renewed === "error" && (
+        <p className="mt-4 rounded-xl bg-red-50 px-4 py-3 text-sm font-medium text-red-600">
+          Prodloužení se nepodařilo. Zkuste to prosím znovu.
+        </p>
+      )}
 
       <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
         <h1 className="text-2xl font-bold text-navy">{reg.child_name}</h1>
@@ -220,17 +258,28 @@ export default async function KrouzekDetailPage({
             <span className="ml-1 text-emerald-700">(aktuální)</span>
           )}
         </p>
-        <p className="mt-2 text-sm text-steel/80">
-          Pokud dítě pokračuje i další pololetí, klikni na tlačítko níže — přihláška
-          se označí jako aktuální a rovnou se vystaví nová faktura ke kontrole
-          (rodiči se automaticky neodešle, to uděláš ručně stejně jako u ostatních
-          faktur).
-        </p>
-        <form action={renewForNewSeason.bind(null, reg.id)} className="mt-4">
-          <button className="rounded-full bg-brand px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-dark">
-            Prodloužit na {CLUB_SEASON.label}
-          </button>
-        </form>
+        {reg.season === CLUB_SEASON.id ? (
+          <p className="mt-2 text-sm text-steel/80">
+            Přihláška už je na aktuální sezóně, není potřeba nic prodlužovat.
+          </p>
+        ) : (
+          <>
+            <p className="mt-2 text-sm text-steel/80">
+              Pokud dítě pokračuje i další pololetí, klikni na tlačítko níže — přihláška
+              se označí jako aktuální a rovnou se vystaví nová faktura ke kontrole
+              (rodiči se automaticky neodešle, to uděláš ručně stejně jako u ostatních
+              faktur).
+            </p>
+            <div className="mt-4">
+              <ConfirmSubmitButton
+                action={renewForNewSeason.bind(null, reg.id)}
+                confirmMessage={`Opravdu chcete přihlášku prodloužit na další pololetí (${CLUB_SEASON.label})? Vystaví se nová faktura ke kontrole.`}
+                label="Prodloužit na další pololetí"
+                className="rounded-full bg-brand px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-dark"
+              />
+            </div>
+          </>
+        )}
       </Card>
 
       <Card className="mt-6 p-5">
@@ -485,6 +534,19 @@ export default async function KrouzekDetailPage({
                 Vystavit a odeslat rodiči
               </button>
             </form>
+
+            <span className="mt-3 ml-2 inline-block">
+              <ConfirmSubmitButton
+                action={deleteInvoice.bind(null, reg.id, inv.id)}
+                confirmMessage={
+                  inv.status === "sent"
+                    ? "Tato faktura už byla odeslána rodiči. Opravdu ji chcete trvale smazat?"
+                    : "Opravdu chcete tuto fakturu trvale smazat?"
+                }
+                label="Smazat fakturu"
+                className="rounded-full border border-red-200 bg-red-50 px-4 py-2 text-sm font-semibold text-red-600 transition-colors hover:bg-red-100"
+              />
+            </span>
 
             {canSplit && index === 0 && (
               <details className="mt-4 rounded-xl border border-slate-200 p-4">
