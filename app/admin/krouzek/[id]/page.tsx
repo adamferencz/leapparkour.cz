@@ -52,10 +52,13 @@ export default async function KrouzekDetailPage({
     prevSeason?: string;
     prevStatus?: string;
     prevActive?: string;
+    flash?: string;
+    flashType?: string;
   }>;
 }) {
   const { id } = await params;
-  const { sent, renewed, invoiceId, prevSeason, prevStatus, prevActive } = await searchParams;
+  const { sent, renewed, invoiceId, prevSeason, prevStatus, prevActive, flash, flashType } =
+    await searchParams;
   const supabase = await createClient();
   const { data } = await supabase
     .from("club_registrations")
@@ -199,6 +202,17 @@ export default async function KrouzekDetailPage({
       {renewed === "error" && (
         <p className="mt-4 rounded-xl bg-red-50 px-4 py-3 text-sm font-medium text-red-600">
           Prodloužení se nepodařilo. Zkuste to prosím znovu.
+        </p>
+      )}
+      {flash && (
+        <p
+          className={`mt-4 rounded-xl px-4 py-3 text-sm font-medium ${
+            flashType === "error"
+              ? "bg-red-50 text-red-600"
+              : "bg-emerald-50 text-emerald-700"
+          }`}
+        >
+          {flash}
         </p>
       )}
 
@@ -394,9 +408,11 @@ export default async function KrouzekDetailPage({
                     {formatCzk(invoiceDefaults.baseAmountCzk)}
                   </p>
                 </div>
-                <button className="rounded-full bg-brand px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-brand-dark">
-                  Vystavit náhled faktury
-                </button>
+                <ConfirmButton
+                  confirmMessage="Opravdu chcete vystavit náhled faktury s vyplněnými údaji?"
+                  label="Vystavit náhled faktury"
+                  className="rounded-full bg-brand px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-brand-dark"
+                />
               </div>
             </form>
           </>
@@ -546,9 +562,11 @@ export default async function KrouzekDetailPage({
               action={sendIssuedInvoice.bind(null, reg.id, inv.id)}
               className="mt-3 inline-block"
             >
-              <button className="rounded-full bg-brand px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-brand-dark">
-                Vystavit a odeslat rodiči
-              </button>
+              <ConfirmButton
+                confirmMessage={`Opravdu chcete fakturu odeslat na e-mail ${inv.buyer_email}?`}
+                label="Vystavit a odeslat rodiči"
+                className="rounded-full bg-brand px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-brand-dark"
+              />
             </form>
 
             <span className="mt-3 ml-2 inline-block">
