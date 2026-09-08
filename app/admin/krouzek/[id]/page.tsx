@@ -12,10 +12,13 @@ import StatusForm from "@/components/admin/StatusForm";
 import NotesForm from "@/components/admin/NotesForm";
 import DeleteButton from "@/components/admin/DeleteButton";
 import ConfirmSubmitButton from "@/components/admin/ConfirmSubmitButton";
+import ConfirmButton from "@/components/admin/ConfirmButton";
+import EmailForm from "@/components/admin/EmailForm";
 import { formatDateTime, termLabels, whatsappLabel } from "../../_lib/format";
 import {
   updateStatus,
   updateNotes,
+  updateContactEmail,
   deleteRegistration,
   issueInvoice,
   sendIssuedInvoice,
@@ -211,6 +214,17 @@ export default async function KrouzekDetailPage({
           </h2>
         </div>
         <DetailTable items={items} />
+      </Card>
+
+      <Card className="mt-6 p-5">
+        <h2 className="text-base font-semibold text-navy">Kontaktní e-mail</h2>
+        <p className="mt-1 text-sm text-steel/80">
+          Použije se pro budoucí zprávy a propíše se i do e-mailu na všech fakturách
+          této přihlášky (faktury se zároveň znovu vygenerují se správným e-mailem).
+        </p>
+        <div className="mt-4">
+          <EmailForm action={updateContactEmail.bind(null, reg.id)} current={reg.email} />
+        </div>
       </Card>
 
       <Card className="mt-6 p-5">
@@ -520,9 +534,11 @@ export default async function KrouzekDetailPage({
                     {formatCzk(inv.total_amount_czk)}
                   </p>
                 </div>
-                <button className="rounded-full bg-brand px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-brand-dark">
-                  Uložit a regenerovat PDF
-                </button>
+                <ConfirmButton
+                  confirmMessage="Opravdu chcete fakturu uložit a znovu vygenerovat PDF? Předchozí verze se přepíše."
+                  label="Uložit a regenerovat PDF"
+                  className="rounded-full bg-brand px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-brand-dark"
+                />
               </div>
             </form>
 
