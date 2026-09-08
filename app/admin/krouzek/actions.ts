@@ -27,6 +27,11 @@ type SupabaseServerClient = Awaited<ReturnType<typeof createClient>>;
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+function flashRedirect(id: string, message: string, type: "ok" | "error" = "ok"): never {
+  const params = new URLSearchParams({ flash: message, flashType: type });
+  redirect(`/admin/krouzek/${id}?${params.toString()}`);
+}
+
 function parseCzk(value: FormDataEntryValue | null, fallback: number) {
   const raw = String(value ?? "").trim().replace(/\s/g, "").replace(",", ".");
   if (!raw) return fallback;
@@ -91,7 +96,9 @@ function getInvoiceFormOverrides(reg: ClubRegistration, formData?: FormData) {
 
 export async function updateStatus(id: string, formData: FormData) {
   const status = formData.get("status") as RegistrationStatus;
-  if (!(status in STATUS_LABELS)) return;
+  if (!(status in STATUS_LABELS)) {
+    flashRedirect(id, "Neplatný stav přihlášky.", "error");
+  }
 
   const supabase = await createClient();
   await supabase
@@ -102,6 +109,7 @@ export async function updateStatus(id: string, formData: FormData) {
   revalidatePath(`/admin/krouzek/${id}`);
   revalidatePath("/admin/krouzek");
   revalidatePath("/admin");
+  flashRedirect(id, "Stav přihlášky byl uložen.");
 }
 
 export async function updateNotes(id: string, formData: FormData) {
@@ -115,13 +123,13 @@ export async function updateNotes(id: string, formData: FormData) {
     .eq("id", id);
 
   revalidatePath(`/admin/krouzek/${id}`);
+  flashRedirect(id, "Poznámka byla uložena.");
 }
 
 export async function updateContactEmail(id: string, formData: FormData) {
   const newEmail = String(formData.get("email") ?? "").trim();
   if (!newEmail || !EMAIL_REGEX.test(newEmail)) {
-    console.error("Úprava kontaktního e-mailu selhala: neplatný formát.");
-    return;
+    flashRedirect(id, "Zadejte prosím platný e-mail.", "error");
   }
 
   const supabase = await createClient();
@@ -153,6 +161,7 @@ export async function updateContactEmail(id: string, formData: FormData) {
 
   revalidatePath(`/admin/krouzek/${id}`);
   revalidatePath("/admin/krouzek");
+  flashRedirect(id, "E-mail byl uložen a faktury přegenerovány.");
 }
 
 export async function deleteRegistration(id: string) {
@@ -289,10 +298,15 @@ async function issueInvoiceRecord(id: string, formData?: FormData) {
 }
 
 export async function issueInvoice(id: string, formData: FormData) {
-  await issueInvoiceRecord(id, formData);
+  const invoice = await issueInvoiceRecord(id, formData);
 
   revalidatePath(`/admin/krouzek/${id}`);
   revalidatePath("/admin/krouzek");
+
+  if (!invoice) {
+    flashRedirect(id, "Vystavení faktury se nepodařilo.", "error");
+  }
+  flashRedirect(id, "Náhled faktury byl vystaven.");
 }
 
 export async function updateTerms(id: string, formData: FormData) {
@@ -303,8 +317,7 @@ export async function updateTerms(id: string, formData: FormData) {
     .filter((t) => validTermIds.includes(t));
 
   if (terms.length === 0) {
-    console.error("Úprava termínu selhala: musí být vybraný alespoň jeden termín.");
-    return;
+    flashRedirect(id, "Vyberte prosím alespoň jeden termín.", "error");
   }
 
   const totalAmountCzk = getClubAmountCzk(terms);
@@ -320,6 +333,7 @@ export async function updateTerms(id: string, formData: FormData) {
 
   revalidatePath(`/admin/krouzek/${id}`);
   revalidatePath("/admin/krouzek");
+  flashRedirect(id, "Termín byl uložen, cena přepočítána.");
 }
 
 export async function renewForNewSeason(id: string) {
@@ -408,6 +422,7 @@ export async function deleteInvoice(id: string, invoiceId: string) {
 
   revalidatePath(`/admin/krouzek/${id}`);
   revalidatePath("/admin/krouzek");
+  flashRedirect(id, "Faktura byla smazána.");
 }
 
 export async function undoRenewal(
@@ -542,7 +557,7 @@ export async function updateInvoice(id: string, invoiceId: string, formData: For
 
   if (invoiceError || !invoiceData) {
     console.error("Načtení kroužkové faktury pro úpravu selhalo:", invoiceError);
-    return;
+    flashRedirect(id, "Fakturu se nepodařilo najít.", "error");
   }
 
   const invoice = invoiceData as Invoice;
@@ -574,7 +589,7 @@ export async function updateInvoice(id: string, invoiceId: string, formData: For
 
   if (uploaded.error) {
     console.error("Regenerace kroužkové PDF faktury selhala:", uploaded.error);
-    return;
+    flashRedirect(id, "Regenerace PDF faktury se nepodařila.", "error");
   }
 
   await supabase
@@ -601,6 +616,7 @@ export async function updateInvoice(id: string, invoiceId: string, formData: For
   );
   revalidatePath(`/admin/krouzek/${id}`);
   revalidatePath("/admin/krouzek");
+  flashRedirect(id, "Faktura byla uložena a PDF přegenerováno.");
 }
 
 export async function splitInvoice(id: string, invoiceId: string, formData: FormData) {
@@ -613,7 +629,7 @@ export async function splitInvoice(id: string, invoiceId: string, formData: Form
 
   if (invoiceError || !invoiceData) {
     console.error("Načtení kroužkové faktury pro rozdělení na splátky selhalo:", invoiceError);
-    return;
+    flashRedirect(id, "Fakturu se nepodařilo najít.", "error");
   }
 
   const invoice = invoiceData as Invoice;
@@ -628,7 +644,11 @@ export async function splitInvoice(id: string, invoiceId: string, formData: Form
     console.error(
       "Rozdělení kroužkové faktury selhalo: částka první splátky musí být kladná a menší než celková částka.",
     );
-    return;
+    flashRedirect(
+      id,
+      "Částka první splátky musí být kladná a menší než celková částka.",
+      "error",
+    );
   }
 
   const firstItemName = `${invoice.item_name} (1. splátka)`;
@@ -647,7 +667,7 @@ export async function splitInvoice(id: string, invoiceId: string, formData: Form
 
   if (firstUploaded.error) {
     console.error("Uložení PDF první splátky selhalo:", firstUploaded.error);
-    return;
+    flashRedirect(id, "Rozdělení faktury se nepodařilo (PDF 1. splátky).", "error");
   }
 
   await supabase
@@ -666,7 +686,7 @@ export async function splitInvoice(id: string, invoiceId: string, formData: Form
   const sequence = await supabase.rpc("next_invoice_sequence");
   if (sequence.error || sequence.data === null) {
     console.error("Vygenerování čísla faktury pro druhou splátku selhalo:", sequence.error);
-    return;
+    flashRedirect(id, "Rozdělení faktury se nepodařilo (číslo faktury).", "error");
   }
 
   const secondInvoiceNumber = buildInvoiceNumber(Number(sequence.data));
@@ -695,7 +715,7 @@ export async function splitInvoice(id: string, invoiceId: string, formData: Form
 
   if (secondUploaded.error) {
     console.error("Uložení PDF druhé splátky selhalo:", secondUploaded.error);
-    return;
+    flashRedirect(id, "Rozdělení faktury se nepodařilo (PDF 2. splátky).", "error");
   }
 
   const secondInserted = await supabase.from("invoices").insert({
@@ -728,11 +748,12 @@ export async function splitInvoice(id: string, invoiceId: string, formData: Form
 
   if (secondInserted.error) {
     console.error("Uložení druhé splátky do databáze selhalo:", secondInserted.error);
-    return;
+    flashRedirect(id, "Rozdělení faktury se nepodařilo (uložení 2. splátky).", "error");
   }
 
   revalidatePath(`/admin/krouzek/${id}`);
   revalidatePath("/admin/krouzek");
+  flashRedirect(id, "Faktura byla rozdělena na dvě splátky.");
 }
 
 export async function createManualRegistration(formData: FormData) {
