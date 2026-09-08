@@ -25,6 +25,8 @@ import {
 
 type SupabaseServerClient = Awaited<ReturnType<typeof createClient>>;
 
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 function parseCzk(value: FormDataEntryValue | null, fallback: number) {
   const raw = String(value ?? "").trim().replace(/\s/g, "").replace(",", ".");
   if (!raw) return fallback;
@@ -113,6 +115,44 @@ export async function updateNotes(id: string, formData: FormData) {
     .eq("id", id);
 
   revalidatePath(`/admin/krouzek/${id}`);
+}
+
+export async function updateContactEmail(id: string, formData: FormData) {
+  const newEmail = String(formData.get("email") ?? "").trim();
+  if (!newEmail || !EMAIL_REGEX.test(newEmail)) {
+    console.error("Úprava kontaktního e-mailu selhala: neplatný formát.");
+    return;
+  }
+
+  const supabase = await createClient();
+
+  await supabase.from("club_registrations").update({ email: newEmail }).eq("id", id);
+
+  const { data: invoicesData } = await supabase
+    .from("invoices")
+    .select("*")
+    .eq("club_registration_id", id);
+
+  for (const invoiceRow of (invoicesData ?? []) as Invoice[]) {
+    const updatedInvoice: InvoicePdfData = {
+      ...invoiceDataFromRow(invoiceRow),
+      buyerEmail: newEmail,
+    };
+    const pdf = await generateInvoicePdf(updatedInvoice);
+    const uploaded = await supabase.storage
+      .from("invoices")
+      .upload(invoiceRow.storage_path, pdf, { contentType: "application/pdf", upsert: true });
+
+    if (uploaded.error) {
+      console.error("Regenerace faktury po změně e-mailu selhala:", uploaded.error);
+      continue;
+    }
+
+    await supabase.from("invoices").update({ buyer_email: newEmail }).eq("id", invoiceRow.id);
+  }
+
+  revalidatePath(`/admin/krouzek/${id}`);
+  revalidatePath("/admin/krouzek");
 }
 
 export async function deleteRegistration(id: string) {
