@@ -28,6 +28,8 @@ import {
   renewForNewSeason,
   undoRenewal,
   deleteInvoice,
+  cancelInvoice,
+  restoreInvoice,
 } from "../actions";
 
 export const dynamic = "force-dynamic";
@@ -445,7 +447,11 @@ export default async function KrouzekDetailPage({
                   <p>
                     Stav:{" "}
                     <strong className="text-navy">
-                      {inv.status === "sent" ? "odeslaná" : "vystavená"}
+                      {inv.status === "cancelled"
+                        ? "stornovaná"
+                        : inv.status === "sent"
+                          ? "odeslaná"
+                          : "vystavená"}
                     </strong>
                     {inv.sent_at ? ` (${formatDateTime(inv.sent_at)})` : ""}
                   </p>
@@ -460,6 +466,22 @@ export default async function KrouzekDetailPage({
               </Link>
             </div>
 
+            {inv.status === "cancelled" && (
+              <div className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-xl bg-slate-100 px-4 py-3 text-sm text-steel">
+                <span>
+                  Tato faktura je <strong>stornovaná</strong> a nemá se hradit. Zůstává v
+                  evidenci kvůli číselné řadě.
+                </span>
+                <ConfirmSubmitButton
+                  action={restoreInvoice.bind(null, reg.id, inv.id)}
+                  confirmMessage="Opravdu chcete storno vrátit a fakturu znovu označit jako platnou?"
+                  label="Vrátit storno"
+                  className="rounded-full border border-slate-300 bg-white px-4 py-2 text-xs font-semibold text-navy transition-colors hover:bg-slate-50"
+                />
+              </div>
+            )}
+
+            {inv.status !== "cancelled" && (
             <form
               key={`${inv.id}:${inv.base_amount_czk}:${inv.due_date}:${inv.item_name}:${inv.variable_symbol}:${inv.buyer_name}:${inv.buyer_email}:${inv.buyer_address}:${inv.stamp_signature}`}
               action={updateInvoice.bind(null, reg.id, inv.id)}
@@ -557,7 +579,9 @@ export default async function KrouzekDetailPage({
                 />
               </div>
             </form>
+            )}
 
+            {inv.status !== "cancelled" && (
             <form
               action={sendIssuedInvoice.bind(null, reg.id, inv.id)}
               className="mt-3 inline-block"
@@ -568,7 +592,20 @@ export default async function KrouzekDetailPage({
                 className="rounded-full bg-brand px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-brand-dark"
               />
             </form>
+            )}
 
+            {inv.status !== "cancelled" && (
+              <span className="mt-3 ml-2 inline-block">
+                <ConfirmSubmitButton
+                  action={cancelInvoice.bind(null, reg.id, inv.id)}
+                  confirmMessage="Opravdu chcete fakturu stornovat? Zůstane v evidenci, ale bude označená jako zrušená a nemá se hradit."
+                  label="Stornovat fakturu"
+                  className="rounded-full border border-amber-300 bg-amber-50 px-4 py-2 text-sm font-semibold text-amber-800 transition-colors hover:bg-amber-100"
+                />
+              </span>
+            )}
+
+            {inv.status !== "cancelled" && (
             <span className="mt-3 ml-2 inline-block">
               <ConfirmSubmitButton
                 action={deleteInvoice.bind(null, reg.id, inv.id)}
@@ -581,8 +618,9 @@ export default async function KrouzekDetailPage({
                 className="rounded-full border border-red-200 bg-red-50 px-4 py-2 text-sm font-semibold text-red-600 transition-colors hover:bg-red-100"
               />
             </span>
+            )}
 
-            {canSplit && index === 0 && (
+            {canSplit && index === 0 && inv.status !== "cancelled" && (
               <details className="mt-4 rounded-xl border border-slate-200 p-4">
                 <summary className="cursor-pointer text-sm font-semibold text-navy">
                   Rozdělit fakturu na 2 splátky

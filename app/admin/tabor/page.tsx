@@ -72,9 +72,10 @@ export default async function TaborListPage({
   if (ids.length > 0) {
     const { data: invoicesData } = await supabase
       .from("invoices")
-      .select("camp_registration_id, total_amount_czk")
+      .select("camp_registration_id, total_amount_czk, status")
       .in("camp_registration_id", ids);
     (invoicesData ?? []).forEach((inv) => {
+      if (inv.status === "cancelled") return;
       const key = inv.camp_registration_id as string;
       invoiceTotals.set(key, (invoiceTotals.get(key) ?? 0) + (inv.total_amount_czk as number));
       invoiceCounts.set(key, (invoiceCounts.get(key) ?? 0) + 1);

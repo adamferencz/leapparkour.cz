@@ -425,6 +425,42 @@ export async function deleteInvoice(id: string, invoiceId: string) {
   flashRedirect(id, "Faktura byla smazána.");
 }
 
+export async function cancelInvoice(id: string, invoiceId: string) {
+  const supabase = await createClient();
+  const { error } = await supabase
+    .from("invoices")
+    .update({ status: "cancelled" })
+    .eq("id", invoiceId)
+    .eq("club_registration_id", id);
+
+  if (error) {
+    console.error("Storno kroužkové faktury selhalo:", error);
+    flashRedirect(id, "Fakturu se nepodařilo stornovat.", "error");
+  }
+
+  revalidatePath(`/admin/krouzek/${id}`);
+  revalidatePath("/admin/krouzek");
+  flashRedirect(id, "Faktura byla označena jako stornovaná.");
+}
+
+export async function restoreInvoice(id: string, invoiceId: string) {
+  const supabase = await createClient();
+  const { error } = await supabase
+    .from("invoices")
+    .update({ status: "issued", sent_at: null })
+    .eq("id", invoiceId)
+    .eq("club_registration_id", id);
+
+  if (error) {
+    console.error("Vrácení storna kroužkové faktury selhalo:", error);
+    flashRedirect(id, "Storno se nepodařilo vrátit.", "error");
+  }
+
+  revalidatePath(`/admin/krouzek/${id}`);
+  revalidatePath("/admin/krouzek");
+  flashRedirect(id, "Storno faktury bylo vráceno, faktura je znovu platná.");
+}
+
 export async function undoRenewal(
   id: string,
   invoiceId: string,
