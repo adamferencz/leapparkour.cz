@@ -7,6 +7,7 @@ import { Card } from "@/components/admin/Card";
 import ExportButton from "@/components/admin/ExportButton";
 import DeleteButton from "@/components/admin/DeleteButton";
 import { ActiveSwitch } from "@/components/admin/ActiveSwitch";
+import CopyEmailsButton from "@/components/admin/CopyEmailsButton";
 import { formatCzk } from "@/lib/billing/config";
 import { formatDate, pluralRegistrations } from "../_lib/format";
 import { deleteRegistration, setActive } from "./actions";
@@ -19,7 +20,14 @@ export const metadata: Metadata = {
 
 type Row = Pick<
   CampRegistration,
-  "id" | "created_at" | "child_name" | "child_age" | "phone_mother" | "phone_father" | "active"
+  | "id"
+  | "created_at"
+  | "child_name"
+  | "child_age"
+  | "phone_mother"
+  | "phone_father"
+  | "email"
+  | "active"
 >;
 
 function inputClass() {
@@ -36,7 +44,7 @@ export default async function TaborListPage({
 
   let query = supabase
     .from("camp_registrations")
-    .select("id, created_at, child_name, child_age, phone_mother, phone_father, active")
+    .select("id, created_at, child_name, child_age, phone_mother, phone_father, email, active")
     .order("created_at", { ascending: false });
 
   const safeQ = q.trim().replace(/[,()]/g, "");
@@ -233,14 +241,20 @@ export default async function TaborListPage({
         )}
       </form>
 
-      <h2 className="mt-8 text-sm font-semibold uppercase tracking-wide text-steel/70">
-        Aktivní ({activeRows.length})
-      </h2>
+      <div className="mt-8 flex flex-wrap items-center justify-between gap-3">
+        <h2 className="text-sm font-semibold uppercase tracking-wide text-steel/70">
+          Aktivní ({activeRows.length})
+        </h2>
+        <CopyEmailsButton emails={activeRows.map((r) => r.email)} />
+      </div>
       {renderTable(activeRows, hasFilters ? "Žádná aktivní přihláška neodpovídá filtru." : "Zatím žádné aktivní přihlášky.")}
 
-      <h2 className="mt-8 text-sm font-semibold uppercase tracking-wide text-steel/70">
-        Neaktivní / odhlášení ({inactiveRows.length})
-      </h2>
+      <div className="mt-8 flex flex-wrap items-center justify-between gap-3">
+        <h2 className="text-sm font-semibold uppercase tracking-wide text-steel/70">
+          Neaktivní / odhlášení ({inactiveRows.length})
+        </h2>
+        <CopyEmailsButton emails={inactiveRows.map((r) => r.email)} />
+      </div>
       {renderTable(inactiveRows, "Žádné odhlášené děti.")}
     </main>
   );
