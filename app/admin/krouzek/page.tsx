@@ -64,9 +64,10 @@ export default async function KrouzekListPage({
   if (ids.length > 0) {
     const { data: invoicesData } = await supabase
       .from("invoices")
-      .select("club_registration_id, total_amount_czk")
+      .select("club_registration_id, total_amount_czk, status")
       .in("club_registration_id", ids);
     (invoicesData ?? []).forEach((inv) => {
+      if (inv.status === "cancelled") return;
       const key = inv.club_registration_id as string;
       invoiceTotals.set(key, (invoiceTotals.get(key) ?? 0) + (inv.total_amount_czk as number));
       invoiceCounts.set(key, (invoiceCounts.get(key) ?? 0) + 1);
